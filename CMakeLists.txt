@@ -13,17 +13,6 @@ set(SILKIT_ADAPTERS_GPIO_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
 set(SILKIT_VERSION "4.0.34" CACHE STRING "If no SIL Kit package is specified, this version will be downloaded")
 set(SILKIT_FLAVOR "ubuntu-18.04-x86_64-gcc" CACHE STRING "If no SIL Kit package is specified, this package flavor will be downloaded")
 
-find_package(Threads REQUIRED)
-add_library(asio INTERFACE)
-target_include_directories(asio INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/third_party/asio/asio/include)
-target_compile_definitions(asio INTERFACE ASIO_STANDALONE=1)
-target_link_libraries(asio INTERFACE Threads::Threads)
-
-if (WIN32)
-    target_compile_definitions(asio INTERFACE _SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING=1)
-    target_compile_definitions(asio INTERFACE WINVER=0x0601 _WIN32_WINNT=0x0601) # Windows 7
-endif()
-
 # SIL KIT PACKAGE CONSUMPTION 
 
 ## On Windows, if an msi-installed version of SIL Kit is available and you want to build the adapters against it, CMAKE will attempt to use it.
@@ -85,7 +74,7 @@ else()
 	message(FATAL_ERROR "Something went wrong : Could not find SIL Kit package.")
 endif()
 
-#add_subdirectory(gpio/adapter)
+add_subdirectory(gpio/adapter)
 add_subdirectory(gpio/demos)
 
 ################################################################################
