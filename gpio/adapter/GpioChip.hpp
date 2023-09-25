@@ -2,14 +2,32 @@
 
 #pragma once
 
+#include <string>
+#include <filesystem>
 
-class GpioChip {
+#include "ChipDatas.hpp"
+#include "silkit/services/pubsub/all.hpp"
+#include "gpiod.hpp"
+
+class GpioChip
+{
 public: 
 	GpioChip() = delete;
-	GpioChip(const std::string& fd);
+	GpioChip(const ::std::filesystem::path& fd);
+	~GpioChip();
 
-	SetGpioValues(::gpiod::line_request& line_req, GpioChip newValues)
+	void SetGpioValues(const ChipDatas& chipDatas);
+	auto GetGpioOffsetsDirection() const -> const std::vector<::gpiod::line::direction>;
+	auto GetGpioOffsetsValues(bool initialization = false) -> const ::gpiod::line::values;
+	auto ReadGpioEvents(ChipDatas& chipDatas, ::gpiod::edge_event_buffer& buffer) -> const bool;
 
 private:
-	std::string _fd;
+	auto ConvertBitToGpioValue(const std::uint8_t bit) const -> const ::gpiod::line::value;
+	auto ConvertBitsToGpiodValues(const std::vector<std::uint8_t>& bits) const -> const ::gpiod::line::values;
+
+	auto ConversBitsToOffsets(const std::vector<std::uint8_t>& bits) const -> const ::gpiod::line::offsets;
+
+	std::shared_ptr<::gpiod::chip> _chip;
+	std::shared_ptr<::gpiod::line_request> _lineReq;
+	std::size_t _numLines;
 };

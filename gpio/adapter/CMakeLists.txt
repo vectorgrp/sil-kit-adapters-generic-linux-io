@@ -1,6 +1,7 @@
-
 add_executable(SilKitAdapterGPIO
-    "SilKitAdapterGPIO.cpp")
+    "SilKitAdapterGPIO.cpp"
+    "GpioChip.cpp" 
+    "ChipDatas.cpp")
 
 add_library(gpiodcxx STATIC IMPORTED)
 
@@ -26,6 +27,12 @@ set_target_properties(SilKitAdapterGPIO
     BUILD_RPATH "$ORIGIN"
     RUNTIME_OUTPUT_DIRECTORY $<$<BOOL:ALWAYS>:${SILKIT_ADAPTERS_GPIO_OUTPUT_DIRECTORY}>
 )
+
+# Compile options for valgrind
+#target_compile_options(SilKitAdapterGPIO
+#    PRIVATE
+#        -g -O0
+#)
 
 add_custom_command(
     TARGET SilKitAdapterGPIO

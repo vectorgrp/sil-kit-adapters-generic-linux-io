@@ -8,30 +8,25 @@
 #include <utility>
 #include <atomic>
 
-#include "SilKitDemoGPIODevice.hpp"
+#include "ChipDatas.hpp"
+
 #include "silkit/SilKit.hpp"
 #include "silkit/config/all.hpp"
 #include "silkit/services/pubsub/all.hpp"
 #include "silkit/util/serdes/Serialization.hpp"
 
-
-using namespace SilKit::Services::PubSub;
-
 using namespace std::chrono_literals;
 
-std::condition_variable cv;
-std::atomic<bool> isStopped;
-std::mutex m;
-bool newValuesReceived;
+std::atomic<bool> isWorking;
+std::atomic<bool> newValuesReceived;
+ChipDatas chipDatas;
 
-GpioChip gpioChip;
+void PrintPinsValues(const std::string &deviceName) {
+    auto numLines = chipDatas.GetDatasSize();
+    ::std::cout << ' ' << deviceName << " - " << numLines << " lines:" << ::std::endl;
 
-void printPinsValues(const std::string &deviceName) {
-    //std::cout << "Enter a new value (x:yz) : " << std::endl;
-
-    ::std::cout << ' ' << deviceName << " - " << gpioChip.pinsValues.size() << " lines:" << ::std::endl;
-
-    for (unsigned int offset = 0; offset < gpioChip.pinsIO.size(); ++offset) {
+    for (std::size_t offset = 0; offset < numLines; ++offset) 
+    {
         ::std::cout << "\tline ";
         ::std::cout.width(3);
         ::std::cout << offset << ": ";
@@ -40,10 +35,12 @@ void printPinsValues(const std::string &deviceName) {
         ::std::cout << "SilKitDemo ";
 
         ::std::cout.width(8);
-        if (gpioChip.pinsIO[offset] == 0) {
-            std::cout << "input    " << (gpioChip.pinsValues[offset] == 0 ? '0': '1') << std::endl;
+        if (chipDatas.GetPinDirection(offset) == 0) 
+        {
+            std::cout << "input    " << (chipDatas.GetPinValue(offset) == 0 ? '0': '1') << std::endl;
         }
-        else {
+        else 
+        {
             std::cout << "output   " << '-' << std::endl;
         }
     }
@@ -53,30 +50,48 @@ void printPinsValues(const std::string &deviceName) {
 int main(int argc, char** argv)
 {
     // Participant configuration
-    const std::string loglevel = "Info"; 
+    const std::string loglevel = "Info";
+
     const std::string deviceName = "gpiochip0";
-    const std::string participantName = "DisplayDevice"; 
+
+    const std::string participantName = "DisplayDevice";
+
     const std::string registryURI = "silkit://localhost:8501";
+
     const std::string participantConfigurationString =
         R"({ "Logging": { "Sinks": [ { "Type": "Stdout", "Level": ")" + loglevel + R"("} ] } })";
 
-    // Publishers specifications
+    // Publisher specifications
     SilKit::Services::PubSub::PubSubSpec subDataSpec{"Topic1", SilKit::Util::SerDes::MediaTypeData()};
     subDataSpec.AddLabel("KeyA", "ValA", SilKit::Services::MatchingLabel::Kind::Optional);
 
-    //SilKit::Services::PubSub::PubSubSpec subDataSpec2{"Topic2", SilKit::Util::SerDes::MediaTypeData()};
-    //subDataSpec.AddLabel("KeyB", "ValB", SilKit::Services::MatchingLabel::Kind::Optional);
-
     try
     {
+        isWorking = true;
+        newValuesReceived = false;
+
+        // Configure the participant
         auto participantConfiguration =
             SilKit::Config::ParticipantConfigurationFromString(participantConfigurationString);
 
         std::cout << "Creating participant " << participantName << " with registry " << registryURI << std::endl;
+        auto participant = SilKit::CreateParticipant(std::move(participantConfiguration), participantName, registryURI);
 
-        auto participant = SilKit::CreateParticipant(participantConfiguration, participantName, registryURI);
+        auto dataSubscriber = participant->CreateDataSubscriber(
+            participantName + "_sub", subDataSpec,
+            [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, 
+                const SilKit::Services::PubSub::DataMessageEvent& dataMessageEvent)
+            {
+                // add error management for received datas
+                std::cout << "Deserializing new values received from GPIO Adapter" << std::endl;
 
-        auto* lifecycleService = participant->CreateLifecycleService({SilKit::Services::Orchestration::OperationMode::Autonomous});
+                // pins' state is updating with received values from the gpiochip 
+                chipDatas.Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
+
+                newValuesReceived = true;
+            });
+
+        auto* lifecycleService = participant->CreateLifecycleService({ SilKit::Services::Orchestration::OperationMode::Autonomous });
 
         lifecycleService->SetStopHandler([]() {
             std::cout << "Stop handler called" << std::endl;
@@ -86,18 +101,7 @@ int main(int argc, char** argv)
             std::cout << "Shutdown handler called" << std::endl;
             });
 
-        auto dataSubscriber = participant->CreateDataSubscriber(
-            participantName + "_sub", subDataSpec,
-            [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
-                // add error management for received datas
-                std::cout << "New values received from GPIO Adapter \n" << std::endl;
-                // pins' state is updating with received values from the gpiochip 
-                gpioChip = deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
-                newValuesReceived = true;
-            });
-
-        // lifeCycle handling
-        isStopped = false;
+        // Print thread handling
         std::thread workerThread;
         std::promise<void> startHandlerPromise;
         auto startHandlerFuture = startHandlerPromise.get_future();
@@ -105,10 +109,13 @@ int main(int argc, char** argv)
             std::cout << "Communication ready handler called for " << participantName << std::endl;
             workerThread = std::thread{ [&]() {
                 startHandlerFuture.get();
-                while (!isStopped)
+
+                while (isWorking)
                 {
-                    if (newValuesReceived) {
-                        printPinsValues(deviceName);
+                    if (newValuesReceived) 
+                    {
+                        PrintPinsValues(deviceName);
+
                         newValuesReceived = false;
                     }
                 }
@@ -121,14 +128,17 @@ int main(int argc, char** argv)
             });
 
         auto finalStateFuture = lifecycleService->StartLifecycle();
+
         std::cout << "Press enter to stop the process..." << std::endl;
         std::cin.ignore();
 
-        isStopped = true;
+        isWorking = false;
+
         if (workerThread.joinable())
         {
             workerThread.join();
         }
+
         auto finalState = finalStateFuture.get();
         std::cout << "Simulation stopped. Final State: " << static_cast<int16_t>(finalState) << std::endl;
     }
