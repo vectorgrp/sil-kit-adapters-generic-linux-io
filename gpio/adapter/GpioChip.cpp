@@ -60,7 +60,7 @@ void GpioChip::SetGpioValues(const ChipDatas& chipDatas)
     }
 }
 
-auto GpioChip::GetGpioOffsetsDirection() const -> const std::vector<::gpiod::line::direction>
+auto GpioChip::GetGpioOffsetsDirection() const -> std::vector<::gpiod::line::direction>
 {
     std::vector<::gpiod::line::direction> directions;
 
@@ -73,7 +73,7 @@ auto GpioChip::GetGpioOffsetsDirection() const -> const std::vector<::gpiod::lin
     return directions;
 }
 
-auto GpioChip::GetGpioOffsetsValues(bool initialization) -> const ::gpiod::line::values
+auto GpioChip::GetGpioOffsetsValues(bool initialization) -> ::gpiod::line::values
 {
     auto line_conf = ::gpiod::line_config();
     auto directions = GetGpioOffsetsDirection();
@@ -110,7 +110,7 @@ auto GpioChip::GetGpioOffsetsValues(bool initialization) -> const ::gpiod::line:
         return _lineReq->reconfigure_lines(line_conf).get_values();
 }
 
-auto GpioChip::ReadGpioEvents(ChipDatas& chipDatas, ::gpiod::edge_event_buffer& buffer) -> const bool
+auto GpioChip::ReadGpioEvents(ChipDatas& chipDatas, ::gpiod::edge_event_buffer& buffer) -> bool
 {
     auto line_conf = ::gpiod::line_config();
 
@@ -147,12 +147,12 @@ auto GpioChip::ReadGpioEvents(ChipDatas& chipDatas, ::gpiod::edge_event_buffer& 
     return newEvent;
 }
 
-auto GpioChip::ConvertBitToGpioValue(const std::uint8_t bit) const -> const ::gpiod::line::value
+auto GpioChip::ConvertBitToGpioValue(const std::uint8_t bit) const -> ::gpiod::line::value
 {
     return (bit == 1 ? gpiod::line::value::ACTIVE : gpiod::line::value::INACTIVE);
 };
 
-auto GpioChip::ConvertBitsToGpiodValues(const std::vector<std::uint8_t>& bits) const -> const ::gpiod::line::values
+auto GpioChip::ConvertBitsToGpiodValues(const std::vector<std::uint8_t>& bits) const -> ::gpiod::line::values
 {
     ::gpiod::line::values values;
     for (const auto bit : bits)
@@ -161,7 +161,7 @@ auto GpioChip::ConvertBitsToGpiodValues(const std::vector<std::uint8_t>& bits) c
     return values;
 };
 
-auto GpioChip::ConversBitsToOffsets(const std::vector<std::uint8_t>& bits) const -> const ::gpiod::line::offsets
+auto GpioChip::ConversBitsToOffsets(const std::vector<std::uint8_t>& bits) const -> ::gpiod::line::offsets
 {
     ::gpiod::line::offsets offsets;
     for (const auto bit : bits)

@@ -55,27 +55,27 @@ auto ChipDatas::GetOutputLinesValues() const -> const std::vector<std::uint8_t>
     return values;
 }
 
-auto ChipDatas::GetDatasSize() const -> const std::size_t
+auto ChipDatas::GetDatasSize() const -> std::size_t
 {
     return _pinsValues.size();
 }
 
-auto ChipDatas::GetPinValue(const int offset) const -> const std::uint8_t
+auto ChipDatas::GetPinValue(const std::size_t offset) const -> std::uint8_t
 {
     return _pinsValues[offset];
 }
 
-auto ChipDatas::GetPinDirection(const int offset) const -> const std::uint8_t
+auto ChipDatas::GetPinDirection(const std::size_t offset) const -> std::uint8_t
 {
     return _pinsIO[offset];
 }
 
-void ChipDatas::SetPinValue(const int offset, const std::uint8_t value)
+void ChipDatas::SetPinValue(const std::size_t offset, const std::uint8_t value)
 {
     _pinsValues[offset] = value;
 }
 
-void ChipDatas::SetIOValue(const int offset, const std::uint8_t value)
+void ChipDatas::SetIOValue(const std::size_t offset, const std::uint8_t value)
 {
     _pinsIO[offset] = value;
 }

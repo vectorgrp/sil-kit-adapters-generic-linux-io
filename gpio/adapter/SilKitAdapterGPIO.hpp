@@ -25,17 +25,17 @@ void promptForExit()
     std::cin.ignore();
 }
 
-auto ConvertGpioValueToBit(const ::gpiod::line::value value) -> const std::uint8_t
+auto ConvertGpioValueToBit(const ::gpiod::line::value value) -> std::uint8_t
 {
     return (value == gpiod::line::value::ACTIVE ? 1 : 0);
 };
 
-auto ConvertGpioDirectionToBit(const ::gpiod::line::direction dir) -> const std::uint8_t
+auto ConvertGpioDirectionToBit(const ::gpiod::line::direction dir) -> std::uint8_t
 {
     return (dir == ::gpiod::line::direction::OUTPUT ? 1 : 0);
 };
 
-auto ConvertGpiodValuesToBits(const ::gpiod::line::values& values) -> const std::vector<std::uint8_t>
+auto ConvertGpiodValuesToBits(const ::gpiod::line::values& values) -> std::vector<std::uint8_t>
 {
     std::vector<std::uint8_t> bits;
     for (auto val : values)

@@ -18,12 +18,12 @@ public:
 
     auto GetLinesDirection() const -> const std::pair<std::vector<std::uint8_t>, std::vector<std::uint8_t>>;
     auto GetOutputLinesValues() const -> const std::vector<std::uint8_t>;
-    auto GetDatasSize() const -> const  std::size_t;
-    auto GetPinValue(const int offset) const -> const std::uint8_t;
-    auto GetPinDirection(const int offset) const -> const std::uint8_t;
+    auto GetDatasSize() const -> std::size_t;
+    auto GetPinValue(const std::size_t offset) const -> std::uint8_t;
+    auto GetPinDirection(const std::size_t offset) const -> std::uint8_t;
 
-    void SetPinValue(const int offset, const std::uint8_t value);
-    void SetIOValue(const int offset, const std::uint8_t value);
+    void SetPinValue(const std::size_t offset, const std::uint8_t value);
+    void SetIOValue(const std::size_t offset, const std::uint8_t value);
 
 private:
     std::vector<std::uint8_t> _pinsValues;

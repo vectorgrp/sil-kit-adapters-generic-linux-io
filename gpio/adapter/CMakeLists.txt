@@ -28,11 +28,16 @@ set_target_properties(SilKitAdapterGPIO
     RUNTIME_OUTPUT_DIRECTORY $<$<BOOL:ALWAYS>:${SILKIT_ADAPTERS_GPIO_OUTPUT_DIRECTORY}>
 )
 
-# Compile options for valgrind
-#target_compile_options(SilKitAdapterGPIO
-#    PRIVATE
-#        -g -O0
-#)
+target_compile_options(SilKitAdapterGPIO
+    PRIVATE
+        #-g -O0 # Compile options for valgrind
+        -pedantic -Wall -Wextra
+        -Wcast-align -Wformat=2
+        -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5
+        -Wno-unused
+        -Wpacked
+        -Werror -Wfatal-errors
+)
 
 add_custom_command(
     TARGET SilKitAdapterGPIO
