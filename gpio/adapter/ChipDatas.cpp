@@ -31,9 +31,9 @@ auto ChipDatas::Serialize() -> std::vector<uint8_t>
     return serializer.ReleaseBuffer();
 }
 
-auto ChipDatas::GetLinesDirection() const -> const std::pair<std::vector<std::uint8_t>, std::vector<std::uint8_t>>
+auto ChipDatas::GetLinesDirection() const -> const std::pair<std::vector<std::size_t>, std::vector<std::size_t>>
 {
-    std::vector<std::uint8_t> offsetsIN, offsetsOUT;
+    std::vector<std::size_t> offsetsIN, offsetsOUT;
     for (std::size_t i = 0; i < _pinsIO.size(); ++i) 
     {
         // Assume that input == 0 / output == 1

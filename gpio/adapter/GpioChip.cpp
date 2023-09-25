@@ -52,7 +52,7 @@ void GpioChip::SetGpioValues(const ChipDatas& chipDatas)
     if (offsetsOUT.size() > 0)
     {
         _lineReq->reconfigure_lines(line_conf)
-            .set_values(ConversBitsToOffsets(offsetsOUT), ConvertBitsToGpiodValues(valuesOUT));
+            .set_values(ConvertLinesToOffsets(offsetsOUT), ConvertBitsToGpiodValues(valuesOUT));
     }
     else 
     {
@@ -116,7 +116,7 @@ auto GpioChip::ReadGpioEvents(ChipDatas& chipDatas, ::gpiod::edge_event_buffer& 
 
     for (std::size_t i = 0; i < chipDatas.GetDatasSize(); ++i) 
     {
-        if (chipDatas.GetPinValue(i) == 0) 
+        if (chipDatas.GetPinDirection(i) == 0)
         {
             line_conf.add_line_settings(
                 ::gpiod::line::offset(i),
@@ -161,11 +161,11 @@ auto GpioChip::ConvertBitsToGpiodValues(const std::vector<std::uint8_t>& bits) c
     return values;
 };
 
-auto GpioChip::ConversBitsToOffsets(const std::vector<std::uint8_t>& bits) const -> ::gpiod::line::offsets
+auto GpioChip::ConvertLinesToOffsets(const std::vector<std::size_t>& lines) const -> ::gpiod::line::offsets
 {
     ::gpiod::line::offsets offsets;
-    for (const auto bit : bits)
-        offsets.push_back(::gpiod::line::offset(bit));
+    for (const auto line : lines)
+        offsets.push_back(::gpiod::line::offset(line));
     
     return offsets;
 }

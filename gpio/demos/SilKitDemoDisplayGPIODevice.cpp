@@ -19,7 +19,7 @@ using namespace std::chrono_literals;
 
 std::atomic<bool> isWorking;
 std::atomic<bool> newValuesReceived;
-ChipDatas chipDatas;
+static ChipDatas chipDatas;
 
 void PrintPinsValues(const std::string &deviceName) {
     auto numLines = chipDatas.GetDatasSize();
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
             [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, 
                 const SilKit::Services::PubSub::DataMessageEvent& dataMessageEvent)
             {
-                // add error management for received datas
+                // TODO: Add error management for received datas
                 std::cout << "Deserializing new values received from GPIO Adapter" << std::endl;
 
                 // pins' state is updating with received values from the gpiochip 

@@ -37,7 +37,7 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    // Handling arg values <line_offset0>=<direction0>:<value0> ...
+    // Handle arg values <line_offset0>=<direction0>:<value0> ...
     std::vector<std::uint8_t> offsets, values, directions;
 
     for (int i = 1; i < argc; i++) 
@@ -99,30 +99,28 @@ int main(int argc, char** argv)
             [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, 
                 const SilKit::Services::PubSub::DataMessageEvent& dataMessageEvent) 
             {
-                // add error management for received datas
+                // TODO: Add error management for received datas
 
-                // getting last gpiochip state from the registry
+                // Get the last gpiochip state from the registry
                 std::cout << "Deserializing new values received from GPIO Adapter" << std::endl;
                 chipDatas.Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
             });
 
         auto dataPublisher = participant->CreateDataPublisher(participantName + "_pub", pubDataSpec);
 
-        // Waiting for getting the last published message on the topic
+        // Wait for getting the last published message on the topic
         std::this_thread::sleep_for(1s);
 
-        // A modifier pour afficher les valeurs reçues
         std::cout << "Values received are : ";
         PrintDirectionsValues(chipDatas);
 
-        // Modifying chip datas received from the adapter with arg datas
+        // Modify chip datas received from the adapter with arg datas
         for (std::size_t i = 0; i < offsets.size(); ++i) 
         {
             chipDatas.SetIOValue(offsets[i], directions[i]);
             chipDatas.SetPinValue(offsets[i], values[i]);
         }
 
-        // Ajouter les valeurs envoyées io + values
         std::cout << "Values sent are     : ";
         PrintDirectionsValues(chipDatas);
 
