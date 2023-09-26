@@ -35,13 +35,13 @@ void PrintPinsValues(const std::string &deviceName) {
         ::std::cout << "SilKitDemo ";
 
         ::std::cout.width(8);
-        if (chipDatas.GetPinDirection(offset) == 0) 
+        if (chipDatas.GetLineDirection(offset) == 0) 
         {
-            std::cout << "input    " << (chipDatas.GetPinValue(offset) == 0 ? '0': '1') << std::endl;
+            std::cout << "input   " << (chipDatas.GetLineValue(offset) == 0 ? '0': '1') << std::endl;
         }
         else 
         {
-            std::cout << "output   " << '-' << std::endl;
+            std::cout << "output  " << '-' << std::endl;
         }
     }
     std::cout << '\n';

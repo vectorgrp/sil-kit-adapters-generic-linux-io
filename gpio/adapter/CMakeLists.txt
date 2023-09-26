@@ -1,3 +1,5 @@
+# Copyright (c) Vector Informatik GmbH. All rights reserved.
+
 add_executable(SilKitAdapterGPIO
     "SilKitAdapterGPIO.cpp"
     "GpioChip.cpp" 

@@ -1,3 +1,5 @@
+# Copyright (c) Vector Informatik GmbH. All rights reserved.
+
 add_executable(SilKitDemoDisplayGPIODevice
     "SilKitDemoDisplayGPIODevice.cpp"
     "${CMAKE_SOURCE_DIR}/gpio/adapter/ChipDatas.cpp"

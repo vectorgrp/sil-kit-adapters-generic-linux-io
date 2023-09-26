@@ -19,9 +19,9 @@ void PrintDirectionsValues(const ChipDatas& chipDatas)
 {
     for (std::size_t i = 0; i < chipDatas.GetDatasSize(); ++i) 
     {
-        std::cout << (chipDatas.GetPinDirection(i) == 0 ? '0' : '1');
+        std::cout << (chipDatas.GetLineDirection(i) == 0 ? '0' : '1');
         std::cout << ':';
-        std::cout << (chipDatas.GetPinValue(i) == 0 ? '0' : '1');
+        std::cout << (chipDatas.GetLineValue(i) == 0 ? '0' : '1');
         std::cout << ' ';
     }
     std::cout << '\n';
@@ -117,8 +117,8 @@ int main(int argc, char** argv)
         // Modify chip datas received from the adapter with arg datas
         for (std::size_t i = 0; i < offsets.size(); ++i) 
         {
-            chipDatas.SetIOValue(offsets[i], directions[i]);
-            chipDatas.SetPinValue(offsets[i], values[i]);
+            chipDatas.SetLineDirection(offsets[i], directions[i]);
+            chipDatas.SetLineValue(offsets[i], values[i]);
         }
 
         std::cout << "Values sent are     : ";

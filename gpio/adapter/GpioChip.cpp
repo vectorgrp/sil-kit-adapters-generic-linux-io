@@ -30,7 +30,7 @@ void GpioChip::SetGpioValues(const ChipDatas& chipDatas)
 
     for (std::size_t i = 0; i < chipDatas.GetDatasSize(); ++i) 
     {
-        if (chipDatas.GetPinValue(i) == 0) 
+        if (chipDatas.GetLineDirection(i) == 0) 
         {
             line_conf.add_line_settings(
                 ::gpiod::line::offset(i),
@@ -116,7 +116,7 @@ auto GpioChip::ReadGpioEvents(ChipDatas& chipDatas, ::gpiod::edge_event_buffer& 
 
     for (std::size_t i = 0; i < chipDatas.GetDatasSize(); ++i) 
     {
-        if (chipDatas.GetPinDirection(i) == 0)
+        if (chipDatas.GetLineDirection(i) == 0)
         {
             line_conf.add_line_settings(
                 ::gpiod::line::offset(i),
@@ -131,7 +131,7 @@ auto GpioChip::ReadGpioEvents(ChipDatas& chipDatas, ::gpiod::edge_event_buffer& 
                 ::gpiod::line::offset(i),
                 ::gpiod::line_settings()
                 .set_direction(::gpiod::line::direction::OUTPUT)
-                .set_output_value(ConvertBitToGpioValue(chipDatas.GetPinValue(i)))
+                .set_output_value(ConvertBitToGpioValue(chipDatas.GetLineValue(i)))
             );
         }
     }

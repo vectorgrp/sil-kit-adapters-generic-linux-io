@@ -90,7 +90,7 @@ int main(int argc, char** argv)
                 newMsg = true;
 
                 // Updating internal chip datas
-                chipDatas.Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
+                chipDatas.SpecificDeserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
 
                 // Updating gpio chip
                 logger->Info("Updating " + gpiochipName);
@@ -138,14 +138,14 @@ int main(int argc, char** argv)
                                 if (event.type() == ::gpiod::edge_event::event_type::RISING_EDGE) 
                                 {
                                     logger->Info(gpiochipName + " : RISING_EDGE line " + std::to_string(static_cast<unsigned int>(line)));
-                                    chipDatas.SetPinValue(::gpiod::line::offset(line), 1);
-                                    chipDatas.SetIOValue(::gpiod::line::offset(line), 0);
+                                    chipDatas.SetLineValue(::gpiod::line::offset(line), 1);
+                                    chipDatas.SetLineDirection(::gpiod::line::offset(line), 0);
                                 }
                                 else 
                                 {
                                     logger->Info(gpiochipName + " : FALLING_EDGE line " + std::to_string(static_cast<unsigned int>(line)));
-                                    chipDatas.SetPinValue(::gpiod::line::offset(line), 0);
-                                    chipDatas.SetIOValue(::gpiod::line::offset(line), 0);
+                                    chipDatas.SetLineValue(::gpiod::line::offset(line), 0);
+                                    chipDatas.SetLineDirection(::gpiod::line::offset(line), 0);
                                 }
                             }
 

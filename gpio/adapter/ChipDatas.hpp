@@ -7,16 +7,21 @@
 
 #include "silkit/services/pubsub/all.hpp"
 
-// Handling chip datas with bits
+/* Handling chip datas with bits
+* A line in a chip is represented as an offset
+*/ 
 class ChipDatas
 {
 public:
     ChipDatas() = default;
-    ChipDatas(std::vector<std::uint8_t> initPinsValues, std::vector<std::uint8_t> initPinsIO);
+    ChipDatas(const std::vector<std::uint8_t>& initLinesValues, const std::vector<std::uint8_t>& initLinesDirections);
 
-    // Deserialize datas received in _pinsValue and _pinsIO
+    // Deserialize all received datas in _linesValues and _linesDirections
     void Deserialize(const std::vector<uint8_t>& data);
-    // Serialize internal chip datas _pinsValues and _pinsIO
+    // Deserialize received datas in _linesValues and _linesDirections without
+    // Taking into account the value when direction is INPUT
+    void SpecificDeserialize(const std::vector<uint8_t>& data);
+    // Serialize internal chip datas _linesValues and _linesDirections
     auto Serialize() -> std::vector<uint8_t>;
 
     // Get a vector of input lines and a second one of output lines
@@ -26,17 +31,21 @@ public:
     // Get the number of lines
     auto GetDatasSize() const -> std::size_t;
     // Get the value of a given offset
-    auto GetPinValue(const std::size_t offset) const -> std::uint8_t;
+    auto GetLineValue(const std::size_t offset) const -> std::uint8_t;
     // Get the direction of a given offset
-    auto GetPinDirection(const std::size_t offset) const -> std::uint8_t;
+    auto GetLineDirection(const std::size_t offset) const -> std::uint8_t;
 
     // Set the value of a given offset
-    void SetPinValue(const std::size_t offset, const std::uint8_t value);
+    void SetLineValue(const std::size_t offset, const std::uint8_t value);
     // Set the direction of a given offset
-    void SetIOValue(const std::size_t offset, const std::uint8_t value);
+    void SetLineDirection(const std::size_t offset, const std::uint8_t value);
+    // Set all lines values
+    void SetLinesValues(const std::vector<std::uint8_t>& values);
+    // Set all lines directions
+    void SetLinesDirections(const std::vector<std::uint8_t>& directions);
 
 private:
-    std::vector<std::uint8_t> _pinsValues;
-    std::vector<std::uint8_t> _pinsIO;
+    std::vector<std::uint8_t> _linesValues;
+    std::vector<std::uint8_t> _linesDirections;
 };
 
