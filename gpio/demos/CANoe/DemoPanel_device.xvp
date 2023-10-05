@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=17.2.88.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=17.2.88.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="DemoPanel">
+    <Object Type="Vector.CANalyzer.Panels.Design.EventControl, Vector.CANalyzer.Panels.CommonControls, Version=17.2.88.0, Culture=neutral, PublicKeyToken=null" Name="EventControl2" Children="Controls" ControlName="Complex Data Control 1">
+      <Property Name="Name">EventControl2</Property>
+      <Property Name="Size">175, 179</Property>
+      <Property Name="Location">182, 2</Property>
+      <Property Name="DescriptionText">Update data</Property>
+      <Property Name="SymbolConfiguration">8;4096;KeyA;UpdatedData.updatedData;;1;256;;;-1;;;;;;16</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.EventControl, Vector.CANalyzer.Panels.CommonControls, Version=17.2.88.0, Culture=neutral, PublicKeyToken=null" Name="EventControl1" Children="Controls" ControlName="RecvValues">
+      <Property Name="Name">EventControl1</Property>
+      <Property Name="Size">175, 424</Property>
+      <Property Name="Location">2, 2</Property>
+      <Property Name="ValueType">RawValue</Property>
+      <Property Name="DescriptionText">GPIO Chip</Property>
+      <Property Name="SymbolConfiguration">8;4096;KeyA;Receiver.adapterPublishTopic;;1;256;;;-1;;;;;;8</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">362, 431</Property>
+    <Property Name="BackColor">White</Property>
+    <Property Name="BorderStyle">FixedSingle</Property>
+  </Object>
+</Panel>

@@ -1,0 +1,45 @@
+version 1.4;
+
+import module "SilKit";
+
+namespace KeyA
+{ 
+  struct ChipDatas
+  {
+    array<bool, 8> values;
+    array<bool, 8> directions;
+  }
+  
+  // Handle received datas
+  [Binding="SilKit"]
+  interface GPIOAdapter
+  {
+    consumed data ChipDatas adapterPublishTopic;
+  }
+  
+  object Receiver : GPIOAdapter;
+  
+  // Handle published datas
+  [Binding="SilKit"]
+  interface ValueSender
+  {
+    provided data ChipDatas adapterSubscribeTopic;
+  }
+  
+  object Sender : ValueSender;
+  
+  // Handling data we want to update
+  struct Data 
+  {
+    int32 line;
+    bool direction;
+    bool value;
+  }
+  
+  interface Update
+  {
+    internal data Data updatedData;
+  }
+  
+  object UpdatedData : Update;
+}
