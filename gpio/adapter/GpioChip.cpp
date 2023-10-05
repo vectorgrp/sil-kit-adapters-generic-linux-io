@@ -150,7 +150,7 @@ auto GpioChip::ReadGpioEvents(ChipDatas& chipDatas, ::gpiod::edge_event_buffer& 
 auto GpioChip::ConvertBitToGpioValue(const std::uint8_t bit) const -> ::gpiod::line::value
 {
     return (bit == 1 ? gpiod::line::value::ACTIVE : gpiod::line::value::INACTIVE);
-};
+}
 
 auto GpioChip::ConvertBitsToGpiodValues(const std::vector<std::uint8_t>& bits) const -> ::gpiod::line::values
 {
@@ -159,7 +159,7 @@ auto GpioChip::ConvertBitsToGpiodValues(const std::vector<std::uint8_t>& bits) c
         values.push_back(ConvertBitToGpioValue(bit));
 
     return values;
-};
+}
 
 auto GpioChip::ConvertLinesToOffsets(const std::vector<std::size_t>& lines) const -> ::gpiod::line::offsets
 {

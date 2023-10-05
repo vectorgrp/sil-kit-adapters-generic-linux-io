@@ -28,12 +28,12 @@ void promptForExit()
 auto ConvertGpioValueToBit(const ::gpiod::line::value value) -> std::uint8_t
 {
     return (value == gpiod::line::value::ACTIVE ? 1 : 0);
-};
+}
 
 auto ConvertGpioDirectionToBit(const ::gpiod::line::direction dir) -> std::uint8_t
 {
     return (dir == ::gpiod::line::direction::OUTPUT ? 1 : 0);
-};
+}
 
 auto ConvertGpiodValuesToBits(const ::gpiod::line::values& values) -> std::vector<std::uint8_t>
 {
@@ -42,7 +42,7 @@ auto ConvertGpiodValuesToBits(const ::gpiod::line::values& values) -> std::vecto
         bits.push_back(ConvertGpioValueToBit(val));
 
     return bits;
-};
+}
 
 auto ConvertGpiodDirectionsToBits(const std::vector<::gpiod::line::direction>& directions) -> const std::vector<std::uint8_t>
 {
@@ -51,4 +51,4 @@ auto ConvertGpiodDirectionsToBits(const std::vector<::gpiod::line::direction>& d
         bits.push_back(ConvertGpioDirectionToBit(dir));
 
     return bits;
-};
+}
