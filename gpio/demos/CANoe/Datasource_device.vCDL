@@ -28,7 +28,7 @@ namespace KeyA
   
   object Sender : ValueSender;
   
-  // Handling data we want to update
+  // Handle updated data
   struct Data 
   {
     int32 line;

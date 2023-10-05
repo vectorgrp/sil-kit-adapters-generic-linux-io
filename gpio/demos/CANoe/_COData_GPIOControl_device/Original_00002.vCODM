@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FunctionBusLibrary Version="4" FormatMajorVersion="3">
+<FunctionBusLibrary Version="5" FormatMajorVersion="3">
   <Namespaces>
     <Namespace IsDefinedAsHidden="False" IsSystemDefined="False" Name="KeyA">
       <Subnamespaces>
