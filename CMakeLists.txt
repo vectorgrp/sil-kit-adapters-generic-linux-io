@@ -77,6 +77,8 @@ endif()
 add_subdirectory(gpio/adapter)
 add_subdirectory(gpio/demos)
 
+add_subdirectory(third_party)
+
 ################################################################################
 # Distribution of the source code and binaries
 ################################################################################
@@ -92,15 +94,6 @@ install(
     COMPONENT source
     REGEX "\.git$" EXCLUDE
     REGEX "\.github$" EXCLUDE    
-)
-
-install(
-    DIRECTORY
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party
-    DESTINATION .
-    COMPONENT source
-    REGEX "\.git$" EXCLUDE
-    REGEX "\.github$" EXCLUDE
 )
 
 install(

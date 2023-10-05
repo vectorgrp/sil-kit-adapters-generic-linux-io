@@ -3,22 +3,24 @@
 add_executable(SilKitAdapterGPIO
     "SilKitAdapterGPIO.cpp"
     "GpioChip.cpp" 
-    "ChipDatas.cpp")
-
-add_library(gpiodcxx STATIC IMPORTED)
-
-set_target_properties(gpiodcxx PROPERTIES
-  IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/third_party/gpiod/lib/libgpiodcxx.so"
-  INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/third_party/gpiod/include/"
+    "ChipDatas.cpp"
 )
 
-target_include_directories(SilKitAdapterGPIO PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR} 
-    "${CMAKE_SOURCE_DIR}/third_party/gpiod/include")
+add_dependencies(SilKitAdapterGPIO gpiod)
+
+set(gpiod_INCLUDES "${CMAKE_BINARY_DIR}/include/")
+set(gpiod_LIBRARIES "${CMAKE_BINARY_DIR}/lib/")
+    
+
+target_include_directories(SilKitAdapterGPIO 
+    PUBLIC 
+        ${CMAKE_CURRENT_SOURCE_DIR} 
+        ${gpiod_INCLUDES}
+)
 
 target_link_libraries(SilKitAdapterGPIO
     PRIVATE
-        gpiodcxx
+        ${gpiod_LIBRARIES}/libgpiodcxx.so
         SilKit::SilKit
 )
 
@@ -45,5 +47,5 @@ add_custom_command(
     TARGET SilKitAdapterGPIO
     POST_BUILD
     COMMAND ${CMAKE_COMMAND}
-    ARGS -E copy $<TARGET_FILE:SilKit::SilKit> ${SILKIT_ADAPTERS_GPIO_OUTPUT_DIRECTORY}
+    ARGS -E copy ${gpiod_LIBRARIES}/libgpiodcxx.so $<TARGET_FILE:SilKit::SilKit> ${SILKIT_ADAPTERS_GPIO_OUTPUT_DIRECTORY}
 )
