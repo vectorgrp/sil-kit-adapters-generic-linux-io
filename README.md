@@ -24,9 +24,8 @@ The first thing that you should do is initializing the submodules to fetch the r
     git submodule update --init --recursive
 
 ### Build the Adapters and Demos
-To build the demos, you'll need SIL Kit packages ``SilKit-x.y.z-$platform`` for your platform. You can download them directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases).
-
-Before building the adapter you have to install the package ``autoconf-archive`` on your machine. For ubuntu you can do it with the following command : 
+To build the demos, you'll need SIL Kit packages ``SilKit-x.y.z-$platform`` for your platform. You can download them directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). 
+You will also need the ``autoconf-archive`` package. For ubuntu you can install it with the following command : 
 
     sudo apt install autoconf-archive -y
 
