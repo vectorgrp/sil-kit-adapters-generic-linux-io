@@ -61,8 +61,10 @@ int main(int argc, char** argv)
     const std::string participantConfigurationString =
         R"({ "Logging": { "Sinks": [ { "Type": "Stdout", "Level": ")" + loglevel + R"("} ] } })";
 
+    const std::string topicSubscriber = "adapterPublishTopic";
+
     // Publisher specifications
-    SilKit::Services::PubSub::PubSubSpec subDataSpec{"Topic1", SilKit::Util::SerDes::MediaTypeData()};
+    SilKit::Services::PubSub::PubSubSpec subDataSpec{topicSubscriber, SilKit::Util::SerDes::MediaTypeData()};
     subDataSpec.AddLabel("KeyA", "ValA", SilKit::Services::MatchingLabel::Kind::Optional);
 
     try

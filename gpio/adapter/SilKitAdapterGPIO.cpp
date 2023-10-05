@@ -35,9 +35,9 @@ int main(int argc, char** argv)
 
     const std::string registryURI = "silkit://localhost:8501";
 
-    const std::string topicPublisher = "Topic1";
+    const std::string topicPublisher = "adapterPublishTopic";
 
-    const std::string topicSubscriber = "Topic2";
+    const std::string topicSubscriber = "adapterSubscribeTopic";
 
     const std::string loglevel = "Info";
 
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
         pubDataSpec.AddLabel("KeyA", "ValA", SilKit::Services::MatchingLabel::Kind::Optional);
 
         SilKit::Services::PubSub::PubSubSpec subDataSpec{topicSubscriber, SilKit::Util::SerDes::MediaTypeData()};
-        subDataSpec.AddLabel("KeyB", "ValB", SilKit::Services::MatchingLabel::Kind::Optional);
+        subDataSpec.AddLabel("KeyA", "ValB", SilKit::Services::MatchingLabel::Kind::Optional);
 
         // Handling gpio chip
         GpioChip gpioChip(gpiochipName);

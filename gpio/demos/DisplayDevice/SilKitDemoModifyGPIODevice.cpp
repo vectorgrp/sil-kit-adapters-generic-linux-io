@@ -71,15 +71,19 @@ int main(int argc, char** argv)
 
     const std::string registryURI = "silkit://localhost:8501";
 
+    const std::string topicPublisher = "adapterSubscribeTopic";
+
+    const std::string topicSubscriber = "adapterPublishTopic";
+
     const std::string participantConfigurationString =
         R"({ "Logging": { "Sinks": [ { "Type": "Stdout", "Level": ")" + loglevel + R"("} ] } })";
 
     // Publisher specifications
-    SilKit::Services::PubSub::PubSubSpec pubDataSpec{"Topic2", SilKit::Util::SerDes::MediaTypeData()};
-    pubDataSpec.AddLabel("KeyB", "ValB", SilKit::Services::MatchingLabel::Kind::Optional);
+    SilKit::Services::PubSub::PubSubSpec pubDataSpec{topicPublisher, SilKit::Util::SerDes::MediaTypeData()};
+    pubDataSpec.AddLabel("KeyA", "ValB", SilKit::Services::MatchingLabel::Kind::Optional);
 
     // Subscriber specifications to get the last gpio chip state
-    SilKit::Services::PubSub::PubSubSpec subDataSpec{"Topic1", SilKit::Util::SerDes::MediaTypeData()};
+    SilKit::Services::PubSub::PubSubSpec subDataSpec{topicSubscriber, SilKit::Util::SerDes::MediaTypeData()};
     subDataSpec.AddLabel("KeyA", "ValA", SilKit::Services::MatchingLabel::Kind::Optional);
 
     try
