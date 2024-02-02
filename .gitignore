@@ -1,8 +1,0 @@
-/silkit-qemu-demos-guest.qcow2
-/out/
-/.vs/
-/_build/
-/build/
-/*/build/
-/CMakeSettings.json
-/build_wsl
