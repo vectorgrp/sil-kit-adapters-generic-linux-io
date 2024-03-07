@@ -1,0 +1,8 @@
+Description: Configuration for CANoe participant for SIL Kit Adapter GLIO gpio demo
+Middleware:
+  RegistryUri: silkit://localhost:8501
+# Logging:
+  # Sinks:
+  # - Type: File
+    # Level: Trace
+    # LogName: TraceLogFile

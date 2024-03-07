@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FunctionBusLibrary Version="4" FormatMajorVersion="3">
+  <Namespaces>
+    <Namespace IsDefinedAsHidden="False" IsSystemDefined="False" Name="KeyA">
+      <DOInterfaces>
+        <DOInterface IsAbstract="False" Name="GLIOAdapter">
+          <AttributeValues>
+            <AttributeValue Definition="_SystemAttributes::Binding" InitialValue="SilKit" InitialValueType="String" />
+          </AttributeValues>
+          <MemberData>
+            <DOMemberDataHolder Name="MemberData" />
+          </MemberData>
+          <DataMembers>
+            <DOIFDataMember LocalDirection="Consumed" Name="fromFifo1">
+              <DataType DataType="_SystemDataTypes::UTF8String" />
+            </DOIFDataMember>
+            <DOIFDataMember LocalDirection="Consumed" Name="fromFifo2">
+              <DataType DataType="_SystemDataTypes::UTF8String" />
+            </DOIFDataMember>
+          </DataMembers>
+        </DOInterface>
+        <DOInterface IsAbstract="False" Name="ValueSender">
+          <AttributeValues>
+            <AttributeValue Definition="_SystemAttributes::Binding" InitialValue="SilKit" InitialValueType="String" />
+          </AttributeValues>
+          <MemberData>
+            <DOMemberDataHolder Name="MemberData" />
+          </MemberData>
+          <DataMembers>
+            <DOIFDataMember Name="toFifo2">
+              <DataType DataType="_SystemDataTypes::UTF8String" />
+            </DOIFDataMember>
+          </DataMembers>
+        </DOInterface>
+      </DOInterfaces>
+      <DistributedObjects>
+        <DistributedObject GenerateDotNetAPI="True" Name="Receiver">
+          <DataType>
+            <ModifiedDOIF Reverse="False" IsDOReference="False" Interface="KeyA::GLIOAdapter" />
+          </DataType>
+          <MemberData>
+            <DOMemberDataHolder Name="MemberData" />
+          </MemberData>
+        </DistributedObject>
+        <DistributedObject GenerateDotNetAPI="True" Name="Sender">
+          <DataType>
+            <ModifiedDOIF Reverse="False" IsDOReference="False" Interface="KeyA::ValueSender" />
+          </DataType>
+          <MemberData>
+            <DOMemberDataHolder Name="MemberData" />
+          </MemberData>
+        </DistributedObject>
+      </DistributedObjects>
+    </Namespace>
+  </Namespaces>
+  <ModuleDependencies>
+    <ModuleDependency Module="SilKit" />
+  </ModuleDependencies>
+</FunctionBusLibrary>

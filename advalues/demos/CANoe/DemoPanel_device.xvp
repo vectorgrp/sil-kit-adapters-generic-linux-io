@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="DemoPanel">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box 1">
+      <Object Type="Vector.CANalyzer.Panels.Design.VectorTabControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="VectorTabControl5" Children="Controls" ControlName="Tab Control 5">
+        <Object Type="Vector.CANalyzer.Panels.Design.VectorTabPage, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="VectorTabPage9" Children="Controls" ControlName="Tab Control 5">
+          <Object Type="Vector.CANalyzer.Panels.Design.VectorTabControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="VectorTabControl1" Children="Controls" ControlName="Tab Control 1">
+            <Object Type="Vector.CANalyzer.Panels.Design.VectorTabPage, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="VectorTabPage3" Children="Controls" ControlName="Tab Control 1">
+              <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl2" Children="Controls" ControlName="Input/Output Box 2">
+                <Property Name="Name">TextBoxControl2</Property>
+                <Property Name="Size">184, 18</Property>
+                <Property Name="Location">19, 46</Property>
+                <Property Name="AlarmUpperTextColor">WindowText</Property>
+                <Property Name="ValueDecimalPlaces">0</Property>
+                <Property Name="AlarmLowerBkgColor">IndianRed</Property>
+                <Property Name="ValueDisplay">Text</Property>
+                <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+                <Property Name="AlarmLowerTextColor">WindowText</Property>
+                <Property Name="AlarmGeneralSettings">1;0;0;10</Property>
+                <Property Name="DisplayLabel">Left</Property>
+                <Property Name="DescriptionText">in_voltage15:</Property>
+                <Property Name="ShowMinMax">True</Property>
+                <Property Name="DescriptionSize">85, 18</Property>
+                <Property Name="SymbolConfiguration">8;4096;KeyA;Sender.toVoltage15;;1;4;;;-1;;;;;;16</Property>
+                <Property Name="TabIndex">4</Property>
+              </Object>
+              <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl1" Children="Controls" ControlName="Input/Output Box 1">
+                <Property Name="Name">TextBoxControl1</Property>
+                <Property Name="Size">191, 18</Property>
+                <Property Name="Location">12, 17</Property>
+                <Property Name="AlarmUpperTextColor">WindowText</Property>
+                <Property Name="ValueDecimalPlaces">0</Property>
+                <Property Name="AlarmLowerBkgColor">LightCoral</Property>
+                <Property Name="ValueDisplay">Text</Property>
+                <Property Name="AlarmUpperBkgColor">LightCoral</Property>
+                <Property Name="AlarmLowerTextColor">WindowText</Property>
+                <Property Name="AlarmGeneralSettings">1;0;0;5</Property>
+                <Property Name="DisplayLabel">Left</Property>
+                <Property Name="DescriptionText">in_voltage103:</Property>
+                <Property Name="ShowMinMax">True</Property>
+                <Property Name="DescriptionSize">92, 18</Property>
+                <Property Name="SymbolConfiguration">8;4096;KeyA;Sender.toVoltage103;;1;4;;;-1;;;;;;16</Property>
+                <Property Name="TabIndex">5</Property>
+              </Object>
+              <Property Name="Name">VectorTabPage3</Property>
+              <Property Name="Size">252, 159</Property>
+              <Property Name="Location">3, 20</Property>
+              <Property Name="Text">int16_t</Property>
+            </Object>
+            <Property Name="Name">VectorTabControl1</Property>
+            <Property Name="Size">258, 182</Property>
+            <Property Name="Location">5, 5</Property>
+            <Property Name="SymbolConfiguration">
+            </Property>
+            <Property Name="TabIndex">7</Property>
+          </Object>
+          <Property Name="Name">VectorTabPage9</Property>
+          <Property Name="Size">334, 246</Property>
+          <Property Name="Location">3, 20</Property>
+          <Property Name="Text">adchip0</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.VectorTabPage, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="VectorTabPage10" Children="Controls" ControlName="Tab Control 5">
+          <Object Type="Vector.CANalyzer.Panels.Design.VectorTabControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="VectorTabControl2" Children="Controls" ControlName="Tab Control 2">
+            <Object Type="Vector.CANalyzer.Panels.Design.VectorTabPage, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="VectorTabPage7" Children="Controls" ControlName="Tab Control 2">
+              <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl4" Children="Controls" ControlName="Input/Output Box 4">
+                <Property Name="Name">TextBoxControl4</Property>
+                <Property Name="Size">202, 18</Property>
+                <Property Name="Location">5, 18</Property>
+                <Property Name="AlarmUpperTextColor">WindowText</Property>
+                <Property Name="ValueDecimalPlaces">0</Property>
+                <Property Name="AlarmLowerBkgColor">IndianRed</Property>
+                <Property Name="ValueDisplay">Text</Property>
+                <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+                <Property Name="AlarmLowerTextColor">WindowText</Property>
+                <Property Name="AlarmGeneralSettings">1;0;0;10</Property>
+                <Property Name="DisplayLabel">Left</Property>
+                <Property Name="DescriptionText">PIN12 Direction:</Property>
+                <Property Name="ShowMinMax">True</Property>
+                <Property Name="DescriptionSize">102, 18</Property>
+                <Property Name="SymbolConfiguration">8;4096;KeyA;Sender.toPIN12Dir;;1;4;;;-1;;;;;;16</Property>
+                <Property Name="TabIndex">1</Property>
+              </Object>
+              <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl5" Children="Controls" ControlName="Input/Output Box 5">
+                <Property Name="Name">TextBoxControl5</Property>
+                <Property Name="Size">185, 18</Property>
+                <Property Name="Location">23, 46</Property>
+                <Property Name="AlarmUpperTextColor">WindowText</Property>
+                <Property Name="ValueDecimalPlaces">0</Property>
+                <Property Name="AlarmLowerBkgColor">IndianRed</Property>
+                <Property Name="ValueDisplay">Text</Property>
+                <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+                <Property Name="AlarmLowerTextColor">WindowText</Property>
+                <Property Name="AlarmGeneralSettings">1;0;0;10</Property>
+                <Property Name="DisplayLabel">Left</Property>
+                <Property Name="DescriptionText">PIN12 Value:</Property>
+                <Property Name="ShowMinMax">True</Property>
+                <Property Name="DescriptionSize">84, 18</Property>
+                <Property Name="SymbolConfiguration">8;4096;KeyA;Sender.toPIN12Value;;1;4;;;-1;;;;;;16</Property>
+                <Property Name="TabIndex">2</Property>
+              </Object>
+              <Property Name="Name">VectorTabPage7</Property>
+              <Property Name="Size">252, 159</Property>
+              <Property Name="Location">3, 20</Property>
+              <Property Name="Text">uint8_t</Property>
+            </Object>
+            <Object Type="Vector.CANalyzer.Panels.Design.VectorTabPage, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="VectorTabPage6" Children="Controls" ControlName="Tab Control 2">
+              <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl3" Children="Controls" ControlName="Input/Output Box 3">
+                <Property Name="Name">TextBoxControl3</Property>
+                <Property Name="Size">187, 18</Property>
+                <Property Name="Location">18, 23</Property>
+                <Property Name="AlarmUpperTextColor">WindowText</Property>
+                <Property Name="ValueDecimalPlaces">0</Property>
+                <Property Name="AlarmLowerBkgColor">IndianRed</Property>
+                <Property Name="ValueDisplay">Text</Property>
+                <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+                <Property Name="AlarmLowerTextColor">WindowText</Property>
+                <Property Name="AlarmGeneralSettings">1;0;0;10</Property>
+                <Property Name="DisplayLabel">Left</Property>
+                <Property Name="DescriptionText">out_voltage5:</Property>
+                <Property Name="ShowMinMax">True</Property>
+                <Property Name="DescriptionSize">85, 18</Property>
+                <Property Name="SymbolConfiguration">8;4096;KeyA;Sender.toVoltage5;;1;4;;;-1;;;;;;16</Property>
+                <Property Name="TabIndex">3</Property>
+              </Object>
+              <Property Name="Name">VectorTabPage6</Property>
+              <Property Name="Size">252, 159</Property>
+              <Property Name="Location">3, 20</Property>
+              <Property Name="Text">double</Property>
+            </Object>
+            <Property Name="Name">VectorTabControl2</Property>
+            <Property Name="Size">258, 182</Property>
+            <Property Name="Location">5, 5</Property>
+            <Property Name="SymbolConfiguration">
+            </Property>
+            <Property Name="TabIndex">8</Property>
+          </Object>
+          <Property Name="Name">VectorTabPage10</Property>
+          <Property Name="Size">334, 246</Property>
+          <Property Name="Location">3, 20</Property>
+          <Property Name="Text">adchip1</Property>
+        </Object>
+        <Property Name="Name">VectorTabControl5</Property>
+        <Property Name="Size">340, 269</Property>
+        <Property Name="Location">5, 17</Property>
+        <Property Name="SymbolConfiguration">
+        </Property>
+        <Property Name="TabIndex">16</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl1</Property>
+      <Property Name="Size">350, 293</Property>
+      <Property Name="Location">8, 7</Property>
+      <Property Name="Text">Values to send</Property>
+      <Property Name="TabIndex">17</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">365, 306</Property>
+    <Property Name="BackColor">White</Property>
+    <Property Name="BorderStyle">FixedSingle</Property>
+  </Object>
+</Panel>

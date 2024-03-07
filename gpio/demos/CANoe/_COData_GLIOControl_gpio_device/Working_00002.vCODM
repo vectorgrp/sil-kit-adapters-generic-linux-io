@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FunctionBusLibrary Version="2" FormatMajorVersion="3">
+  <Namespaces>
+    <Namespace IsDefinedAsHidden="False" IsSystemDefined="False" Name="KeyA">
+      <DOInterfaces>
+        <DOInterface IsAbstract="False" Name="GLIOAdapter">
+          <AttributeValues>
+            <AttributeValue Definition="_SystemAttributes::Binding" InitialValue="SilKit" InitialValueType="String" />
+          </AttributeValues>
+          <MemberData>
+            <DOMemberDataHolder Name="MemberData" />
+          </MemberData>
+          <DataMembers>
+            <DOIFDataMember LocalDirection="Consumed" Name="fromGpiochip0Line0">
+              <DataType DataType="KeyA::RecvLineValue" />
+            </DOIFDataMember>
+            <DOIFDataMember LocalDirection="Consumed" Name="fromGpiochip0Line1">
+              <DataType DataType="KeyA::RecvLineValue" />
+            </DOIFDataMember>
+            <DOIFDataMember LocalDirection="Consumed" Name="fromGpiochip0Line4">
+              <DataType DataType="KeyA::RecvLineValue" />
+            </DOIFDataMember>
+            <DOIFDataMember LocalDirection="Consumed" Name="fromGpiochip1Line1">
+              <DataType DataType="KeyA::RecvLineValue" />
+            </DOIFDataMember>
+          </DataMembers>
+        </DOInterface>
+        <DOInterface IsAbstract="False" Name="ValueSender">
+          <AttributeValues>
+            <AttributeValue Definition="_SystemAttributes::Binding" InitialValue="SilKit" InitialValueType="String" />
+          </AttributeValues>
+          <MemberData>
+            <DOMemberDataHolder Name="MemberData" />
+          </MemberData>
+          <DataMembers>
+            <DOIFDataMember Name="toGpiochip0Line0">
+              <DataType DataType="KeyA::SendLineValue" />
+            </DOIFDataMember>
+            <DOIFDataMember Name="toGpiochip0Line1">
+              <DataType DataType="KeyA::SendLineValue" />
+            </DOIFDataMember>
+            <DOIFDataMember Name="toGpiochip0Line2">
+              <DataType DataType="KeyA::SendLineValue" />
+            </DOIFDataMember>
+            <DOIFDataMember Name="toGpiochip1Line1">
+              <DataType DataType="KeyA::SendLineValue" />
+            </DOIFDataMember>
+            <DOIFDataMember Name="toGpiochip1Line2">
+              <DataType DataType="KeyA::SendLineValue" />
+            </DOIFDataMember>
+          </DataMembers>
+        </DOInterface>
+      </DOInterfaces>
+      <DistributedObjects>
+        <DistributedObject GenerateDotNetAPI="True" Name="Receiver">
+          <DataType>
+            <ModifiedDOIF Reverse="False" IsDOReference="False" Interface="KeyA::GLIOAdapter" />
+          </DataType>
+          <MemberData>
+            <DOMemberDataHolder Name="MemberData" />
+          </MemberData>
+        </DistributedObject>
+        <DistributedObject GenerateDotNetAPI="True" Name="Sender">
+          <DataType>
+            <ModifiedDOIF Reverse="False" IsDOReference="False" Interface="KeyA::ValueSender" />
+          </DataType>
+          <MemberData>
+            <DOMemberDataHolder Name="MemberData" />
+          </MemberData>
+        </DistributedObject>
+      </DistributedObjects>
+      <DataTypes>
+        <StructDataType Bitcount="0" RawBitcount="0" HasFixedBinaryLayout="False" HasMotorolaByteOrder="False" Name="RecvLineValue">
+          <Fields>
+            <DataTypeField RelativeBitOffset="0" IsOptional="False" IsHidden="False" Name="value">
+              <DataType DataType="_SystemDataTypes::UInt8">
+                <NumericProperties MinValue="0" MinValueType="UInt32" MaxValue="2" MaxValueType="UInt32" IsBoolean="False" IsTimespan="False">
+                  <ImplToPhysEncodings TextualEncodings="KeyA::RecvValue" />
+                </NumericProperties>
+              </DataType>
+            </DataTypeField>
+            <DataTypeField RelativeBitOffset="0" IsOptional="False" IsHidden="False" Name="direction">
+              <DataType DataType="_SystemDataTypes::UInt8">
+                <NumericProperties MinValue="0" MinValueType="UInt32" MaxValue="1" MaxValueType="UInt32" IsBoolean="False" IsTimespan="False">
+                  <ImplToPhysEncodings TextualEncodings="KeyA::Direction" />
+                </NumericProperties>
+              </DataType>
+            </DataTypeField>
+          </Fields>
+        </StructDataType>
+        <StructDataType Bitcount="0" RawBitcount="0" HasFixedBinaryLayout="False" HasMotorolaByteOrder="False" Name="SendLineValue">
+          <Fields>
+            <DataTypeField RelativeBitOffset="0" IsOptional="False" IsHidden="False" Name="value">
+              <DataType DataType="_SystemDataTypes::UInt8">
+                <NumericProperties MinValue="0" MinValueType="UInt32" MaxValue="1" MaxValueType="UInt32" IsBoolean="False" IsTimespan="False">
+                  <ImplToPhysEncodings TextualEncodings="KeyA::SendValue" />
+                </NumericProperties>
+              </DataType>
+            </DataTypeField>
+            <DataTypeField RelativeBitOffset="0" IsOptional="False" IsHidden="False" Name="direction">
+              <DataType DataType="_SystemDataTypes::UInt8">
+                <NumericProperties MinValue="0" MinValueType="UInt32" MaxValue="1" MaxValueType="UInt32" IsBoolean="False" IsTimespan="False">
+                  <ImplToPhysEncodings TextualEncodings="KeyA::Direction" />
+                </NumericProperties>
+              </DataType>
+            </DataTypeField>
+          </Fields>
+        </StructDataType>
+      </DataTypes>
+      <TextualEncodings>
+        <TextualEncodings DefinesMinMax="False" Name="RecvValue">
+          <TextualEncoding TextualValue="Low" DisplayValue="Low" LowerBound="0" LowerBoundType="UInt32" UpperBound="0" UpperBoundType="UInt32" />
+          <TextualEncoding TextualValue="High" DisplayValue="High" LowerBound="1" LowerBoundType="UInt32" UpperBound="1" UpperBoundType="UInt32" />
+          <TextualEncoding TextualValue="Unknown" DisplayValue="Unknown" LowerBound="2" LowerBoundType="UInt32" UpperBound="2" UpperBoundType="UInt32" />
+        </TextualEncodings>
+        <TextualEncodings DefinesMinMax="False" Name="SendValue">
+          <TextualEncoding TextualValue="Low" DisplayValue="Low" LowerBound="0" LowerBoundType="UInt32" UpperBound="0" UpperBoundType="UInt32" />
+          <TextualEncoding TextualValue="High" DisplayValue="High" LowerBound="1" LowerBoundType="UInt32" UpperBound="1" UpperBoundType="UInt32" />
+        </TextualEncodings>
+        <TextualEncodings DefinesMinMax="False" Name="Direction">
+          <TextualEncoding TextualValue="Input" DisplayValue="Input" LowerBound="0" LowerBoundType="UInt32" UpperBound="0" UpperBoundType="UInt32" />
+          <TextualEncoding TextualValue="Output" DisplayValue="Output" LowerBound="1" LowerBoundType="UInt32" UpperBound="1" UpperBoundType="UInt32" />
+        </TextualEncodings>
+      </TextualEncodings>
+    </Namespace>
+  </Namespaces>
+  <ModuleDependencies>
+    <ModuleDependency Module="SilKit" />
+  </ModuleDependencies>
+</FunctionBusLibrary>

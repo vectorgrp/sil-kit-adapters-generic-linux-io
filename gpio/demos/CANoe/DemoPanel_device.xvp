@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="DemoPanel">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box 1">
+      <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl3" Children="Controls" ControlName="Button 3">
+        <Property Name="Name">ButtonControl3</Property>
+        <Property Name="Size">72, 23</Property>
+        <Property Name="Location">202, 96</Property>
+        <Property Name="Text">Send</Property>
+        <Property Name="SymbolConfiguration">8;16;Gpiochip;;;send;1;;;-1;;;;;;0</Property>
+        <Property Name="TabIndex">26</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl9" Children="Controls" ControlName="Combo Box 1">
+        <Property Name="Name">ComboBoxControl9</Property>
+        <Property Name="Size">260, 19</Property>
+        <Property Name="Location">14, 24</Property>
+        <Property Name="DropDownWidth">248</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Left</Property>
+        <Property Name="DescriptionText">chip and line</Property>
+        <Property Name="UsedValueTable">PhysicalValue</Property>
+        <Property Name="DescriptionSize">64, 19</Property>
+        <Property Name="SymbolConfiguration">8;16;Gpiochip;;;gpiochip;1;;;-1;;;;;;0</Property>
+        <Property Name="TabIndex">23</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl7" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl7</Property>
+        <Property Name="Size">240, 19</Property>
+        <Property Name="Location">34, 48</Property>
+        <Property Name="DropDownWidth">248</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Left</Property>
+        <Property Name="DescriptionText">direction </Property>
+        <Property Name="UsedValueTable">PhysicalValue</Property>
+        <Property Name="DescriptionSize">45, 19</Property>
+        <Property Name="SymbolConfiguration">8;16;Gpiochip;;;direction;1;;;-1;;;;;;0</Property>
+        <Property Name="TabIndex">24</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=17.3.91.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl8" Children="Controls" ControlName="Combo Box 3">
+        <Property Name="Name">ComboBoxControl8</Property>
+        <Property Name="Size">226, 19</Property>
+        <Property Name="Location">49, 72</Property>
+        <Property Name="DropDownWidth">248</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Left</Property>
+        <Property Name="DescriptionText">value</Property>
+        <Property Name="UsedValueTable">PhysicalValue</Property>
+        <Property Name="DescriptionSize">30, 19</Property>
+        <Property Name="SymbolConfiguration">8;16;Gpiochip;;;value;1;;;-1;;;;;;0</Property>
+        <Property Name="TabIndex">25</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl1</Property>
+      <Property Name="Size">292, 137</Property>
+      <Property Name="Location">13, 13</Property>
+      <Property Name="Text">Data to send</Property>
+      <Property Name="TabIndex">15</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">322, 162</Property>
+    <Property Name="BackColor">White</Property>
+    <Property Name="BorderStyle">FixedSingle</Property>
+  </Object>
+</Panel>

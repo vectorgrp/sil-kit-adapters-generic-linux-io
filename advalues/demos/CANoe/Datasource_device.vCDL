@@ -1,0 +1,41 @@
+version 1.4;
+
+import module "SilKit";
+
+namespace KeyA
+{  
+  //////////////////////////
+  // Handle received data //
+  //////////////////////////
+  [Binding="SilKit"]
+  interface GLIOAdapter
+  {
+    // adchip0 //
+    consumed data int16 fromVoltage15;
+    consumed data int16 fromVoltage32;
+    
+    // adchip1 //
+    consumed data uint8 fromPIN12Value;
+    consumed data uint8 fromPIN12Dir;
+  }
+  
+  object Receiver : GLIOAdapter;
+  
+  /////////////////////////
+  // Handle data to send //
+  /////////////////////////
+  [Binding="SilKit"]
+  interface ValueSender
+  {
+    // adchip0 //
+    provided data int16 toVoltage103;
+    provided data int16 toVoltage15;
+    
+    // adchip1 //
+    provided data uint8 toPIN12Value;
+    provided data uint8 toPIN12Dir;
+    provided data double toVoltage5;
+  }
+  
+  object Sender : ValueSender;
+}

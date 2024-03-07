@@ -1,0 +1,8 @@
+version: 2.0.0
+
+test-unit-information:
+  description: This test unit tests the basic functionality of the gpio mode for reading and writing into lines.
+  
+test-unit-implementation:
+  - source-file-path: testForwardGpio.can
+  - source-file-path: testForwardGpio.vtesttree.yaml

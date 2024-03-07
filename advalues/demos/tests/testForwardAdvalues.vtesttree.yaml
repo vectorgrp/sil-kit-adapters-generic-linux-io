@@ -1,0 +1,7 @@
+version: 2.1.0
+test-tree:
+  - test-fixture: ForwardAdvaluesTestFixture    
+    capl-preparation: PepareTestscenarioAdvalues
+    elements:
+      - capl-test-case: DO_CheckAdvaluesMatchInt16
+      - capl-test-case: DO_CheckAdvaluesMatchUint8

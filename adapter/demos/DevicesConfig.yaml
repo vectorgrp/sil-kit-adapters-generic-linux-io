@@ -1,0 +1,76 @@
+# Configuration for the following advalue chips:
+#
+# /path/to/adchips/adchip0/
+# |-- in_voltage103
+# |-- in_voltage15
+# |-- out_voltage32
+#
+# /path/to/adchips/adchip1/
+# |-- out_voltage5
+# |-- PIN12
+# |   |-- value
+# |   `-- direction
+# 
+advalues:
+- path: "/path/to/adchips/adchip0/"
+  int16_t:
+  - files:
+    - name: in_voltage103
+      topic_subscribe: toVoltage103
+  - files:
+    - name: in_voltage15
+      topic_subscribe: toVoltage15
+      topic_publish: fromVoltage15
+    - name: out_voltage32
+      topic_publish: fromVoltage32
+- path: "/path/to/adchips/adchip1/"
+  uint8_t:
+  - files:
+    - name: PIN12/value
+      topic_subscribe: toPIN12Value
+      topic_publish: fromPIN12Value
+    - name: PIN12/direction
+      topic_subscribe: toPIN12Dir
+      topic_publish: fromPIN12Dir
+  double:
+  - files:
+    - name: out_voltage5
+      topic_subscribe: toVoltage5
+
+# Configuration for the following character devices:
+#
+# /path/to/chardevs/fifo1
+# /path/to/chardevs/fifo2
+#
+chardevs:
+- path: "/path/to/chardevs/fifo1"
+  topic_publish: fromFifo1
+- path: "/path/to/chardevs/fifo2"
+  topic_publish: fromFifo2
+  topic_subscribe: toFifo2
+
+# Configuration for the following gpio chips:
+#
+# /dev/gpiochip0
+# /dev/gpiochip1
+#
+gpiochips:
+- path: "/dev/gpiochip0"
+  lines:
+  - offset: 0
+    topic_subscribe: toGpiochip0Line0
+    topic_publish: fromGpiochip0Line0
+  - offset: 1
+    topic_subscribe: toGpiochip0Line1
+    topic_publish: fromGpiochip0Line1
+  - offset: 2
+    topic_subscribe: toGpiochip0Line2
+  - offset: 4
+    topic_publish: fromGpiochip0Line4
+- path: "/dev/gpiochip1"
+  lines:
+  - offset: 1
+    topic_subscribe: toGpiochip1Line1
+    topic_publish: fromGpiochip1Line1
+  - offset: 2
+    topic_subscribe: toGpiochip1Line2

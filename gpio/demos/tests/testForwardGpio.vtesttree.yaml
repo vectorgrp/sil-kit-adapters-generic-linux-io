@@ -1,0 +1,6 @@
+version: 2.1.0
+test-tree:
+  - test-fixture: ForwardGpioTestFixture    
+    capl-preparation: PepareTestscenarioGpio
+    elements:
+      - capl-test-case: DO_CheckGpioMatch

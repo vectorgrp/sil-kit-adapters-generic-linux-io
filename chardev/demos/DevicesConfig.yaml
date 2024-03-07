@@ -1,0 +1,11 @@
+# Configuration for the following character devices :
+#
+# /path/to/chardevs/fifo1
+# /path/to/chardevs/fifo2
+#
+chardevs:
+- path: "/path/to/chardevs/fifo1"
+  topic_publish: fromFifo1
+- path: "/path/to/chardevs/fifo2"
+  topic_publish: fromFifo2
+  topic_subscribe: toFifo2

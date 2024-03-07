@@ -1,0 +1,26 @@
+# Configuration for the following chips :
+#
+# /dev/gpiochip0
+# /dev/gpiochip1
+#
+
+gpiochips:
+- path: "/dev/gpiochip0"
+  lines:
+  - offset: 0
+    topic_subscribe: toGpiochip0Line0
+    topic_publish: fromGpiochip0Line0
+  - offset: 1
+    topic_subscribe: toGpiochip0Line1
+    topic_publish: fromGpiochip0Line1
+  - offset: 2
+    topic_subscribe: toGpiochip0Line2
+  - offset: 4
+    topic_publish: fromGpiochip0Line4
+- path: "/dev/gpiochip1"
+  lines:
+  - offset: 1
+    topic_subscribe: toGpiochip1Line1
+    topic_publish: fromGpiochip1Line1
+  - offset: 2
+    topic_subscribe: toGpiochip1Line2

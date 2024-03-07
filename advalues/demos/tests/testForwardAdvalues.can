@@ -1,0 +1,53 @@
+﻿/*@!Encoding:65001*/
+includes
+{
+  
+}
+
+variables
+{
+  distObjRef GLIOAdapter in_object = KeyA::Receiver;
+  distObjRef ValueSender out_object = KeyA::Sender;
+  int result;
+  dword timeout=2000;
+}
+
+export testfunction PepareTestscenarioAdvalues()
+{
+  out_object.Connect();
+  $out_object.toVoltage15 = 3;
+
+  $out_object.toPIN12Value = 0;
+}
+
+// Tests for int16 type
+export testcase DO_CheckAdvaluesMatchInt16()
+{
+  int expectedValue;
+  expectedValue = 3;
+
+  in_object.Connect();
+
+  result = testWaitForPhysValueInRangeSInt(KeyA::Receiver.fromVoltage15, expectedValue, expectedValue, timeout);
+
+  if (result != 1)
+  {
+    TestStepFail("DO_AdvalueMatch", "FAILED: No value within timeout");
+  }
+  TestStepPass("DO_AdvalueMatch", "SUCCESS");
+}
+
+// Tests for uint8 type
+export testCase DO_CheckAdvaluesMatchUint8()
+{
+  byte expectedValue;
+  expectedValue = 0;
+
+  result = testWaitForPhysValueInRangeSInt(KeyA::Receiver.fromPIN12Value, expectedValue, expectedValue, timeout);
+
+  if (result != 1)
+  {
+    TestStepFail("DO_AdvalueMatch", "FAILED: Values do not match");
+  }
+  TestStepPass("DO_AdvalueMatch", "SUCCESS");
+}

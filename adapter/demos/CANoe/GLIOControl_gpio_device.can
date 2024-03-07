@@ -1,0 +1,131 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  distObjRef GLIOAdapter in_object = KeyA::Receiver;
+  distObjRef ValueSender out_object = KeyA::Sender;
+}
+
+on start {
+  out_object.Connect();
+  
+  @Gpiochip::direction == @Gpiochip::direction::input;
+  
+  setControlVisibility("DemoPanel", "Combo Box 3", 0);
+}
+
+on sysvar_change Gpiochip::direction
+{
+  if (@Gpiochip::direction == @Gpiochip::direction::input)
+  {
+    setControlVisibility("DemoPanel", "Combo Box 3", 0);
+  }
+  else
+  {
+    setControlVisibility("DemoPanel", "Combo Box 3", 1);
+  }
+}
+
+on sysvar_change Gpiochip::send
+{
+  if (@Gpiochip::send == 1)
+  {
+    switch (@Gpiochip::gpiochip)
+    {
+      case 0:
+        if (@Gpiochip::direction == @Gpiochip::direction::input)
+        {
+          $out_object.toGpiochip0Line0.direction = KeyA::Direction::Input;
+        }
+        else
+        {
+          $out_object.toGpiochip0Line0.direction = KeyA::Direction::Output;
+          if (@Gpiochip::value == @Gpiochip::value::low)
+          {
+            $out_object.toGpiochip0Line0.value = KeyA::SendValue::Low;
+          }
+          else
+          {
+            $out_object.toGpiochip0Line0.value = KeyA::SendValue::High;
+          }
+        }
+        break;
+      case 1:
+        if (@Gpiochip::direction == @Gpiochip::direction::input)
+        {
+          $out_object.toGpiochip0Line1.direction = KeyA::Direction::Input;
+        }
+        else
+        {
+          $out_object.toGpiochip0Line1.direction = KeyA::Direction::Output;
+          if (@Gpiochip::value == @Gpiochip::value::low)
+          {
+            $out_object.toGpiochip0Line1.value = KeyA::SendValue::Low;
+          }
+          else
+          {
+            $out_object.toGpiochip0Line1.value = KeyA::SendValue::High;
+          }
+        }
+        break;
+      case 2:
+        if (@Gpiochip::direction == @Gpiochip::direction::input)
+        {
+          $out_object.toGpiochip0Line2.direction = KeyA::Direction::Input;
+        }
+        else
+        {
+          $out_object.toGpiochip0Line2.direction = KeyA::Direction::Output;
+          if (@Gpiochip::value == @Gpiochip::value::low)
+          {
+            $out_object.toGpiochip0Line2.value = KeyA::SendValue::Low;
+          }
+          else
+          {
+            $out_object.toGpiochip0Line2.value = KeyA::SendValue::High;
+          }
+        }
+        break;
+      case 3:
+        if (@Gpiochip::direction == @Gpiochip::direction::input)
+        {
+          $out_object.toGpiochip1Line1.direction = KeyA::Direction::Input;
+        }
+        else
+        {
+          $out_object.toGpiochip1Line1.direction = KeyA::Direction::Output;
+          if (@Gpiochip::value == @Gpiochip::value::low)
+          {
+            $out_object.toGpiochip1Line1.value = KeyA::SendValue::Low;
+          }
+          else
+          {
+            $out_object.toGpiochip1Line1.value = KeyA::SendValue::High;
+          }
+        }
+        break;
+      case 4:
+        if (@Gpiochip::direction == @Gpiochip::direction::input)
+        {
+          $out_object.toGpiochip1Line2.direction = KeyA::Direction::Input;
+        }
+        else
+        {
+          $out_object.toGpiochip1Line2.direction = KeyA::Direction::Output;
+          if (@Gpiochip::value == @Gpiochip::value::low)
+          {
+            $out_object.toGpiochip1Line2.value = KeyA::SendValue::Low;
+          }
+          else
+          {
+            $out_object.toGpiochip1Line2.value = KeyA::SendValue::High;
+          }
+        }
+        break;
+    }
+  }
+}

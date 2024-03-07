@@ -1,0 +1,6 @@
+version: 2.1.0
+test-tree:
+  - test-fixture: ForwardChardevTestFixture    
+    capl-preparation: PepareTestscenarioChardev
+    elements:
+      - capl-test-case: DO_CheckChardevMatch

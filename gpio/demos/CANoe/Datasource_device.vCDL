@@ -1,0 +1,74 @@
+version 1.4;
+
+import module "SilKit";
+
+namespace KeyA
+{ 
+  // Enums and structs for gpio mode
+  enum RecvValue : uint8
+  {
+    Low = 0,
+    High = 1,
+    Unknown = 2
+  }
+  
+  // Restrict the user to send 0 or 1
+  enum SendValue : uint8
+  {
+    Low = 0,
+    High = 1
+  }
+  
+  enum Direction : uint8
+  {
+    Input = 0,
+    Output = 1
+  }
+  
+  struct RecvLineValue
+  {
+    RecvValue value;
+    Direction direction;
+  }
+  
+  struct SendLineValue
+  {
+    SendValue value;
+    Direction direction;
+  }
+  
+  //////////////////////////
+  // Handle received data //
+  //////////////////////////
+  [Binding="SilKit"]
+  interface GLIOAdapter
+  {
+    // gpiochip0 //
+    consumed data RecvLineValue fromGpiochip0Line0;
+    consumed data RecvLineValue fromGpiochip0Line1;
+    consumed data RecvLineValue fromGpiochip0Line4;
+    
+    // gpiochip1 //
+    consumed data RecvLineValue fromGpiochip1Line1;
+  }
+  
+  object Receiver : GLIOAdapter;
+  
+  /////////////////////////
+  // Handle data to send //
+  /////////////////////////
+  [Binding="SilKit"]
+  interface ValueSender
+  {   
+    // gpiochip0 //
+    provided data SendLineValue toGpiochip0Line0;
+    provided data SendLineValue toGpiochip0Line1;
+    provided data SendLineValue toGpiochip0Line2;
+    
+    // gpiochip1 //
+    provided data SendLineValue toGpiochip1Line1;
+    provided data SendLineValue toGpiochip1Line2;    
+  }
+  
+  object Sender : ValueSender;
+}
