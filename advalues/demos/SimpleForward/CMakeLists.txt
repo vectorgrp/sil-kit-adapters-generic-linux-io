@@ -1,20 +1,20 @@
 
-add_executable(SilKitDemoGLIOAdvaluesForwardDevice
+add_executable(sil-kit-demo-glio-advalues-forward-device
     "SilKitDemoGLIOAdvaluesForwardDevice.cpp"
 
     "${CMAKE_SOURCE_DIR}/util/Parsing.cpp"
     "${CMAKE_SOURCE_DIR}/util/SignalHandler.cpp"
 )
-target_link_libraries(SilKitDemoGLIOAdvaluesForwardDevice
+target_link_libraries(sil-kit-demo-glio-advalues-forward-device
     PRIVATE
         SilKit::SilKit
 )
 
-target_compile_options(SilKitDemoGLIOAdvaluesForwardDevice
+target_compile_options(sil-kit-demo-glio-advalues-forward-device
     PRIVATE  ${compile_options}
 )
 
-set_target_properties(SilKitDemoGLIOAdvaluesForwardDevice 
+set_target_properties(sil-kit-demo-glio-advalues-forward-device 
     PROPERTIES
     #ensure SilKit shared libraries can be loaded
     INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN"

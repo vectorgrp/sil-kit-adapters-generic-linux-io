@@ -43,14 +43,14 @@ auto ThereAreUnknownArguments(int argc, char** argv) ->bool
 void PrintHelp(bool userRequested)
 {
     std::cout << "Usage (defaults in curly braces if you omit the switch):\n"
-                "SilKitAdapterGenericLinuxIO " << adapterConfigurationArg << " <path to .yaml devices configuration file>\n"
+                "sil-kit-adapter-generic-linux-io " << adapterConfigurationArg << " <path to .yaml devices configuration file>\n"
                 "  [" << configurationArg << " <path to .silkit.yaml or .json configuration file>]\n"
                 "  [" << participantNameArg << " <participant name{SilKitAdapterGenericLinuxIO}>]\n"
                 "  [" << regUriArg << " silkit://<host{localhost}>:<port{8501}>]\n"
                 "  [" << logLevelArg << " <Trace|Debug|Warn|{Info}|Error|Critical|Off>]\n"
                 "\n"
                 "Example:\n"
-                "SilKitAdapterGenericLinuxIO " << adapterConfigurationArg << " ./adapter/demos/ChipConfig.yaml " << participantNameArg << " GLIO_Participant" << '\n';
+                "sil-kit-adapter-generic-linux-io " << adapterConfigurationArg << " ./adapter/demos/ChipConfig.yaml " << participantNameArg << " GLIO_Participant" << '\n';
 
     if (!userRequested)
     {

@@ -1,6 +1,6 @@
 # Copyright (c) Vector Informatik GmbH. All rights reserved.
 
-add_executable(SilKitAdapterGenericLinuxIO
+add_executable(sil-kit-adapter-generic-linux-io
     "SilKitAdapterGenericLinuxIO.cpp"
 
     "../chardev/adapter/ChardevManager.cpp"
@@ -19,20 +19,20 @@ add_executable(SilKitAdapterGenericLinuxIO
     "../util/SignalHandler.cpp"
 )    
 
-target_include_directories(SilKitAdapterGenericLinuxIO 
+target_include_directories(sil-kit-adapter-generic-linux-io 
     PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}
         "${CMAKE_SOURCE_DIR}"
 )
 
-target_link_libraries(SilKitAdapterGenericLinuxIO
+target_link_libraries(sil-kit-adapter-generic-linux-io
     PRIVATE
         SilKit::SilKit
         yaml-cpp
         asio
 )
 
-set_target_properties(SilKitAdapterGenericLinuxIO 
+set_target_properties(sil-kit-adapter-generic-linux-io 
 	PROPERTIES
     #ensure SilKit shared libraries can be loaded
     INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN"
@@ -40,12 +40,12 @@ set_target_properties(SilKitAdapterGenericLinuxIO
     RUNTIME_OUTPUT_DIRECTORY $<$<BOOL:ALWAYS>:${SILKIT_ADAPTERS_GENERIC_LINUX_IO_OUTPUT_DIRECTORY}>
 )
 
-target_compile_options(SilKitAdapterGenericLinuxIO
+target_compile_options(sil-kit-adapter-generic-linux-io
     PRIVATE ${compile_options}
 )
 
 add_custom_command(
-    TARGET SilKitAdapterGenericLinuxIO
+    TARGET sil-kit-adapter-generic-linux-io
     POST_BUILD
     COMMAND ${CMAKE_COMMAND}
     ARGS -E copy $<TARGET_FILE:SilKit::SilKit> ${SILKIT_ADAPTERS_GENERIC_LINUX_IO_LIBRARY_DIRECTORY}/libSilKit.so

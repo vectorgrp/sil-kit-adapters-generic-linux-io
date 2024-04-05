@@ -33,11 +33,11 @@ In the following diagram you can see the whole setup. It illustrates the data fl
 In order to match the above setup, you need to adapt Linux IO ``path`` attributes in the adapter configuration file ``./adapter/demos/DevicesConfig.yaml``. 
 
 # Running the Demos
-Now is a good point to start the ``sil-kit-registry`` and the ``SilKitAdapterGenericLinuxIO``. In separate terminals:
+Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
 ./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
     
-./bin/SilKitAdapterGenericLinuxIO --log Debug --adapter-configuration ./adapter/demos/DevicesConfig.yaml
+./bin/sil-kit-adapter-generic-linux-io --log Debug --adapter-configuration ./adapter/demos/DevicesConfig.yaml
 ```
 
 You should see the following output:
@@ -68,11 +68,11 @@ The adapter will then produce output when data is written into the Linux IO or w
 ## Basic Forward Demo
 First you can start each demo in separte terminals:
 ```
-./bin/SilKitDemoGLIOAdvaluesForwardDevice
+./bin/sil-kit-demo-glio-advalues-forward-device
     
-./bin/SilKitDemoGLIOChardevForwardDevice
+./bin/sil-kit-demo-glio-chardev-forward-device
 
-./bin/SilKitDemoGLIOGpioForwardDevice
+./bin/sil-kit-demo-glio-gpio-forward-device
 ```
 
 You should see the following output in the GLIO Adapter window:

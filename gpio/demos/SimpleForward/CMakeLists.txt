@@ -1,21 +1,21 @@
 
-add_executable(SilKitDemoGLIOGpioForwardDevice
+add_executable(sil-kit-demo-glio-gpio-forward-device
     "SilKitDemoGLIOGpioForwardDevice.cpp"
 
     "${CMAKE_SOURCE_DIR}/util/Parsing.cpp"
     "${CMAKE_SOURCE_DIR}/util/SignalHandler.cpp"
 )
 
-target_link_libraries(SilKitDemoGLIOGpioForwardDevice
+target_link_libraries(sil-kit-demo-glio-gpio-forward-device
     PRIVATE
         SilKit::SilKit
 )
 
-target_compile_options(SilKitDemoGLIOGpioForwardDevice
+target_compile_options(sil-kit-demo-glio-gpio-forward-device
     PRIVATE  ${compile_options}
 )
 
-set_target_properties(SilKitDemoGLIOGpioForwardDevice 
+set_target_properties(sil-kit-demo-glio-gpio-forward-device 
     PROPERTIES
     #ensure SilKit shared libraries can be loaded
     INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN"

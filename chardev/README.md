@@ -1,5 +1,5 @@
 # Chardev Demo and Adapter Setup
-This demo consists of two FIFOs which are connected to the SIL Kit via ``SilKitAdapterGenericLinuxIO`` as a SIL Kit participant. These character devices are attached to the SIL Kit in the form of a DataPublisher/DataSubscriber.
+This demo consists of two FIFOs which are connected to the SIL Kit via ``sil-kit-adapter-generic-linux-io`` as a SIL Kit participant. These character devices are attached to the SIL Kit in the form of a DataPublisher/DataSubscriber.
 
 In the following diagram you can see the whole setup. It illustrates the data flow going through each component involved.
 ```
@@ -31,11 +31,11 @@ This script will create fifo1 and fifo2 into a main folder ``chardevs``.
 In order to match the above setup, you need to adapt the chardev ``path`` attributes in the adapter configuration file ``./chardev/demos/DevicesConfig.yaml``. 
 
 # Running the Demos
-Now is a good point to start the ``sil-kit-registry`` and the ``SilKitAdapterGenericLinuxIO``. In separate terminals:
+Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
 ./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
     
-./bin/SilKitAdapterGenericLinuxIO --log Debug --adapter-configuration ./chardev/demos/DevicesConfig.yaml
+./bin/sil-kit-adapter-generic-linux-io --log Debug --adapter-configuration ./chardev/demos/DevicesConfig.yaml
 ```
 
 You should see the following output:
@@ -72,7 +72,7 @@ The data flow is illustrated in the following drawing:
 
 You can start the forward device:
 ```
-./bin/SilKitDemoGLIOChardevForwardDevice
+./bin/sil-kit-demo-glio-chardev-forward-device
 ```
 
 You should see the following output:

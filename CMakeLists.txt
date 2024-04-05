@@ -134,8 +134,9 @@ install(
 
 install(
     TARGETS 
-        SilKitDemoGLIOAdvaluesForwardDevice
-        SilKitDemoGLIOChardevForwardDevice
+        sil-kit-demo-glio-advalues-forward-device
+        sil-kit-demo-glio-chardev-forward-device
+        sil-kit-demo-glio-gpio-forward-device
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
     PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -144,13 +145,13 @@ install(
     EXCLUDE_FROM_ALL
 )
 
-# only SilKitAdapterGenericLinuxIO should be installed to /usr/local/bin by calling --target install (therefore it is not excluded)
+# only sil-kit-adapter-generic-linux-io should be installed to /usr/local/bin by calling --target install (therefore it is not excluded)
 install(
     TARGETS 
-        SilKitAdapterGenericLinuxIO      
+        sil-kit-adapter-generic-linux-io
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Runtime
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/SilKitAdapterGenericLinuxIO COMPONENT Development   
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/sil-kit-adapter-generic-linux-io COMPONENT Development   
     PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE

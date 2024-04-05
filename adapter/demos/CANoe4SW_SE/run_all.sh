@@ -33,7 +33,7 @@ $silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &
 sleep 1 # wait 1 second for the creation/existense of the .out file
 timeout 30s grep -q 'Registered signal handler' <(tail -f /$scriptDir/sil-kit-registry.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
 
-$scriptDir/../../../bin/SilKitAdapterGenericLinuxIO --adapter-configuration $scriptDir/../DevicesConfig.yaml --log Debug &> $scriptDir/SilKitAdapterGenericLinuxIO.out &
+$scriptDir/../../../bin/sil-kit-adapter-generic-linux-io --adapter-configuration $scriptDir/../DevicesConfig.yaml --log Debug &> $scriptDir/sil-kit-adapter-generic-linux-io.out &
 
 $scriptDir/run.sh
 
@@ -44,8 +44,8 @@ echo "sil-kit-registry.out:-----------------------------------------------------
 cat $scriptDir/sil-kit-registry.out
 echo "-----------------------------------------------------------------------------------------------------------" 
 
-echo "SilKitAdapterGenericLinuxIO.out:---------------------------------------------------------------------------" 
-cat $scriptDir/SilKitAdapterGenericLinuxIO.out
+echo "sil-kit-adapter-generic-linux-io.out:---------------------------------------------------------------------------" 
+cat $scriptDir/sil-kit-adapter-generic-linux-io.out
 echo "-----------------------------------------------------------------------------------------------------------" 
 
 # clean the environment

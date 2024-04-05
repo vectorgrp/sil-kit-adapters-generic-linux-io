@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     if (FindArg(argc, argv, "--help", argv) != nullptr)
     {
         std::cout << "Usage (defaults in curly braces if you omit the switch):\n"
-                     "SilKitDemoGLIOAdvaluesForwardDevice [" << participantNameArg << " <participant's name{AdvaluesForwardDevice}>]\n"
+                     "sil-kit-demo-glio-advalues-forward-device [" << participantNameArg << " <participant's name{AdvaluesForwardDevice}>]\n"
                      "  [" << regUriArg << " silkit://<host{localhost}>:<port{8501}>]\n"
                      "  [" << logLevelArg << " <Trace|Debug|Warn|{Info}|Error|Critical|off>]\n";
         

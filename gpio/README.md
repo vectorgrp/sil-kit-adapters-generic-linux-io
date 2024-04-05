@@ -1,5 +1,5 @@
 # GPIO Demo and Adapter Setup
-This demo consists of two GPIO chips which are connected to the SIL Kit via ``SilKitAdapterGenericLinuxIO`` as a SIL Kit participant. These GPIO chips are attached to the SIL Kit in the form of a DataPublisher/DataSubscriber.
+This demo consists of two GPIO chips which are connected to the SIL Kit via ``sil-kit-adapter-generic-linux-io`` as a SIL Kit participant. These GPIO chips are attached to the SIL Kit in the form of a DataPublisher/DataSubscriber.
 
 ## Simulate GPIO chips
 For this demo some GPIO chips have to be simulated. There are multiple ways to do that, the easiest ones are using one the following Linux modules:
@@ -50,11 +50,11 @@ sudo chown <new_owner> /dev/gpiochip*
 By default the GPIO chips are located under ``/dev/gpiochipX`` (with X a number). If yours are located somewhere else you should adapt the ``path`` attributes in the adapter configuration file ``./gpio/demos/DevicesConfig.yaml`` in order to match your setup.
 
 # Running the Demos
-Now is a good point to start the ``sil-kit-registry`` and the ``SilKitAdapterGenericLinuxIO``. In separate terminals:
+Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
 ./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
     
-./bin/SilKitAdapterGenericLinuxIO --log Debug --adapter-configuration ./gpio/demos/DevicesConfig.yaml
+./bin/sil-kit-adapter-generic-linux-io --log Debug --adapter-configuration ./gpio/demos/DevicesConfig.yaml
 ```
 
 You should see the following output:
@@ -94,7 +94,7 @@ The data flow is illustrated in the following drawing:
 
 You can start the forward device:
 ```
-./bin/SilKitDemoGLIOGpioForwardDevice
+./bin/sil-kit-demo-glio-gpio-forward-device
 ```
 
 You should see the following output:

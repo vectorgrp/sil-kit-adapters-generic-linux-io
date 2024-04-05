@@ -45,29 +45,29 @@ Download a preview or release of the Adapters directly from [Vector SIL Kit Adap
 
 If not already existent on your system you should also download a SIL Kit Release directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). You will need this for being able to start a sil-kit-registry.
 
-## Install the SilKitAdapterGenericLinuxIO (optional)
-If you call the following command (can be done for self build and pre build package after cmake configure) ``SilKitAdapterGenericLinuxIO`` can be called from everywhere without defining a path:  
+## Install the sil-kit-adapter-generic-linux-io (optional)
+If you call the following command (can be done for self build and pre build package after cmake configure) ``sil-kit-adapter-generic-linux-io`` can be called from everywhere without defining a path:  
 
     sudo cmake --build build --target install
 
 The default installation path will be ``/usr/local/bin``. Be aware that SIL Kit itself also needs to be installed to make this work.
 
-## Run the SilKitAdapterGenericLinuxIO
+## Run the sil-kit-adapter-generic-linux-io
 This application allows the user to attach character devices of any Linux system to the Vector SIL Kit.
 
 Before you start the adapter there always needs to be a sil-kit-registry running already. Start it e.g. like this:
 
     ./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
 
-It is also necessary that the involved character devices or GPIO chips exist before the ``SilKitAdapterGenericLinuxIO`` is started. 
+It is also necessary that the involved character devices or GPIO chips exist before the ``sil-kit-adapter-generic-linux-io`` is started. 
 
 The application *must* be started with the following command line argument:
     
-    SilKitAdapterGenericLinuxIO --adapter-configuration <path to .yaml devices configuration file>
+    sil-kit-adapter-generic-linux-io --adapter-configuration <path to .yaml devices configuration file>
 
 The application *optionnally* takes the following command line arguments (default between curly braces):
 
-    SilKitAdapterGenericLinuxIO 
+    sil-kit-adapter-generic-linux-io 
       [--configuration <path to .silkit.yaml or .json configuration file>]
       [--name <participant name{SilKitAdapterGenericLinuxIO}>]
       [--registry-uri silkit://<host{localhost}>:<port{8501}>]

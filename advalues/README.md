@@ -1,5 +1,5 @@
 # Analog-Digital values and Adapter Setup
-This demo consists of a set of files, illustrating a chip device which is connected to the SIL Kit via ``SilKitAdapterGenericLinuxIO`` as a SIL Kit participant. Bytes are transmitted to and from the other participants through SIL Kit publish/subscribe API.
+This demo consists of a set of files, illustrating a chip device which is connected to the SIL Kit via ``sil-kit-adapter-generic-linux-io`` as a SIL Kit participant. Bytes are transmitted to and from the other participants through SIL Kit publish/subscribe API.
 
 In the following diagram you can see the whole setup. It illustrates the data flow going through each component involved.
 ```
@@ -43,11 +43,11 @@ Each file can also be configured to deal with a specific data type. The handled 
 - Floating-point values: ``float``, ``double``
 
 # Running the Demos
-Now is a good point to start the ``sil-kit-registry`` and the ``SilKitAdapterGenericLinuxIO``. In separate terminals:
+Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
 ./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
     
-./bin/SilKitAdapterGenericLinuxIO --adapter-configuration ./advalues/demos/DevicesConfig.yaml --log Debug
+./bin/sil-kit-adapter-generic-linux-io --adapter-configuration ./advalues/demos/DevicesConfig.yaml --log Debug
 ```
 
 You should see the following output:
@@ -86,7 +86,7 @@ The data flow is illustrated in the following drawing:
 
 You can start the forward device:
 ```
-./bin/SilKitDemoGLIOAdvaluesForwardDevice
+./bin/sil-kit-demo-glio-advalues-forward-device
 ```
 
 You should see the following output:
