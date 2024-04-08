@@ -16,15 +16,14 @@ using namespace adapters;
 using namespace adapters::Parsing;
 using namespace SilKit::Services::PubSub;
 
+const std::array<const std::string, 3> demoSwitchesWithArgument = {participantNameArg, regUriArg, logLevelArg};
+const std::array<const std::string, 1> demoSwitchesWithoutArgument = {helpArg};
+
 int main(int argc, char** argv)
 {
     if (FindArg(argc, argv, "--help", argv) != nullptr)
     {
-        std::cout << "Usage (defaults in curly braces if you omit the switch):\n"
-                     "sil-kit-demo-glio-gpio-forward-device [" << participantNameArg << " <participant's name{GpioForwardDevice}>]\n"
-                     "  [" << regUriArg << " silkit://<host{localhost}>:<port{8501}>]\n"
-                     "  [" << logLevelArg << " <Trace|Debug|Warn|{Info}|Error|Critical|off>]\n";
-        
+        PrintDemoHelp("Gpio", true);
         return NO_ERROR;
     }
 
@@ -32,17 +31,19 @@ int main(int argc, char** argv)
     const std::string participantName = GetArgDefault(argc, argv, participantNameArg, "GpioForwardDevice");
     const std::string registryURI = GetArgDefault(argc, argv, regUriArg, "silkit://localhost:8501");
 
-    const std::string participantConfigurationString =
-        R"({ "Logging": { "Sinks": [ { "Type": "Stdout", "Level": ")" + loglevel + R"("} ] } })";
-
-
-    const std::string pubTopic = "toGpiochip1Line2";
-    const std::string subTopic = "fromGpiochip0Line4";
-    PubSubSpec pubDataSpec(pubTopic, SilKit::Util::SerDes::MediaTypeData());
-    PubSubSpec subDataSpec(subTopic, SilKit::Util::SerDes::MediaTypeData());
-
     try
     {
+        throwInvalidCliIf(ThereAreUnknownArgumentsDemo(argc, argv, "Gpio"));
+
+        const std::string participantConfigurationString =
+            R"({ "Logging": { "Sinks": [ { "Type": "Stdout", "Level": ")" + loglevel + R"("} ] } })";
+
+
+        const std::string pubTopic = "toGpiochip1Line2";
+        const std::string subTopic = "fromGpiochip0Line4";
+        PubSubSpec pubDataSpec(pubTopic, SilKit::Util::SerDes::MediaTypeData());
+        PubSubSpec subDataSpec(subTopic, SilKit::Util::SerDes::MediaTypeData());
+
         auto participantConfiguration =
             SilKit::Config::ParticipantConfigurationFromString(participantConfigurationString);
 
@@ -81,15 +82,20 @@ int main(int argc, char** argv)
 
         promptForExit();
     }
+    catch (const InvalidCli&)
+    {
+        std::cerr << "Invalid command line arguments." << std::endl;
+        return CLI_ERROR;
+    }
     catch (const SilKit::ConfigurationError& error)
     {
         std::cerr << "Invalid configuration: " << error.what() << std::endl;
-        return -2;
+        return SILKIT_ERROR;
     }
     catch (const std::exception& error)
     {
         std::cerr << "Something went wrong: " << error.what() << std::endl;
-        return -3;
+        return OTHER_ERROR;
     }
 
     return 0;

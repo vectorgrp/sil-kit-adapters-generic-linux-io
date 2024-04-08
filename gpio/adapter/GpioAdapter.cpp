@@ -114,7 +114,7 @@ void GpioAdapter::Deserialize(const std::vector<uint8_t> &bytes)
         _subscriber = _participant->CreateDataSubscriber(_subscriberName, *_subDataSpec,
             [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
                 // If new values are received for the io device
-                _logger->Debug("New values received on topic: " + _subscribeTopic);
+                _logger->Debug("New values received on " + _subscribeTopic);
                 
                 // Updating internal chip values
                 Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));

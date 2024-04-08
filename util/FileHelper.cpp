@@ -21,7 +21,7 @@ auto ReadFileStr(const std::string& path, SilKit::Services::Logging::ILogger* lo
 
     if (!fs.is_open())
     {
-        logger->Error("File " + path + " cannot be opened:" + GetErrno());
+        logger->Error("File " + path + " cannot be opened: " + GetErrno());
         return "";
     }
 
