@@ -21,10 +21,10 @@ ChardevAdapter::ChardevAdapter(SilKit::IParticipant* participant,
                                const std::string& pathToCharDev,
                                asio::io_context* ioc) :
     _pathToCharDev(pathToCharDev),
+    _logger(participant->GetLogger()),
     _isRecvValue(false),
     _isCancelled(false),
-    _ioc(ioc),
-    _logger(participant->GetLogger())
+    _ioc(ioc)
 {
     if (pubDataSpec)
     {
@@ -87,7 +87,6 @@ void ChardevAdapter::Publish()
 {
     if (!_publishTopic.empty())
     {
-        _logger->Debug("Serializing data and publishing on topic: " + _publishTopic);
         _publisher->Publish(Serialize());
     }
 }
@@ -104,6 +103,8 @@ auto ChardevAdapter::Serialize() -> std::vector<uint8_t>
     publishBuffer.insert(publishBuffer.end(), _bufferFromChardev.begin(),
                             _bufferFromChardev.begin() + size);
 
+    _logger->Debug("Serializing data and publishing on topic: " + _publishTopic);
+    
     return publishBuffer;
 }
 

@@ -46,9 +46,16 @@ public:
     std::vector<uint8_t> _bufferToChardev = {};
     std::vector<uint8_t> _bufferFromChardev = {};
 
-private:
     std::string _pathToCharDev;
+    
+    // Sil Kit logger
+    SilKit::Services::Logging::ILogger* _logger;
 
+    // Publisher and subscriber topics
+    std::string _publishTopic = {};
+    std::string _subscribeTopic = {};
+
+private:
     // Buffers to handle received/sent values
     std::array<uint8_t, EVENT_SIZE> _eventBuffer = {};
     
@@ -62,12 +69,7 @@ private:
     std::unique_ptr<asio::posix::stream_descriptor> fd;
     asio::io_context* _ioc;
 
-    // Publisher and subscriber topics
-    std::string _publishTopic = {};
-    std::string _subscribeTopic = {};
-
-    // Sil Kit logger and pub/sub
-    SilKit::Services::Logging::ILogger* _logger;
+    // Sil Kit pub/sub
     SilKit::Services::PubSub::IDataPublisher* _publisher;
     SilKit::Services::PubSub::IDataSubscriber* _subscriber;
 

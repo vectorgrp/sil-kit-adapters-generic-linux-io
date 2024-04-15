@@ -91,11 +91,11 @@ private:
     // Close the current request
     void CloseRequests();
 
-    inline std::string to_string(const offset_t offset) const;
+    inline auto to_string(const offset_t offset) const -> std::string;
 };
 
 // Inline implementations
-std::string GpioAdapter::to_string(const offset_t offset) const
+auto GpioAdapter::to_string(const offset_t offset) const -> std::string
 {
     return std::to_string(static_cast<int>(offset));
 }

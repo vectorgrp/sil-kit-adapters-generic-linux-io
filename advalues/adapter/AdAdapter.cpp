@@ -15,7 +15,8 @@ AdAdapter::AdAdapter(SilKit::IParticipant* participant,
                      const std::string& pathToCharDev,
                      asio::io_context* ioc,
                      const std::string& dataType) :
-    ChardevAdapter(participant, publisherName, subscriberName, std::move(pubDataSpec), std::move(subDataSpec), pathToCharDev, ioc)
+    ChardevAdapter(participant, publisherName, subscriberName, std::move(pubDataSpec), std::move(subDataSpec), pathToCharDev, ioc),
+    _strDataType(dataType)
 {
     static std::unordered_map<std::string, EnumTypes> map {
 #define CREATE(typename) {#typename, enum_##typename}
@@ -39,33 +40,72 @@ AdAdapter::AdAdapter(SilKit::IParticipant* participant,
 auto AdAdapter::Serialize() -> std::vector<uint8_t>
 {
     SilKit::Util::SerDes::Serializer serializer;
-    switch (_dataType)
+
+    std::string str(_bufferFromChardev.begin(), _bufferFromChardev.end());
+    try
     {
-    case enum_int8_t:
-        serializer.Serialize(bufferFromChardevTo<int16_t>(), 8);
-        break;
-    case enum_uint8_t:
-        serializer.Serialize(bufferFromChardevTo<uint16_t>(), 8);
-        break;
-    case enum_float:
-        serializer.Serialize(bufferFromChardevTo<float>());
-        break;
-    case enum_double:
-        serializer.Serialize(bufferFromChardevTo<double>());
-        break;
+        switch (_dataType)
+        {
+        case enum_int8_t:
+        {
+            int8_t value = isValidData<int8_t, int64_t>(str);
+            serializer.Serialize(bufferFromChardevTo<int16_t>(), 8);
+            break;
+        }
+        case enum_uint8_t:
+        {
+            uint8_t value = isValidData<uint8_t, int64_t>(str);
+            serializer.Serialize(bufferFromChardevTo<uint16_t>(), 8);
+            break;
+        }
+        case enum_float:
+        {
+            float value = isValidData<float, float>(str);
+            serializer.Serialize(value);
+            break;
+        }
+        case enum_double:
+        {
+            double value = isValidData<double, double>(str);
+            serializer.Serialize(value);
+            break;
+        }
 #define CASE(typename,width) \
-    case enum_##typename:\
-        serializer.Serialize(bufferFromChardevTo<typename>(), width);\
-        break;
-    CASE(int16_t, 16);
-    CASE(uint16_t, 16);
-    CASE(int32_t, 32);
-    CASE(uint32_t, 32);
-    CASE(int64_t, 64);
-    CASE(uint64_t, 64);
+        case enum_##typename:\
+        {\
+            if (std::is_signed_v<typename>) {\
+                typename value = isValidData<typename, int64_t>(str);\
+                serializer.Serialize(value, width);\
+            } else {\
+                typename value = isValidData<typename, uint64_t>(str);\
+                serializer.Serialize(value, width);\
+            }\
+            break;\
+        }
+        CASE(int16_t, 16);
+        CASE(uint16_t, 16);
+        CASE(int32_t, 32);
+        CASE(uint32_t, 32);
+        CASE(int64_t, 64);
+        CASE(uint64_t, 64);
 #undef CASE
-    default:
-        break;
+        default:
+            break;
+        }
+
+        _logger->Debug("Serializing data and publishing on topic: " + _publishTopic);
+    }
+    catch (const std::out_of_range& e)
+    {
+        _logger->Error("Invalid value for topic " + _publishTopic + ": " + strWithoutNewLine(str) + " value is out of min or max boundaries for data type " + _strDataType);
+    }
+    catch (const std::invalid_argument& e)
+    {
+        _logger->Error("Invalid value for topic " + _publishTopic + ": '" + strWithoutNewLine(str) + "' value contains characters which are not allowed for data type " + _strDataType);
+    }
+    catch (const std::exception& e)
+    {
+        _logger->Error("Something went wrong when trying to serialize data on " + _publishTopic + ": " + e.what());
     }
 
     return serializer.ReleaseBuffer();
@@ -122,4 +162,39 @@ void AdAdapter::Deserialize(const std::vector<uint8_t>& bytes)
     }
 
     if (!str.empty()) _bufferToChardev = std::vector<uint8_t>(str.begin(), str.end());
+}
+
+void AdAdapter::strContainsOnly(const std::string& str, const std::string& allowedChars, bool isFloatingNumber, bool isSigned)
+{
+    // if isFloatingNumber, allowedChars contains '.', verify if there is one at maximum
+    if (isFloatingNumber)
+    {
+        if (std::count(str.begin(), str.end(), '.') > 1)
+        {
+            throw std::invalid_argument("The value contains more than one '.' character");
+        }
+    }
+
+    // if isSigned, allowedChars contains '-', verify if there is one at maximum
+    if (isSigned)
+    {
+        if (std::count(str.begin(), str.end(), '-') > 1)
+        {
+            throw std::invalid_argument("The value contains more than one '-' character");
+        }
+    }
+
+    if (strWithoutNewLine(str).find_first_not_of(allowedChars) != std::string::npos)
+    {
+        throw std::invalid_argument("The value contains unexpected characters");
+    }
+}
+
+auto AdAdapter::strWithoutNewLine(const std::string& str) -> std::string
+{
+    if (str.back() == '\n')
+    {
+        return str.substr(0, str.size() - 1);
+    }
+    return str;
 }
