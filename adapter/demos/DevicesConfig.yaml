@@ -17,7 +17,6 @@ advalues:
   - files:
     - name: in_voltage103
       topic_subscribe: toVoltage103
-  - files:
     - name: in_voltage15
       topic_subscribe: toVoltage15
       topic_publish: fromVoltage15
