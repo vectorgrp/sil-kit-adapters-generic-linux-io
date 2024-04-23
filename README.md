@@ -10,6 +10,8 @@ as well as complimentary demo applications for some communication to happen.
 Those instructions assume you use a Linux OS (or a virtual machine running a Linux image) for building and running the adapter and use ``bash`` as your interactive
 shell.
 
+**Note:** Advalues and chardev modes are supported in WSL/WSL2 if you use the Linux filesystem (not the mounted drives like `/mnt/..`). However there is no easy way to run the adapter's GPIO mode in WSL/WSL2 without recompiling the Linux kernel with the required module.
+
 ## a) Getting Started with self build Adapters and Demos
 This section specifies steps you should do if you have just cloned the repository.
 
