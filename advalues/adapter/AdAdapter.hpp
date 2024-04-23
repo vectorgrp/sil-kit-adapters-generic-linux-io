@@ -108,15 +108,29 @@ T AdAdapter::isValidData(const std::string& str)
     }
     else if (std::is_signed_v<T>)
     {
-        if (!isHexa) strContainsOnly(str, strNum + "-", false, true);
-        value = std::stoll(str, nullptr, 0);
+        if (isHexa)
+        {
+            value = std::stoll(str, nullptr, 0);
+        }
+        else
+        {
+            strContainsOnly(str, strNum + "-", false, true);
+            value = std::stoll(str);
+        }
         throwIfInvalid(max, lowest, value);
         return static_cast<T>(value);
     }
     else if (std::is_unsigned_v<T>)
     {
-        if (!isHexa) strContainsOnly(str, strNum);
-        value = std::stoull(str, nullptr, 0);
+        if (!isHexa)
+        {
+            value = std::stoull(str, nullptr, 0);
+        }
+        else
+        {
+            strContainsOnly(str, strNum);
+            value = std::stoull(str);
+        }
         throwIfInvalid(max, lowest, value);
         return static_cast<T>(value);
     }
