@@ -94,6 +94,8 @@ auto AdAdapter::Serialize() -> std::vector<uint8_t>
         }
 
         _logger->Debug("Serializing data and publishing on topic: " + _publishTopic);
+
+        return serializer.ReleaseBuffer();
     }
     catch (const std::out_of_range& e)
     {
@@ -108,7 +110,7 @@ auto AdAdapter::Serialize() -> std::vector<uint8_t>
         _logger->Error("Something went wrong when trying to serialize data on " + _publishTopic + ": " + e.what());
     }
 
-    return serializer.ReleaseBuffer();
+    return std::vector<uint8_t>{};
 }
 
 // Deserialize received values 

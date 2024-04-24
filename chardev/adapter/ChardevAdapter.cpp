@@ -87,7 +87,10 @@ void ChardevAdapter::Publish()
 {
     if (!_publishTopic.empty())
     {
-        _publisher->Publish(Serialize());
+        if (const auto& bytes = Serialize(); !bytes.empty())
+        {
+            _publisher->Publish(bytes);
+        }
     }
 }
 
