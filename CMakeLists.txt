@@ -68,8 +68,7 @@ else()
 	message(FATAL_ERROR "Something went wrong : Could not find SIL Kit package.")
 endif()
 
-set(compile_options 
-    #-g -O0 # Compile options for valgrind
+set(compile_options
     -pedantic -Wall -Wextra
     -Wcast-align -Wformat=2
     -Wshadow -Wsign-promo -Wstrict-overflow=5

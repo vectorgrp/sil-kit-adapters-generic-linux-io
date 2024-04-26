@@ -2,16 +2,16 @@
 
 #pragma once
 
-#include "../../chardev/adapter/ChardevAdapter.hpp"
-
 #include <sstream>
 #include <stdexcept>
 #include <limits>
 
+#include "../../chardev/adapter/ChardevAdapter.hpp"
+
 #include "silkit/SilKit.hpp"
 #include "silkit/services/pubsub/all.hpp"
 
-#include <asio/posix/stream_descriptor.hpp>
+#include "asio/posix/stream_descriptor.hpp"
 
 // Each file has a specific AdAdapter
 class AdAdapter : public ChardevAdapter
@@ -22,41 +22,47 @@ enum EnumTypes {enum_int8_t, enum_uint8_t, enum_int16_t, enum_uint16_t,
     enum_int32_t, enum_uint32_t, enum_int64_t, enum_uint64_t, enum_float, enum_double};
 
 public:
+    friend class AdManager;
+
     AdAdapter() = delete;
     AdAdapter(SilKit::IParticipant* participant,
               const std::string& publisherName,
               const std::string& subscriberName,
-              std::unique_ptr<PubSubSpec> pubDataSpec,
-              std::unique_ptr<PubSubSpec> subDataSpec,
+              PubSubSpec* pubDataSpec,
+              PubSubSpec* subDataSpec,
               const std::string& pathToCharDev,
-              asio::io_context* ioc,
-              const std::string& dataType);
+              const std::string& dataType,
+              int inotifyFd);
+
+private:
+    EnumTypes _dataType;
+    std::string _strDataType;
 
     // Serialize chip values
     auto Serialize() -> std::vector<uint8_t> override;
     // Deserialize received values 
     void Deserialize(const std::vector<uint8_t>& bytes) override;
 
-private:
-    EnumTypes _dataType;
-    std::string _strDataType;
-
+    // Converting and checking values
     template<typename T>
-    inline T bufferFromChardevTo();
+    inline auto bufferFromChardevTo() -> T;
 
     template<typename T, typename U>
     inline void throwIfInvalid(const T max, const T lowest, const U value);
     
     template<typename T, typename U>
-    inline T isValidData(const std::string& str);
+    inline auto isValidData(const std::string& str) -> T;
 
     void strContainsOnly(const std::string& str, const std::string& allowedChars, bool isFloatingNumber = false, bool isSigned = false);
     auto strWithoutNewLine(const std::string& str) -> std::string;
 };
 
-// Inline implementations
+////////////////////////////
+// Inline implementations //
+////////////////////////////
+
 template<typename T>
-T AdAdapter::bufferFromChardevTo()
+auto AdAdapter::bufferFromChardevTo() -> T
 {
     std::string str(_bufferFromChardev.begin(), _bufferFromChardev.end());
     std::stringstream val(str);
@@ -75,7 +81,7 @@ void AdAdapter::throwIfInvalid(const T max, const T lowest, const U value)
 }
 
 template<typename T, typename U>
-T AdAdapter::isValidData(const std::string& str)
+auto AdAdapter::isValidData(const std::string& str) -> T
 {
     static const std::string strNum{"0123456789"};
 

@@ -9,8 +9,8 @@
 #include "silkit/util/serdes/Deserializer.hpp"
 #include "silkit/util/serdes/Serializer.hpp"
 
-#include <asio/posix/stream_descriptor.hpp>
-#include <asio/read.hpp>
+#include "asio/posix/stream_descriptor.hpp"
+#include "asio/read.hpp"
 
 using namespace SilKit::Services::PubSub;
 using namespace GpioWrapper;
@@ -18,7 +18,7 @@ using namespace GpioWrapper;
 GpioAdapter::GpioAdapter(SilKit::IParticipant* participant,
                          const std::string& publisherName, 
                          const std::string& subscriberName, 
-                         std::unique_ptr<PubSubSpec> pubDataSpec, 
+                         PubSubSpec* pubDataSpec, 
                          std::unique_ptr<PubSubSpec> subDataSpec,
                          Chip* gpiochip,
                          Ioc* ioc,
@@ -27,9 +27,10 @@ GpioAdapter::GpioAdapter(SilKit::IParticipant* participant,
     _isCancelled(false),
     _chip(gpiochip),
     _ioc(ioc),
-    _participant(participant),
-    _logger(participant->GetLogger())
+    _participant(participant)
 {
+    _logger = participant->GetLogger();
+
     if (subDataSpec)
     {
         _subscribeTopic = subDataSpec->Topic();
@@ -151,7 +152,7 @@ void GpioAdapter::ReceiveEvent()
 {
     gpioevent_data data;
     asio::async_read(*(_eh->GetFd()), asio::buffer(&data, sizeof(data)),
-    [that = shared_from_this(), this, &data](const std::error_code ec, const long unsigned int size){
+    [this, &data](const std::error_code ec, const long unsigned int size){
         if (ec)
         {
             if(_isCancelled && (ec == asio::error::operation_aborted))

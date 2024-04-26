@@ -21,28 +21,25 @@
 // Manage all gpio adapters (initialize, events identification)
 class GpioManager : public IOManager
 {
-
 public:
 	GpioManager() = delete;
 	GpioManager(const YAML::Node& configFile,
-                std::vector<std::shared_ptr<IOAdapter>>& ioAdapters, 
+                std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                 SilKit::Services::Logging::ILogger* logger, 
                 SilKit::IParticipant* participant);
 	~GpioManager();
 
-    // Open the chip and create Adapters 
-	void InitAdaptersFromConfigFile(const YAML::Node& configFile,
-                                    std::vector<std::shared_ptr<IOAdapter>>& ioAdapters, 
-                                    SilKit::IParticipant* participant) override;
-
     void Stop() override;
 
 private:
-    SilKit::Services::Logging::ILogger* _logger;
-
     // One ioc and thread per gpio chip
     std::unordered_map<std::unique_ptr<GpioWrapper::Chip>, std::unique_ptr<GpioWrapper::Ioc>> _chipContexts;
     std::vector<std::thread> threadPool;
+
+    // Open the chip and create Adapters 
+	void InitAdaptersFromConfigFile(const YAML::Node& configFile,
+                                    std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
+                                    SilKit::IParticipant* participant) override;
 
     // Get all informations from YAML configuration file
     void GetYamlConfig(const YAML::Node& chipNode, std::vector<adapters::Util::DataYAMLConfig>& dataYAMLConfigs, std::string& chipPath);

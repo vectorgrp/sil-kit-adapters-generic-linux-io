@@ -3,13 +3,15 @@
 #include "AdManager.hpp"
 
 #include <algorithm>
+#include <sys/inotify.h>
 
-#include "AdAdapter.hpp"
 #include "../../util/Exceptions.hpp"
 
 #include "yaml-cpp/yaml.h"
 
 #include "silkit/util/serdes/Serialization.hpp"
+
+#include "asio/read.hpp"
 
 using namespace adapters;
 using namespace SilKit::Services::PubSub;
@@ -21,34 +23,17 @@ static const std::vector<std::string> types
     {"int8_t", "uint8_t", "int16_t", "uint16_t", "int32_t", "uint32_t", "int64_t", "uint64_t", "float", "double"};
 
 AdManager::AdManager(const YAML::Node& configFile,
-                     std::vector<std::shared_ptr<IOAdapter>>& ioAdapters,
+                     std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                      SilKit::Services::Logging::ILogger* logger,
                      SilKit::IParticipant* participant) :
-    _logger(logger)
+    ChardevManager(logger)
 {
     // Initialize values from config file
     InitAdaptersFromConfigFile(configFile, ioAdapters, participant);
 }
 
-AdManager::~AdManager()
-{
-    Stop();
-}
-
-void AdManager::Stop() 
-{ 
-    if (!_ioc.stopped())
-    {
-        _ioc.stop();
-    }
-    if (_thread.joinable())
-    {
-        _thread.join();
-    }
-}
-
 void AdManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
-                                           std::vector<std::shared_ptr<IOAdapter>>& ioAdapters, 
+                                           std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                                            SilKit::IParticipant* participant)
 {
     std::vector<std::vector<Util::DataYAMLConfig>> advaluesYAMLConfigs;
@@ -77,20 +62,22 @@ void AdManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
                 publisherName = "pub" + fileValuesYaml.fileName;
             }
 
-            auto newAdapter = std::make_shared<AdAdapter>(participant, 
-                                                         publisherName, 
-                                                         subscriberName, 
-                                                         std::move(pubDataSpec), 
-                                                         std::move(subDataSpec), 
-                                                         fileValuesYaml.path + fileValuesYaml.fileName, 
-                                                         &_ioc,
-                                                         fileValuesYaml.dataType);
-            
-            newAdapter->Initialize();
+            auto newAdapter = std::make_unique<AdAdapter>(participant,
+                                                         publisherName,
+                                                         subscriberName,
+                                                         pubDataSpec.get(),
+                                                         subDataSpec.get(),
+                                                         fileValuesYaml.path + fileValuesYaml.fileName,
+                                                         fileValuesYaml.dataType,
+                                                         _inotifyFd);
 
-            ioAdapters.push_back(newAdapter);
+            _wdAdapter[newAdapter->_wd] = newAdapter.get();
+
+            ioAdapters.push_back(std::move(newAdapter));
         }
     }
+
+    ReceiveEvent();
 
     _thread = std::thread([&]() -> void {
         _ioc.run();

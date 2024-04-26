@@ -10,12 +10,12 @@
 AdAdapter::AdAdapter(SilKit::IParticipant* participant,
                      const std::string& publisherName,
                      const std::string& subscriberName,
-                     std::unique_ptr<PubSubSpec> pubDataSpec,
-                     std::unique_ptr<PubSubSpec> subDataSpec,
+                     PubSubSpec* pubDataSpec,
+                     PubSubSpec* subDataSpec,
                      const std::string& pathToCharDev,
-                     asio::io_context* ioc,
-                     const std::string& dataType) :
-    ChardevAdapter(participant, publisherName, subscriberName, std::move(pubDataSpec), std::move(subDataSpec), pathToCharDev, ioc),
+                     const std::string& dataType,
+                     int inotifyFd) :
+    ChardevAdapter(participant, publisherName, subscriberName, std::move(pubDataSpec), std::move(subDataSpec), pathToCharDev, inotifyFd),
     _strDataType(dataType)
 {
     static std::unordered_map<std::string, EnumTypes> map {

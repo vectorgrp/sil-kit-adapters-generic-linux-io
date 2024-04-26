@@ -2,28 +2,37 @@
 
 #include "ChardevManager.hpp"
 
-#include <sys/inotify.h>
-
-#include "ChardevAdapter.hpp"
-
 #include "../../util/FileHelper.hpp"
 #include "../../util/Exceptions.hpp"
 
 #include "silkit/util/serdes/Serialization.hpp"
 
+#include "asio/read.hpp"
+
 using namespace adapters;
 using namespace SilKit::Services::PubSub;
 
-static constexpr std::size_t MAX_EVENTS = 4096;
-
 ChardevManager::ChardevManager(const YAML::Node& configFile,
-                               std::vector<std::shared_ptr<IOAdapter>>& ioAdapters, 
+                               std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                                SilKit::Services::Logging::ILogger* logger, 
                                SilKit::IParticipant* participant) :
-    _logger(logger)
+    ChardevManager(logger)
 {
     // Initialize values from config file
     InitAdaptersFromConfigFile(configFile, ioAdapters, participant);
+}
+
+ChardevManager::ChardevManager(SilKit::Services::Logging::ILogger* logger) :
+    _isCancelled(false)
+{
+    _logger = logger;
+    
+    _inotifyFd = inotify_init1( IN_NONBLOCK );
+    if (_inotifyFd == -1) {
+        throw InotifyError("inotify initialization error (" + std::to_string(errno) +")");
+    }
+
+    _fd = std::make_unique<asio::posix::stream_descriptor>(_ioc, _inotifyFd);
 }
 
 ChardevManager::~ChardevManager()
@@ -32,9 +41,18 @@ ChardevManager::~ChardevManager()
 }
 
 void ChardevManager::Stop() 
-{ 
+{
+    _isCancelled = true;
+
+    if (_fd->is_open())
+    {
+        _logger->Debug("Cancel operation on asio stream_descriptor (with inotify fd: " + std::to_string(_inotifyFd) + ") and close it.");
+        _fd->cancel();
+        _fd->close();
+    }
     if (!_ioc.stopped())
     {
+        _logger->Debug("Stop the associated asio io_context.");
         _ioc.stop();
     }
     if (_thread.joinable())
@@ -43,8 +61,8 @@ void ChardevManager::Stop()
     }
 }
 
-void ChardevManager::InitAdaptersFromConfigFile(const YAML::Node& configFile, 
-                                                std::vector<std::shared_ptr<IOAdapter>>& ioAdapters, 
+void ChardevManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
+                                                std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                                                 SilKit::IParticipant* participant)
 {
     std::vector<Util::DataYAMLConfig> chardevYAMLConfigs;
@@ -84,18 +102,21 @@ void ChardevManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
             publisherName = "pub" + pathToFile_;
         }
 
-        auto newAdapter = std::make_shared<ChardevAdapter>(participant, 
+        auto newAdapter = std::make_unique<ChardevAdapter>(participant, 
                                                            publisherName, 
                                                            subscriberName, 
-                                                           std::move(pubDataSpec), 
-                                                           std::move(subDataSpec), 
-                                                           pathToFile, 
-                                                           &_ioc);
+                                                           pubDataSpec.get(), 
+                                                           subDataSpec.get(), 
+                                                           pathToFile,
+                                                           _inotifyFd);
 
-        newAdapter->Initialize();
+        // _wdAdapter[newAdapter->_wd] = std::move(newAdapter);
+        _wdAdapter[newAdapter->_wd] = newAdapter.get();
 
-        ioAdapters.push_back(newAdapter);
+        ioAdapters.push_back(std::move(newAdapter));
     }
+
+    ReceiveEvent();
 
     _thread = std::thread([&]() -> void {
         _ioc.run();
@@ -130,4 +151,58 @@ void ChardevManager::GetYamlConfig(const YAML::Node& doc, std::vector<Util::Data
 
         dataYAMLConfigs.push_back(chardevYaml);
     }
+}
+
+void ChardevManager::ReceiveEvent()
+{
+    async_read(*_fd, asio::buffer(_eventBuffer, sizeof(inotify_event)),
+    [this](const std::error_code ec, const std::size_t bytes_transferred){
+        if (ec) 
+        {
+            if(_isCancelled && (ec == asio::error::operation_aborted))
+            {
+                // An error code comes right after calling fd.cancel() in order to close all asynchronous reads
+                _isCancelled = false;
+            }
+            else
+            {
+                // If the error does not happened after fd.cancel(), handle it
+                _logger->Error("Unable to handle event. "
+                               "Error code: " + std::to_string(ec.value()) + " (" + ec.message()+ "). " +
+                               "Error category: " + ec.category().name());
+            }
+        }
+        else
+        {
+            auto event = reinterpret_cast<const struct inotify_event *>(_eventBuffer.data());
+
+            ChardevAdapter* adapterOnEvent;
+
+            if (auto search = _wdAdapter.find(event->wd); search != _wdAdapter.end())
+            {
+                adapterOnEvent = search->second;
+
+                if (adapterOnEvent->_isRecvValue)
+                {
+                    adapterOnEvent->_isRecvValue = false;
+                }
+                else // The file has been modified and does not come from deserialization
+                {
+                    _logger->Debug(adapterOnEvent->_pathToCharDev + " has been updated");
+                    // Read the value only if it has to be sent
+                    if (!adapterOnEvent->_publishTopic.empty())
+                    {
+                        adapterOnEvent->_bufferFromChardev = Util::ReadFile(adapterOnEvent->_pathToCharDev, _logger, ChardevAdapter::BUF_LEN);
+                        adapterOnEvent->Publish();
+                    }
+                }
+            }
+            else
+            {
+                _logger->Error("Event error on watch descriptor " + std::to_string(event->wd));
+            }
+
+            ReceiveEvent();
+        }
+    });
 }

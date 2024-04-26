@@ -6,8 +6,8 @@
 #include <string>
 #include <string_view>
 
-#include <asio/posix/stream_descriptor.hpp>
-#include <asio/read.hpp>
+#include "asio/posix/stream_descriptor.hpp"
+#include "asio/read.hpp"
 
 namespace GpioWrapper 
 {
@@ -63,7 +63,8 @@ public:
 	ChipInfo GetInfo();
 	LineInfo GetLineInfo(offset_t);
 
-    inline void Close() { if (fd.is_open()) fd.close(); }
+    inline void Close() { fd.close(); }
+    inline bool IsFdOpen() { return fd.is_open(); }
 
 private:
     Fd fd;

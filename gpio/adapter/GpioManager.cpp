@@ -19,11 +19,12 @@ using namespace std::chrono_literals;
 using namespace SilKit::Services::PubSub;
 
 GpioManager::GpioManager(const YAML::Node& configFile,
-                         std::vector<std::shared_ptr<IOAdapter>>& ioAdapters, 
+                         std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                          SilKit::Services::Logging::ILogger* logger, 
-                         SilKit::IParticipant* participant) :
-    _logger(logger)
+                         SilKit::IParticipant* participant)
 {
+    _logger = logger;
+
     InitAdaptersFromConfigFile(configFile, ioAdapters, participant);
 }
 
@@ -35,30 +36,32 @@ GpioManager::~GpioManager()
 void GpioManager::Stop() 
 { 
     std::size_t i = 0;
-    for (const auto& chipContext : _chipContexts)
+    for (auto& [chip, ioc] : _chipContexts)
     {
-        if (!chipContext.second->stopped())
+        if (chip->IsFdOpen())
         {
-            chipContext.second->stop();
+            chip->Close();
+        }
+        if (!ioc->stopped())
+        {
+            ioc->stop();
         }
         if (threadPool[i].joinable())
         {
             threadPool[i].join();
         }
-
-        chipContext.first->Close();
         ++i;
     }
 }
 
 void GpioManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
-                                             std::vector<std::shared_ptr<IOAdapter>>& ioAdapters, 
+                                             std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                                              SilKit::IParticipant* participant)
 {
     // Root attribute gpiochips
     const auto gpiochipNodes = configFile["gpiochips"];
 
-    _logger->Debug("Gpio chips found in the YAML configuration file.");
+    _logger->Debug("GPIO chips found in the YAML configuration file.");
 
     // for each gpio chip
     for (const auto& chipNode : gpiochipNodes)
@@ -71,6 +74,7 @@ void GpioManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
         const auto chipName = chipPath.substr(chipPath.find_last_of('/') + 1);
 
         auto ioc = std::make_unique<Ioc>();
+        _logger->Debug("Opening " + chipPath);
         auto chip = std::make_unique<Chip>(*ioc, chipPath);
         
         // Manage each line specified in the YAML config file
@@ -92,10 +96,10 @@ void GpioManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
                 subscriberName = chipName + "SubLine" + gpioYAMLConfigs[j].offset;
             }
 
-            auto newAdapter = std::make_shared<GpioAdapter>(participant, 
+            auto newAdapter = std::make_unique<GpioAdapter>(participant, 
                                                             publisherName, 
                                                             subscriberName, 
-                                                            std::move(pubDataSpec), 
+                                                            pubDataSpec.get(), 
                                                             std::move(subDataSpec), 
                                                             chip.get(), 
                                                             ioc.get(), 
@@ -103,7 +107,7 @@ void GpioManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
 
             newAdapter->Initialize();
 
-            ioAdapters.push_back(newAdapter);
+            ioAdapters.push_back(std::move(newAdapter));
         }
 
         _chipContexts.insert(std::make_pair(std::move(chip), std::move(ioc)));

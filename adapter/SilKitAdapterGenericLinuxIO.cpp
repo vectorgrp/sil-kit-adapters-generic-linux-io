@@ -4,6 +4,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
+#include <iostream>
 
 #include "IOAdapter.hpp"
 #include "IOManager.hpp"
@@ -122,7 +123,7 @@ int main(int argc, char** argv)
 
         // Initialize chip and values
         std::vector<std::unique_ptr<IOManager>> ioManagers;
-        std::vector<std::shared_ptr<IOAdapter>> ioAdapters;
+        std::vector<std::unique_ptr<IOAdapter>> ioAdapters;
 
         if (configFile["advalues"])
         {
@@ -147,7 +148,7 @@ int main(int argc, char** argv)
 
         // Stop all io_contexts and threads
         std::for_each(ioManagers.begin(), ioManagers.end(), [](const auto& manager){ manager->Stop(); });
-        
+
         auto runningStateFuture = runningStatePromise.get_future();
         auto futureStatus = runningStateFuture.wait_for(15s);
         if (futureStatus != std::future_status::ready)

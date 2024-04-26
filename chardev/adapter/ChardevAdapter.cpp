@@ -8,7 +8,7 @@
 #include "silkit/util/serdes/Deserializer.hpp"
 #include "silkit/util/serdes/Serializer.hpp"
 
-#include <asio/read.hpp>
+#include "asio/read.hpp"
 
 using namespace SilKit::Services::PubSub;
 using namespace adapters;
@@ -16,16 +16,20 @@ using namespace adapters;
 ChardevAdapter::ChardevAdapter(SilKit::IParticipant* participant,
                                const std::string& publisherName, 
                                const std::string& subscriberName, 
-                               std::unique_ptr<PubSubSpec> pubDataSpec, 
-                               std::unique_ptr<PubSubSpec> subDataSpec,
+                               PubSubSpec* pubDataSpec, 
+                               PubSubSpec* subDataSpec,
                                const std::string& pathToCharDev,
-                               asio::io_context* ioc) :
+                               int inotifyFd) :
     _pathToCharDev(pathToCharDev),
-    _logger(participant->GetLogger()),
-    _isRecvValue(false),
-    _isCancelled(false),
-    _ioc(ioc)
+    _isRecvValue(false)
 {
+    _logger = participant->GetLogger();
+    
+    _wd = inotify_add_watch(inotifyFd, _pathToCharDev.c_str(), IN_CLOSE_WRITE);
+    if (_wd == -1) {
+        throw InotifyError("inotify add watch error (" + std::to_string(errno) +") on: " + _pathToCharDev);
+    }
+
     if (pubDataSpec)
     {
         _publishTopic = pubDataSpec->Topic();
@@ -54,33 +58,6 @@ ChardevAdapter::ChardevAdapter(SilKit::IParticipant* participant,
                 Publish();
             });
     }
-}
-
-ChardevAdapter::~ChardevAdapter()
-{
-    int ret = close(inotifyFd);
-    if (ret == -1)
-    {
-        _logger->Error("Error while closing inotify file descriptor (" + std::to_string(inotifyFd) + ") for " + _pathToCharDev);
-    }
-}
-
-void ChardevAdapter::Initialize()
-{
-    // Handle event only if there is a publisher topic
-    // Initialize file event handler
-    inotifyFd = inotify_init1( IN_NONBLOCK );
-    if (inotifyFd == -1) {
-        throw InotifyError("inotify initialization error");
-    }
-
-    fd = std::make_unique<asio::posix::stream_descriptor>(*_ioc, inotifyFd);
-    auto wd = inotify_add_watch(inotifyFd, _pathToCharDev.c_str(), IN_CLOSE_WRITE);
-    if (wd == -1) {
-        throw InotifyError("inotify add watcher error");
-    }
-
-    ReceiveEvent();
 }
 
 void ChardevAdapter::Publish()
@@ -116,46 +93,4 @@ void ChardevAdapter::Deserialize(const std::vector<uint8_t>& bytes)
     _logger->Debug("Deserializing data from topic: " + _subscribeTopic);
     SilKit::Util::SerDes::Deserializer deserializer(bytes);
     _bufferToChardev = deserializer.Deserialize<std::vector<uint8_t>>();
-}
-
-void ChardevAdapter::ReceiveEvent()
-{
-    async_read(*fd, asio::buffer(_eventBuffer, sizeof(inotify_event)),
-    [that = shared_from_this(), this](const std::error_code ec, const std::size_t bytes_transferred){
-        if (ec) 
-        {
-            if(_isCancelled && (ec == asio::error::operation_aborted))
-            {
-                // An error code comes right after calling fd.cancel() in order to close all asynchronous reads
-                _isCancelled = false;
-            }
-            else
-            {
-                // If the error does not happened after fd.cancel(), handle it
-                _logger->Error("Unable to handle event on " + _pathToCharDev + ". " +
-                               "Error code: " + std::to_string(ec.value()) + " (" + ec.message()+ "). " +
-                               "Error category: " + ec.category().name());
-            }
-        }
-        else
-        {
-            if (_isRecvValue)
-            {
-                _isRecvValue = false;
-            }
-            // The file has been modified and does not come from deserialization
-            else
-            {
-                _logger->Debug(_pathToCharDev + " has been updated");
-                // Read the value only if it has to be sent
-                if (!_publishTopic.empty())
-                {
-                    _bufferFromChardev = Util::ReadFile(_pathToCharDev, _logger, BUF_LEN);
-                    Publish();
-                }
-            }
-
-            ReceiveEvent();
-        }
-    });
 }
