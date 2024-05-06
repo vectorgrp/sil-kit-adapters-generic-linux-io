@@ -42,6 +42,14 @@ auto AdAdapter::Serialize() -> std::vector<uint8_t>
     SilKit::Util::SerDes::Serializer serializer;
 
     std::string str(_bufferFromChardev.begin(), _bufferFromChardev.end());
+
+    // Check if the file read is empty
+    if ((str == "") || (str[0] == '\n'))
+    {
+        _logger->Warn(_pathToCharDev + " is empty");
+        return std::vector<uint8_t>{};
+    }
+
     try
     {
         switch (_dataType)
