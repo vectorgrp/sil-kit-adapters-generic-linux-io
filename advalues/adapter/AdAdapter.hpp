@@ -128,7 +128,7 @@ auto AdAdapter::isValidData(const std::string& str) -> T
     }
     else if (std::is_unsigned_v<T>)
     {
-        if (!isHexa)
+        if (isHexa)
         {
             value = std::stoull(str, nullptr, 0);
         }

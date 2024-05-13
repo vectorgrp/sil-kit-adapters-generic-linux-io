@@ -62,7 +62,7 @@ auto AdAdapter::Serialize() -> std::vector<uint8_t>
         }
         case enum_uint8_t:
         {
-            uint8_t value = isValidData<uint8_t, int64_t>(str);
+            uint8_t value = isValidData<uint8_t, uint64_t>(str);
             serializer.Serialize(bufferFromChardevTo<uint16_t>(), 8);
             break;
         }
@@ -133,14 +133,14 @@ void AdAdapter::Deserialize(const std::vector<uint8_t>& bytes)
     case enum_uint8_t:
     {
         std::stringstream ss;
-        ss << static_cast<int>(deserializer.Deserialize<int16_t>(8));
+        ss << static_cast<int>(deserializer.Deserialize<uint16_t>(8));
         str = ss.str();
         break;
     }
     case enum_int8_t:
     {
         std::stringstream ss;
-        ss << static_cast<int>(deserializer.Deserialize<uint16_t>(8));
+        ss << static_cast<int>(deserializer.Deserialize<int16_t>(8));
         str = ss.str();
         break;
     }
