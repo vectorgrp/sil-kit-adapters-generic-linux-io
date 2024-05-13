@@ -25,6 +25,8 @@ In the following diagram you can see the whole setup. It illustrates the data fl
 +----------------------+
 ```
 
+**Note:** In order to trigger the events happening on the files, Linux inotify watchers are instanciated with the ``IN_CLOSE_WRITE`` flag. This means events are only triggered when a file opened for writing is closed again afterwards.
+
 ## Create the adchips
 In order to get the same setup on your local machine, you can run the following script:
 ```
