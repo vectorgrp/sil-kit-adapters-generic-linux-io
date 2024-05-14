@@ -47,6 +47,8 @@ protected:
     // Inotify watch descriptor
     int _wd;
 
+    auto isBufferFromChardevEmpty() const -> bool;
+
 private:
     // Publish chardev values
     void Publish() override;

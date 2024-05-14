@@ -39,16 +39,15 @@ AdAdapter::AdAdapter(SilKit::IParticipant* participant,
 // Serialize chip values
 auto AdAdapter::Serialize() -> std::vector<uint8_t>
 {
-    SilKit::Util::SerDes::Serializer serializer;
-
-    std::string str(_bufferFromChardev.begin(), _bufferFromChardev.end());
-
     // Check if the file read is empty
-    if ((str == "") || (str[0] == '\n'))
+    if(isBufferFromChardevEmpty())
     {
-        _logger->Warn(_pathToCharDev + " is empty");
+        _logger->Info(_pathToCharDev + " file is empty or resource is temporarily unavailable");
         return std::vector<uint8_t>{};
     }
+
+    SilKit::Util::SerDes::Serializer serializer;
+    const std::string str(_bufferFromChardev.begin(), _bufferFromChardev.end());
 
     try
     {

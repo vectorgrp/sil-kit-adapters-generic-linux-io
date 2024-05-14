@@ -51,7 +51,15 @@ auto ReadFile(const std::string& path, SilKit::Services::Logging::ILogger* logge
 
     if (n == -1)
     {
-        logger->Error("Reading " + path + " ended with error: " + GetErrno());
+        if (errno == EAGAIN)
+        {
+            // File is empty or resource is temporarily unavailable
+            return std::vector<uint8_t>{};
+        }
+        else
+        {
+            logger->Error("Reading " + path + " ended with error: " + GetErrno());
+        }
     }
 
     for (int i = 0; i < n; ++i)

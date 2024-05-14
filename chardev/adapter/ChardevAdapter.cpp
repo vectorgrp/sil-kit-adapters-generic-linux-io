@@ -73,6 +73,13 @@ void ChardevAdapter::Publish()
 
 auto ChardevAdapter::Serialize() -> std::vector<uint8_t>
 {    
+    // Check if the file read is empty
+    if(isBufferFromChardevEmpty())
+    {
+        _logger->Info(_pathToCharDev + " file is empty or resource is temporarily unavailable");
+        return std::vector<uint8_t>{};
+    }
+
     SilKit::Util::SerDes::Serializer serializer;
 
     std::size_t size = _bufferFromChardev.size();
@@ -93,4 +100,16 @@ void ChardevAdapter::Deserialize(const std::vector<uint8_t>& bytes)
     _logger->Debug("Deserializing data from topic: " + _subscribeTopic);
     SilKit::Util::SerDes::Deserializer deserializer(bytes);
     _bufferToChardev = deserializer.Deserialize<std::vector<uint8_t>>();
+}
+
+auto ChardevAdapter::isBufferFromChardevEmpty() const -> bool
+{
+    const std::string str(_bufferFromChardev.begin(), _bufferFromChardev.end());
+
+    // Check if the file read is empty
+    if ((str == "") || (str[0] == '\n'))
+    {
+        return true;
+    }
+    return false;
 }
