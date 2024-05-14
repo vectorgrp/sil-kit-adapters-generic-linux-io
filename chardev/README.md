@@ -41,13 +41,13 @@ Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-
 
 You should see the following output:
 ```
-[2024-02-01 10:07:19.208] [SilKitAdapterGenericLinuxIO] [info] Creating participant 'SilKitAdapterGenericLinuxIO' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
-[2024-02-01 10:07:19.216] [SilKitAdapterGenericLinuxIO] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:34612' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
-[2024-02-01 10:07:19.229] [SilKitAdapterGenericLinuxIO] [info] Creating participant SilKitAdapterGenericLinuxIO with registry silkit://localhost:8501
+[date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant 'SilKitAdapterGenericLinuxIO' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [SilKitAdapterGenericLinuxIO] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:34612' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
+[date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant SilKitAdapterGenericLinuxIO with registry silkit://localhost:8501
 ...
-[2024-02-01 10:07:19.260] [SilKitAdapterGenericLinuxIO] [debug] Serializing and publishing initial values
-[2024-02-01 10:07:19.261] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo1
-[2024-02-01 10:07:19.261] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing and publishing initial values
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo1
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
 ...
 Press CTRL + C to stop the process...
 ```
@@ -79,8 +79,8 @@ You can start the forward device:
 You should see the following output:
 ```
 Creating participant 'ForwardDevice' at silkit://localhost:850
-[2024-01-31 14:49:00.110] [ForwardDevice] [info] Creating participant 'ForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
-[2024-01-31 14:49:00.111] [ForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:45286' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
+[date time] [ForwardDevice] [info] Creating participant 'ForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [ForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:45286' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
 Press enter to stop the process...
 GLIO Adapter  >> ForwardDevice: message1
 ForwardDevice >> GLIO Adapter : message1
@@ -90,9 +90,9 @@ The GLIO Adapter published the initial data, it means ``message1`` is the initia
 
 On the GLIO Adapter window you should see three new lines:
 ```
-[2024-02-01 10:17:59.853] [SilKitAdapterGenericLinuxIO] [debug] New value received on toFifo2
-[2024-02-01 10:17:59.853] [SilKitAdapterGenericLinuxIO] [debug] Updating ./chardevs/fifo2
-[2024-02-01 10:17:59.853] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] New value received on toFifo2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Updating ./chardevs/fifo2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
 ```
 
 In your chardevs folder you can see the updated value in ``fifo2``:

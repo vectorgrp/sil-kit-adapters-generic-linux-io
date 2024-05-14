@@ -42,21 +42,21 @@ Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-
 
 You should see the following output:
 ```
-[2024-02-01 14:34:23.824] [SilKitAdapterGenericLinuxIO] [info] Creating participant 'SilKitAdapterGenericLinuxIO' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
-[2024-02-01 14:34:23.825] [SilKitAdapterGenericLinuxIO] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:37918' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
-[2024-02-01 14:34:23.827] [SilKitAdapterGenericLinuxIO] [info] Creating participant SilKitAdapterGenericLinuxIO with registry silkit://localhost:8501
+[date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant 'SilKitAdapterGenericLinuxIO' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [SilKitAdapterGenericLinuxIO] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:37918' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
+[date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant SilKitAdapterGenericLinuxIO with registry silkit://localhost:8501
 ...
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing and publishing initial values
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo1
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromVoltage15
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromVoltage32
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromPIN12Value
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromPIN12Dir
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line0
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line1
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line4
-[2024-02-01 14:34:23.855] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip1Line1
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing and publishing initial values
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo1
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromVoltage15
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromVoltage32
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromPIN12Value
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromPIN12Dir
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line0
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line1
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line4
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip1Line1
 ...
 Press CTRL + C to stop the process...
 ```
@@ -77,13 +77,13 @@ First you can start each demo in separte terminals:
 
 You should see the following output in the GLIO Adapter window:
 ```
-[2024-02-01 14:44:49.870] [SilKitAdapterGenericLinuxIO] [debug] New value received on toVoltage103
-[2024-02-01 14:44:49.870] [SilKitAdapterGenericLinuxIO] [debug] Updating ./adchips/adchip0/in_voltage103
-[2024-02-01 14:44:55.738] [SilKitAdapterGenericLinuxIO] [debug] New value received on toFifo2
-[2024-02-01 14:44:55.738] [SilKitAdapterGenericLinuxIO] [debug] Updating ./chardevs/fifo2
-[2024-02-01 14:44:55.738] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
-[2024-02-01 14:45:01.437] [SilKitAdapterGenericLinuxIO] [debug] New values received on topic: toGpiochip1Line2
-[2024-02-01 14:45:01.437] [SilKitAdapterGenericLinuxIO] [debug] Updating gpiochip1 line 2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] New value received on toVoltage103
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Updating ./adchips/adchip0/in_voltage103
+[date time] [SilKitAdapterGenericLinuxIO] [debug] New value received on toFifo2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Updating ./chardevs/fifo2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] New values received on topic: toGpiochip1Line2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Updating gpiochip1 line 2
 ```
 
 For running the forward demo with all Linux IOs connected, just repeat the manual steps (*cat* and *echo* commands) to observe and stimulate the values for each mode ([Advalues](../advalues/README.md#basic-forward-demo), [Chardev](../chardev/README.md#basic-forward-demo) and [GPIO](../gpio/README.md#basic-forward-demo)).

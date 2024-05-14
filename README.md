@@ -59,7 +59,7 @@ This application allows the user to attach character devices of any Linux system
 
 Before you start the adapter there always needs to be a sil-kit-registry running already. Start it e.g. like this:
 
-    ./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
+    /path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
 
 It is also necessary that the involved character devices or GPIO chips exist before the ``sil-kit-adapter-generic-linux-io`` is started. 
 

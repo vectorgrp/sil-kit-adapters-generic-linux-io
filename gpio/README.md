@@ -59,15 +59,15 @@ Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-
 
 You should see the following output:
 ```
-[2024-02-01 14:10:36.401] [SilKitAdapterGenericLinuxIO] [info] Creating participant 'SilKitAdapterGenericLinuxIO' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
-[2024-02-01 14:10:36.402] [SilKitAdapterGenericLinuxIO] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:57824' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
-[2024-02-01 14:10:36.404] [SilKitAdapterGenericLinuxIO] [info] Creating participant SilKitAdapterGenericLinuxIO with registry silkit://localhost:8501
+[date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant 'SilKitAdapterGenericLinuxIO' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [SilKitAdapterGenericLinuxIO] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:57824' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
+[date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant SilKitAdapterGenericLinuxIO with registry silkit://localhost:8501
 ...
-[2024-02-01 14:10:36.409] [SilKitAdapterGenericLinuxIO] [debug] Serializing and publishing initial values
-[2024-02-01 14:10:36.409] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line0
-[2024-02-01 14:10:36.409] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line1
-[2024-02-01 14:10:36.409] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line4
-[2024-02-01 14:10:36.409] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip1Line1
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing and publishing initial values
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line0
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line1
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip0Line4
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromGpiochip1Line1
 ...
 Press CTRL + C to stop the process...
 ```
@@ -100,8 +100,8 @@ You can start the forward device:
 You should see the following output:
 ```
 Creating participant 'GpioForwardDevice' at silkit://localhost:8501
-[2024-02-01 14:17:16.368] [GpioForwardDevice] [info] Creating participant 'GpioForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
-[2024-02-01 14:17:16.370] [GpioForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:34144' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
+[date time] [GpioForwardDevice] [info] Creating participant 'GpioForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [GpioForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:34144' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
 Press enter to stop the process...
 GLIO Adapter  >> ForwardDevice: INPUT - LOW
 ForwardDevice >> GLIO Adapter : OUTPUT - LOW
@@ -111,9 +111,9 @@ The GLIO Adapter published the initial value, it means ``LOW`` is the initial va
 
 On the GLIO Adapter window you should see new lines:
 ```
-[2024-02-01 14:18:39.187] [SilKitAdapterGenericLinuxIO] [debug] New values received on topic: toGpiochip1Line2
-[2024-02-01 14:18:39.187] [SilKitAdapterGenericLinuxIO] [debug] Deserializing data from topic: toGpiochip1Line2
-[2024-02-01 14:18:39.187] [SilKitAdapterGenericLinuxIO] [debug] Updating gpiochip1 line 2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] New values received on topic: toGpiochip1Line2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Deserializing data from topic: toGpiochip1Line2
+[date time] [SilKitAdapterGenericLinuxIO] [debug] Updating gpiochip1 line 2
 ```
 
 Using the file system, you can see and set the value of your GPIO chip lines. For ``gpiochip1 line 2``:
