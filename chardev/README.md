@@ -34,7 +34,7 @@ In order to match the above setup, you need to adapt the chardev ``path`` attrib
 # Running the Demos
 Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
-./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
+/path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
     
 ./bin/sil-kit-adapter-generic-linux-io --log Debug --adapter-configuration ./chardev/demos/DevicesConfig.yaml
 ```
@@ -91,20 +91,20 @@ The GLIO Adapter published the initial data, it means ``message1`` is the initia
 On the GLIO Adapter window you should see three new lines:
 ```
 [2024-02-01 10:17:59.853] [SilKitAdapterGenericLinuxIO] [debug] New value received on toFifo2
-[2024-02-01 10:17:59.853] [SilKitAdapterGenericLinuxIO] [debug] Updating /path/to/chardevs/fifo2
+[2024-02-01 10:17:59.853] [SilKitAdapterGenericLinuxIO] [debug] Updating ./chardevs/fifo2
 [2024-02-01 10:17:59.853] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
 ```
 
 In your chardevs folder you can see the updated value in ``fifo2``:
 ```
-cat /path/to/chardevs/fifo2 
+cat ./chardevs/fifo2
 message1
 ```
 
 Then you can update ``fifo1``:
 ```
-echo "new message" > /path/to/chardevs/fifo1
-cat /path/to/chardevs/fifo2 
+echo "new message" > ./chardevs/fifo1
+cat ./chardevs/fifo2
 new message
 ```
 

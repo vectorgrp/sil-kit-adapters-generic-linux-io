@@ -35,7 +35,7 @@ In order to match the above setup, you need to adapt Linux IO ``path`` attribute
 # Running the Demos
 Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
-./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
+/path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
     
 ./bin/sil-kit-adapter-generic-linux-io --log Debug --adapter-configuration ./adapter/demos/DevicesConfig.yaml
 ```
@@ -78,9 +78,9 @@ First you can start each demo in separte terminals:
 You should see the following output in the GLIO Adapter window:
 ```
 [2024-02-01 14:44:49.870] [SilKitAdapterGenericLinuxIO] [debug] New value received on toVoltage103
-[2024-02-01 14:44:49.870] [SilKitAdapterGenericLinuxIO] [debug] Updating /home/dev/temp/adchip0/in_voltage103
+[2024-02-01 14:44:49.870] [SilKitAdapterGenericLinuxIO] [debug] Updating ./adchips/adchip0/in_voltage103
 [2024-02-01 14:44:55.738] [SilKitAdapterGenericLinuxIO] [debug] New value received on toFifo2
-[2024-02-01 14:44:55.738] [SilKitAdapterGenericLinuxIO] [debug] Updating /home/dev/temp/chardevs/fifo2
+[2024-02-01 14:44:55.738] [SilKitAdapterGenericLinuxIO] [debug] Updating ./chardevs/fifo2
 [2024-02-01 14:44:55.738] [SilKitAdapterGenericLinuxIO] [debug] Serializing data and publishing on topic: fromFifo2
 [2024-02-01 14:45:01.437] [SilKitAdapterGenericLinuxIO] [debug] New values received on topic: toGpiochip1Line2
 [2024-02-01 14:45:01.437] [SilKitAdapterGenericLinuxIO] [debug] Updating gpiochip1 line 2

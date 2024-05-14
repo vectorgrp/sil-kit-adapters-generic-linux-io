@@ -47,7 +47,7 @@ Each file can also be configured to deal with a specific data type. The handled 
 # Running the Demos
 Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
-./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
+/path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
     
 ./bin/sil-kit-adapter-generic-linux-io --adapter-configuration ./advalues/demos/DevicesConfig.yaml --log Debug
 ```
@@ -106,19 +106,19 @@ The GLIO Adapter published the initial values, it means ``3`` is the initial val
 On the GLIO Adapter terminal you should see two new lines:
 ```
 [2024-01-31 14:49:00.116] [SilKitAdapterGenericLinuxIO] [debug] New value received on toVoltage103
-[2024-01-31 14:49:00.116] [SilKitAdapterGenericLinuxIO] [debug] Updating /home/dev/temp/adchip0/in_voltage103
+[2024-01-31 14:49:00.116] [SilKitAdapterGenericLinuxIO] [debug] Updating ./adchips/adchip0/in_voltage103
 ```
 
 In your adchip0 folder you can see the updated value in ``in_voltage103``:
 ```
-cat /path/to/adchips/adchip0/in_voltage103 
+cat ./adchips/adchip0/in_voltage103
 3
 ```
 
 Then you can update ``out_voltage32``:
 ```
-echo 2 > /path/to/adchips/adchip0/out_voltage32
-cat /path/to/adchips/adchip0/in_voltage103 
+echo 2 > ./adchips/adchip0/out_voltage32
+cat ./adchips/adchip0/in_voltage103
 2
 ```
 

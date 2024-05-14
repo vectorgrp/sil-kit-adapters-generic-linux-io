@@ -52,7 +52,7 @@ By default the GPIO chips are located under ``/dev/gpiochipX`` (with X a number)
 # Running the Demos
 Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
-./path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
+/path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
     
 ./bin/sil-kit-adapter-generic-linux-io --log Debug --adapter-configuration ./gpio/demos/DevicesConfig.yaml
 ```

@@ -16,3 +16,5 @@
 *.vector
 /**/.run/
 *.out
+/adchips/
+/chardevs/
