@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(SILKIT_ADAPTERS_GENERIC_LINUX_IO_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 set(SILKIT_ADAPTERS_GENERIC_LINUX_IO_LIBRARY_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
-set(SILKIT_VERSION "4.0.47" CACHE STRING "If no SIL Kit package is specified, this version will be downloaded")
+set(SILKIT_VERSION "4.0.50" CACHE STRING "If no SIL Kit package is specified, this version will be downloaded")
 set(SILKIT_FLAVOR "ubuntu-18.04-x86_64-gcc" CACHE STRING "If no SIL Kit package is specified, this package flavor will be downloaded")
 
 find_package(Threads REQUIRED)
