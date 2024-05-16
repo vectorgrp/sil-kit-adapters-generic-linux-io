@@ -117,6 +117,95 @@ install(
     EXCLUDE_FROM_ALL
 )
 
+install(
+    FILES            
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run_all.sh
+    DESTINATION adapter/demos/CANoe4SW_SE
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
+install(
+    FILES            
+        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run_all.sh
+    DESTINATION advalues/demos/CANoe4SW_SE
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
+install(
+    FILES            
+        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/create_adchips.sh
+    DESTINATION advalues/demos
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
+install(
+    FILES            
+        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run_all.sh
+    DESTINATION chardev/demos/CANoe4SW_SE
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
+install(
+    FILES            
+        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/create_chardevs.sh
+    DESTINATION chardev/demos
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
+install(
+    FILES            
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_all.sh
+    DESTINATION gpio/demos/CANoe4SW_SE
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
+install(
+    FILES            
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/create_gpio_sim.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/clean_gpio_sim.sh
+    DESTINATION gpio/demos
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
 include(GNUInstallDirs)
 
 install(
