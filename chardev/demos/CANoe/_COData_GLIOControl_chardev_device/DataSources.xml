@@ -5,9 +5,9 @@
       <Files>
         <File>
           <FileType>evCDL</FileType>
-          <LastModifiedTime>2024-01-30T17:13:49.1921277+01:00</LastModifiedTime>
+          <LastModifiedTime>2024-02-09T15:18:40.5111412+01:00</LastModifiedTime>
           <Path>Datasource_device.vCDL</Path>
-          <ReferenceHashValue>h92uPSeNahHISllPW8STcuqzcyE604GlL0vmxMx4ZlU=</ReferenceHashValue>
+          <ReferenceHashValue>5qzAlhePsjZeEggH7H9WcO/JlzFt/phLgH8Vxi0SrdM=</ReferenceHashValue>
         </File>
       </Files>
       <ID>2</ID>
@@ -18,7 +18,7 @@
     "vCDL": {
       "$id": "3",
       "IncludeFiles": [
-        "D:\\dev\\kaubry\\private\\sil-kit-adapters-generic-linux-io\\chardev\\demos\\CANoe\\Datasource_device.vCDL"
+        "D:\\vfs\\SilKit\\sil-kit-adapters-generic-linux-io\\chardev\\demos\\CANoe\\Datasource_device.vCDL"
       ],
       "FileType": 3,
       "Version": 0,
@@ -27,7 +27,7 @@
         {
           "$id": "4",
           "Type": 3,
-          "Path": "D:\\dev\\kaubry\\private\\sil-kit-adapters-generic-linux-io\\chardev\\demos\\CANoe\\Datasource_device.vCDL",
+          "Path": "D:\\vfs\\SilKit\\sil-kit-adapters-generic-linux-io\\chardev\\demos\\CANoe\\Datasource_device.vCDL",
           "Name": "Datasource_device.vCDL",
           "Version": "1.4"
         }
@@ -52,9 +52,9 @@
       <Name></Name>
       <ReferencedFiles>
         <File>
-          <LastModifiedTime>2024-01-30T17:13:49.1921277+01:00</LastModifiedTime>
+          <LastModifiedTime>2024-02-09T15:18:40.5111412+01:00</LastModifiedTime>
           <Path>Datasource_device.vCDL</Path>
-          <ReferenceHashValue>h92uPSeNahHISllPW8STcuqzcyE604GlL0vmxMx4ZlU=</ReferenceHashValue>
+          <ReferenceHashValue>5qzAlhePsjZeEggH7H9WcO/JlzFt/phLgH8Vxi0SrdM=</ReferenceHashValue>
         </File>
       </ReferencedFiles>
     </DataSource>
