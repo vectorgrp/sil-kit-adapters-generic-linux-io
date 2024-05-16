@@ -6,7 +6,7 @@ For this demo some GPIO chips have to be simulated. There are multiple ways to d
 - [gpio-mockup](https://docs.kernel.org/admin-guide/gpio/gpio-mockup.html): it needs to be built with the Linux kernel, that is the reason why we don't provide further information for this module.
 - [gpio-sim](https://docs.kernel.org/admin-guide/gpio/gpio-sim.html): **requires Linux kernel version v5.17-rc1 or higher**. This is the module used to simulate GPIO chips in this demo. 
 
-To create two GPIO chips like in the following diagram you can run ``sudo ./gpio/demos/create_gpio_sim.sh``. This script sets up the GPIO chips using the gpio-sim module and creates the two character devices which appear on the system as ``/dev/gpiochip0`` and ``/dev/gpiochip1``.
+To create two GPIO chips like in the following diagram you can run ``sudo ./gpio/demos/create_gpio_sim.sh``. This script sets up the GPIO chips using the gpio-sim module and creates the two instances which appear on the file system as ``/dev/gpiochip0`` and ``/dev/gpiochip1``.
 
 The following diagram illustrates the data flow going through each component involved.
 
@@ -34,7 +34,7 @@ The following diagram illustrates the data flow going through each component inv
 +-------------------+
 ```
 
-**Note 1:** In order to avoid running the GLIO adapter as sudo, you should change the owner of the two character devices to you instead of root. This can be done by the following command:
+**Note 1:** In order to avoid running the GLIO adapter as sudo, you should change the owner of the two GPIO chips to you instead of root. This can be done by the following command:
 ```
 sudo chown <new_owner> /dev/gpiochip*
 ```
