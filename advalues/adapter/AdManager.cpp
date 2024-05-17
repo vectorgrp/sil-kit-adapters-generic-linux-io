@@ -3,6 +3,7 @@
 #include "AdManager.hpp"
 
 #include <algorithm>
+#include <filesystem>
 #include <sys/inotify.h>
 
 #include "../../util/Exceptions.hpp"
@@ -45,6 +46,11 @@ void AdManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
         {
             std::unique_ptr<PubSubSpec> subDataSpec, pubDataSpec;
             std::string publisherName, subscriberName;
+
+            if (!std::filesystem::exists(fileValuesYaml.path + fileValuesYaml.fileName))
+            {
+                throw std::runtime_error("file " + fileValuesYaml.path + fileValuesYaml.fileName + " does not exist");
+            }
 
             // Manage topic_subscribe
             if (!fileValuesYaml.topic_subscribe.empty())

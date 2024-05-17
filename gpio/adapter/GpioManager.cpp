@@ -3,6 +3,7 @@
 #include "GpioManager.hpp"
 
 #include <thread>
+#include <filesystem>
 #include <sys/ioctl.h>
 #include <linux/gpio.h>
 
@@ -70,6 +71,11 @@ void GpioManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
         std::string chipPath;
         std::vector<Util::DataYAMLConfig> gpioYAMLConfigs;
         GetYamlConfig(chipNode, gpioYAMLConfigs, chipPath);
+
+        if (!std::filesystem::exists(chipPath))
+        {
+            throw std::runtime_error("GPIO chip " + chipPath + " does not exist");
+        }
 
         const auto chipName = chipPath.substr(chipPath.find_last_of('/') + 1);
 

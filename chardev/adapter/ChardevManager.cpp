@@ -2,6 +2,8 @@
 
 #include "ChardevManager.hpp"
 
+#include <filesystem>
+
 #include "../../util/FileHelper.hpp"
 #include "../../util/Exceptions.hpp"
 
@@ -71,6 +73,11 @@ void ChardevManager::InitAdaptersFromConfigFile(const YAML::Node& configFile,
     for (auto chardevYaml : chardevYAMLConfigs)
     {
         const std::string pathToFile = chardevYaml.path;
+
+        if (!std::filesystem::exists(pathToFile))
+        {
+            throw std::runtime_error("file " + pathToFile + " does not exist");
+        }
         
         std::string pathToFile_ = pathToFile;
         for(std::size_t i = 0; i < pathToFile_.size(); ++i)
