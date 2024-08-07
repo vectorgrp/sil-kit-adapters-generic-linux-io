@@ -32,7 +32,7 @@ In the following diagram you can see the whole setup. It illustrates the data fl
 ### Configure the Linux IO paths
 In order to match the above setup, you need to adapt Linux IO ``path`` attributes in the adapter configuration file ``./adapter/demos/DevicesConfig.yaml``. 
 
-# Running the Demos
+# Running the Demo
 Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
 /path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'

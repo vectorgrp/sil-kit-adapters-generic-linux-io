@@ -44,7 +44,7 @@ Each file can also be configured to deal with a specific data type. The handled 
 - Integer values: ``uint8_t``/``int8_t`` to ``uint64_t``/``int64_t``
 - Floating-point values: ``float``, ``double``
 
-# Running the Demos
+# Running the Demo
 Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
 /path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'

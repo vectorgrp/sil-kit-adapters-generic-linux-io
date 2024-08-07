@@ -1,7 +1,7 @@
-SIL Kit Adapters Generic Linux IO Third Party Libraries
+SIL Kit Adapter Generic Linux IO Third Party Libraries
 ======================================
 
-The SIL Kit Adapters Generic Linux IO uses the following third party software components which are governed by their respective licenses:
+The SIL Kit Adapter Generic Linux IO uses the following third party software components which are governed by their respective licenses:
 
  1. Yaml-cpp
  2. Asio C++ Library

@@ -37,7 +37,7 @@ set_target_properties(sil-kit-adapter-generic-linux-io
     #ensure SilKit shared libraries can be loaded
     INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN"
     BUILD_RPATH "$ORIGIN"
-    RUNTIME_OUTPUT_DIRECTORY $<$<BOOL:ALWAYS>:${SILKIT_ADAPTERS_GENERIC_LINUX_IO_OUTPUT_DIRECTORY}>
+    RUNTIME_OUTPUT_DIRECTORY $<$<BOOL:ALWAYS>:${SILKIT_ADAPTER_GENERIC_LINUX_IO_OUTPUT_DIRECTORY}>
 )
 
 target_compile_options(sil-kit-adapter-generic-linux-io
@@ -48,5 +48,5 @@ add_custom_command(
     TARGET sil-kit-adapter-generic-linux-io
     POST_BUILD
     COMMAND ${CMAKE_COMMAND}
-    ARGS -E copy $<TARGET_FILE:SilKit::SilKit> ${SILKIT_ADAPTERS_GENERIC_LINUX_IO_LIBRARY_DIRECTORY}/libSilKit.so
+    ARGS -E copy $<TARGET_FILE:SilKit::SilKit> ${SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY}/libSilKit.so
 )

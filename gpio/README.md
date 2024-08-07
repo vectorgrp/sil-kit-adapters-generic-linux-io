@@ -49,7 +49,7 @@ sudo chown <new_owner> /dev/gpiochip*
 ### Configure the GPIO chip paths
 By default the GPIO chips are located under ``/dev/gpiochipX`` (with X a number). If yours are located somewhere else you should adapt the ``path`` attributes in the adapter configuration file ``./gpio/demos/DevicesConfig.yaml`` in order to match your setup.
 
-# Running the Demos
+# Running the Demo
 Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-generic-linux-io``. In separate terminals:
 ```
 /path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
@@ -129,7 +129,7 @@ cat /sys/devices/platform/gpio-sim.0/gpiochip1/sim_gpio2/value
 1
 ```
 
-The terminal output of the ForwardDevice and the SIL Kit Adapters GLIO will show that new value as well.
+The terminal output of the ForwardDevice and the GLIO Adapter will show that new value as well.
 
 ## Adding CANoe (17 SP3 or newer) as a participant
 Before you can connect CANoe to the SIL Kit network you should adapt the ``RegistryUri`` in ``./gpio/demos/SilKitConfig_CANoe.silkit.yaml`` to the IP address of your system where your sil-kit-registry is running.

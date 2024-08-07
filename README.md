@@ -12,7 +12,7 @@ shell.
 
 **Note:** Advalues and chardev modes are supported in WSL/WSL2 if you use the Linux filesystem (not the mounted drives like `/mnt/..`). However there is no easy way to run the adapter's GPIO mode in WSL/WSL2 without recompiling the Linux kernel with the required module.
 
-## a) Getting Started with self build Adapters and Demos
+## a) Getting Started with self-built Adapter and Demos
 This section specifies steps you should do if you have just cloned the repository.
 
 To get started, please change your current directory to the top-level in the ``sil-kit-adapters-generic-linux-io``
@@ -25,10 +25,10 @@ The first thing that you should do is initializing the submodules to fetch the r
 
     git submodule update --init --recursive
 
-### Build the Adapters and Demos
+### Build the Adapter and Demos
 To build the demos, you'll need SIL Kit packages ``SilKit-x.y.z-$platform`` for your platform. You can download them directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases).
 
-The adapters and demos are built using ``cmake``. If you want to build the adapter against a specific downloaded release of SIL Kit, you can follow these steps:
+The adapter and demos are built using ``cmake``. If you want to build the adapter against a specific downloaded release of SIL Kit, you can follow these steps:
 
     mkdir build
     cmake -S. -Bbuild -DSILKIT_PACKAGE_DIR=/path/to/SilKit-x.y.z-$platform/ -D CMAKE_BUILD_TYPE=Release
@@ -40,15 +40,15 @@ The adapters and demos are built using ``cmake``. If you want to build the adapt
 
 **Note 3:** If you don't provide a specific path for SILKIT_PACKAGE_DIR and there is no SIL Kit installation on your system, a SIL Kit release package (the default version listed in CMakeLists.txt) will be fetched from github.com and the adapter will be built against it.
 
-The adapters and demo executables will be available in the bin directory. Additionally the SilKit shared library is copied to the lib directory next to it automatically.
+The adapter and demo executables will be available in the bin directory. Additionally the ``SilKit`` shared library is copied to the lib directory next to it automatically.
 
-## b) Getting Started with pre-built Adapters and Demos
-Download a preview or release of the Adapters directly from [Vector SIL Kit Adapters Releases](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/releases).
+## b) Getting Started with pre-built Adapter and Demos
+Download a preview or release of the adapter directly from [Vector SIL Kit Adapter for Generic Linux IO Releases](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/releases).
 
 If not already existent on your system you should also download a SIL Kit Release directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). You will need this for being able to start a sil-kit-registry.
 
 ## Install the sil-kit-adapter-generic-linux-io (optional)
-If you call the following command (can be done for self build and pre build package after cmake configure) ``sil-kit-adapter-generic-linux-io`` can be called from everywhere without defining a path:  
+If you call the following command (can be done for self-built and pre-built package after cmake configure) ``sil-kit-adapter-generic-linux-io`` can be called from everywhere without defining a path:  
 
     sudo cmake --build build --target install
 
@@ -85,19 +85,19 @@ Some examples of configuration files can be found in the following demos.
 The subscribe topic is used by the adapter to receive data from the other participants.
 
 ## Analog-Digital values Demo
-The aim of this demo is to showcase the adapter forwarding bytes with an attached data type from and to a set of files through Vector SIL Kit. This demo illustrates how an analog-digital-converted values can be covered by the adapter.
+The aim of this demo is to showcase the adapter forwarding bytes with an attached data type from and to a set of files through SIL Kit. This demo illustrates how an analog-digital-converted values can be covered by the adapter.
 
 This demo is further explained in [advalues/README.md](advalues/README.md).
 
 ## Chardev Demo
 The aim of this demo is to showcase the adapter forwarding bytes from and to a set of character devices through
-Vector SIL Kit. In this demo the character devices used are FIFOs.
+SIL Kit. In this demo the character devices used are FIFOs.
 
 This demo is further explained in [chardev/README.md](chardev/README.md).
 
 ## GPIO Demo
 The aim of this demo is to showcase the adapter forwarding data from and to a GPIO chip through
-Vector SIL Kit. 
+SIL Kit. 
 
 This demo is further explained in [gpio/README.md](gpio/README.md).
 

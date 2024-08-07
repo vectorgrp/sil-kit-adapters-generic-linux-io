@@ -20,5 +20,5 @@ set_target_properties(sil-kit-demo-glio-chardev-forward-device
     #ensure SilKit shared libraries can be loaded
     INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN"
     BUILD_RPATH "$ORIGIN"
-    RUNTIME_OUTPUT_DIRECTORY $<$<BOOL:ALWAYS>:${SILKIT_ADAPTERS_GENERIC_LINUX_IO_OUTPUT_DIRECTORY}>
+    RUNTIME_OUTPUT_DIRECTORY $<$<BOOL:ALWAYS>:${SILKIT_ADAPTER_GENERIC_LINUX_IO_OUTPUT_DIRECTORY}>
 )
