@@ -17,7 +17,9 @@
     "$id": "2",
     "vCDL": {
       "$id": "3",
-      "IncludeFiles": [],
+      "IncludeFiles": [
+        "D:\\vfs\\SilKit\\sil-kit-adapters-generic-linux-io\\gpio\\demos\\CANoe\\Datasource_device.vCDL"
+      ],
       "FileType": 3,
       "Version": 0,
       "Networks": [],
@@ -25,7 +27,7 @@
         {
           "$id": "4",
           "Type": 3,
-          "Path": "D:\\dev\\kaubry\\private\\sil-kit-adapters-generic-linux-io\\gpio\\demos\\CANoe\\Datasource_device.vCDL",
+          "Path": "D:\\vfs\\SilKit\\sil-kit-adapters-generic-linux-io\\gpio\\demos\\CANoe\\Datasource_device.vCDL",
           "Name": "Datasource_device.vCDL",
           "Version": "1.4"
         }
@@ -48,7 +50,13 @@
 }</ImportParameters>
       <ImportStatus>eImported</ImportStatus>
       <Name></Name>
-      <ReferencedFiles />
+      <ReferencedFiles>
+        <File>
+          <LastModifiedTime>2024-03-05T14:35:26.0947629+01:00</LastModifiedTime>
+          <Path>Datasource_device.vCDL</Path>
+          <ReferenceHashValue>LjFQTVjB+l3eXVMd2OrJ7JDJ16sxTcoIGrqYF8UUDzc=</ReferenceHashValue>
+        </File>
+      </ReferencedFiles>
     </DataSource>
   </DataSources>
   <FormatVersion>

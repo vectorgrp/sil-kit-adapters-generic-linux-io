@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FunctionBusLibrary Version="2" FormatMajorVersion="3">
+<FunctionBusLibrary Version="3" FormatMajorVersion="3">
   <Namespaces>
     <Namespace IsDefinedAsHidden="False" IsSystemDefined="False" Name="KeyA">
       <DOInterfaces>
