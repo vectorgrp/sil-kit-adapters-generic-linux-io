@@ -1,6 +1,17 @@
 #!/bin/bash
 
-echo 0 > /sys/kernel/config/gpio-sim/gpio-demo/live
-rmdir /sys/kernel/config/gpio-sim/gpio-demo/bank0
-rmdir /sys/kernel/config/gpio-sim/gpio-demo/bank1
-rmdir /sys/kernel/config/gpio-sim/gpio-demo
+# check if user is root
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root / via sudo!"
+  exit 1
+fi
+
+dir="/sys/kernel/config/gpio-sim/gpio-demo"
+
+if [ ! -d "$dir" ]; then
+  echo "[error] $dir does not exist."
+  exit 1
+fi
+
+echo 0 > $dir/live
+rmdir $dir/bank0 $dir/bank1 $dir
