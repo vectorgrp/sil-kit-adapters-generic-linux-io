@@ -36,14 +36,6 @@ $scriptDir/run.sh
 #capture returned value of run.sh script
 exit_status=$?
 
-echo "sil-kit-registry.out:--------------------------------------------------------------------------------------" 
-cat $scriptDir/sil-kit-registry.out
-echo "-----------------------------------------------------------------------------------------------------------" 
-
-echo "sil-kit-adapter-generic-linux-io.out:---------------------------------------------------------------------------" 
-cat $scriptDir/sil-kit-adapter-generic-linux-io.out
-echo "-----------------------------------------------------------------------------------------------------------" 
-
 # clean the created chardevs
 rm -rf $(pwd)/chardevs
 

@@ -34,8 +34,36 @@
             "inherits": "linux-base",            
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
-            }            
-        }        
+            }
+        },
+        {
+            "name": "cross-qnx-x86_64",
+            "displayName": "QNX cross-build x86_64",
+            "generator": "Unix Makefiles",
+            "environment": {
+                "QNX_BUILD": "true"
+            },
+            "toolchainFile": "${sourceDir}/cmake/toolchain-qnx-x86_64.cmake",
+            "binaryDir": "${sourceDir}/_build/${presetName}",
+            "vendor": {
+                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+                "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}",
+                "rsyncCommandArgs": [ "--exclude", "_build" ]
+                }
+            }
+        },
+        {
+            "inherits": "cross-qnx-x86_64",
+            "name": "cross-qnx-armv7",
+            "displayName": "QNX cross-build armv7",
+            "toolchainFile": "${sourceDir}/cmake/toolchain-qnx-armv7.cmake"
+        },
+        {
+            "inherits": "cross-qnx-x86_64",
+            "name": "cross-qnx-aarch64",
+            "displayName": "QNX cross-build aarch64",
+            "toolchainFile": "${sourceDir}/cmake/toolchain-qnx-aarch64.cmake"
+        }
     ],
 
     "buildPresets": [
@@ -48,7 +76,6 @@
                 "rhs": "Linux"
             }
         },
-
         {
             "name": "linux-debug",
             "inherits": "linux-base",
@@ -58,6 +85,18 @@
             "name": "linux-release",
             "inherits": "linux-base",
             "configurePreset": "linux-release"
+        },
+        {
+            "name": "cross-qnx-x86_64",
+            "configurePreset": "cross-qnx-x86_64"
+        },
+        {
+            "name": "cross-qnx-armv7",
+            "configurePreset": "cross-qnx-armv7"
+        },
+        {
+            "name": "cross-qnx-aarch64",
+            "configurePreset": "cross-qnx-aarch64"
         }
     ],
     "testPresets": [
@@ -80,6 +119,18 @@
             "name": "linux-release",
             "inherits": "linux-base",
             "configurePreset": "linux-release"
+        },
+        {
+            "name": "cross-qnx-x86_64",
+            "configurePreset": "cross-qnx-x86_64"
+        },
+        {
+            "name": "cross-qnx-armv7",
+            "configurePreset": "cross-qnx-armv7"
+        },
+        {
+            "name": "cross-qnx-aarch64",
+            "configurePreset": "cross-qnx-aarch64"
         }
     ]
 }

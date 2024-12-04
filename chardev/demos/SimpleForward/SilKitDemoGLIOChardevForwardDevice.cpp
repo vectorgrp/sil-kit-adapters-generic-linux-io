@@ -1,8 +1,9 @@
 // Copyright (c) Vector Informatik GmbH. All rights reserved.
 
-#include <iostream>
 #include <string>
 #include <vector>
+#include <thread>
+#include <chrono>
 
 #include "../../../util/Parsing.hpp"
 #include "../../../util/SignalHandler.hpp"
@@ -50,6 +51,9 @@ int main(int argc, char** argv)
         auto participant = SilKit::CreateParticipant(participantConfiguration, participantName, registryURI);
 
         auto dataPublisher = participant->CreateDataPublisher(participantName + "_pub", pubDataSpec);
+
+        // sleep to be sure that the publisher is created before the subscriber
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         std::string line_buffer;
         

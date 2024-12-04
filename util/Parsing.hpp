@@ -4,12 +4,11 @@
 
 #include <string>
 #include <array>
-#include <algorithm>
 
 #include "Exceptions.hpp"
 
-namespace adapters::Parsing 
-{
+namespace adapters {
+namespace Parsing {
 
 // All arguments handled by the adapter
 const std::string regUriArg = "--registry-uri";
@@ -70,4 +69,5 @@ void ForeachArgDo(int argc, char** argv, const std::string& argument, const Acti
     }
 }
 
-} // namespace adapters::Parsing
+} // namespace Parsing
+} // namespace adapters

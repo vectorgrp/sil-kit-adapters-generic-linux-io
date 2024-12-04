@@ -2,12 +2,12 @@
 
 #include "YamlHelper.hpp"
 
-//using namespace adapters;
-namespace adapters::Util
-{
+// using namespace adapters;
+namespace adapters {
+namespace Util {
     
 void LoadYAMLConfigFile(YAML::Node& doc, const std::string& configFile, SilKit::Services::Logging::ILogger* logger)
- {
+{
     logger->Debug("Loading YAML configuration file: " + configFile);
     const std::string buffer = Util::ReadFileStr(configFile, logger);
     if (buffer.empty())
@@ -17,7 +17,7 @@ void LoadYAMLConfigFile(YAML::Node& doc, const std::string& configFile, SilKit::
     }
 
     doc = YAML::Load(buffer);
- }
+}
 
 void GetYAMLValue(const YAML::Node& node, const std::string& valueToGet, std::string& valueToUpdate, [[maybe_unused]] const bool isMandatory, SilKit::Services::Logging::ILogger* logger)
 {
@@ -34,4 +34,5 @@ void GetYAMLValue(const YAML::Node& node, const std::string& valueToGet, std::st
     }
 }
 
-} // namespace adapters::Util
+} // namespace Util
+} // namespace adapters

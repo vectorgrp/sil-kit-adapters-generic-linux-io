@@ -4,21 +4,21 @@
 #include <thread>
 #include <vector>
 #include <chrono>
-#include <iostream>
+#include <sys/inotify.h>
 
 #include "IOAdapter.hpp"
-#include "IOManager.hpp"
+#include "InotifyHandler.hpp"
+#include "AdapterFactory.hpp"
 
 #include "chardev/adapter/ChardevAdapter.hpp"
-#include "chardev/adapter/ChardevManager.hpp"
-
 #include "advalues/adapter/AdAdapter.hpp"
-#include "advalues/adapter/AdManager.hpp"
 
+#ifndef QNX_BUILD
 #include "gpio/adapter/GpioAdapter.hpp"
-#include "gpio/adapter/GpioManager.hpp"
+#endif
 
 #include "util/Exceptions.hpp"
+#include "util/YamlHelper.hpp"
 #include "util/Parsing.hpp"
 #include "util/SignalHandler.hpp"
 
@@ -33,7 +33,7 @@ using namespace adapters;
 
 int main(int argc, char** argv)
 {
-    // Handle arguments
+    // handle arguments
     if (Parsing::FindArg(argc, argv, Parsing::helpArg, argv) != NULL)
     {
         Parsing::PrintHelp(true);
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
             return CLI_ERROR;
         }
 
-        // Configure the participant
+        // configure the participant
         std::shared_ptr<SilKit::Config::IParticipantConfiguration> participantConfiguration;
         if (!configurationFile.empty())
         {
@@ -95,8 +95,8 @@ int main(int argc, char** argv)
             SilKit::CreateParticipant(std::move(participantConfiguration), participantName, registryURI);
 
         auto logger = participant->GetLogger();
-        
-        // Handle Sil Kit life cycle
+
+        // handle Sil Kit life cycle
         auto* lifecycleService = participant->CreateLifecycleService({ SilKit::Services::Orchestration::OperationMode::Autonomous });
         auto* systemMonitor = participant->CreateSystemMonitor();
         std::promise<void> runningStatePromise;
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
                 }
             });
         
-        // Handle the YAML config file 
+        // handle the YAML config file 
         YAML::Node configFile;
         Util::LoadYAMLConfigFile(configFile, adapterConfiguration, logger);
 
@@ -121,33 +121,35 @@ int main(int argc, char** argv)
             throw YamlError("Loading YAML configuration file failed.");
         }
 
-        // Initialize chip and values
-        std::vector<std::unique_ptr<IOManager>> ioManagers;
+        asio::io_context ioc;
+
+        // initialize chip and values
         std::vector<std::unique_ptr<IOAdapter>> ioAdapters;
 
-        if (configFile["advalues"])
-        {
-            ioManagers.push_back(std::make_unique<AdManager>(configFile, ioAdapters, logger, participant.get()));
-        }
-        if (configFile["chardevs"])
-        {
-            ioManagers.push_back(std::make_unique<ChardevManager>(configFile, ioAdapters, logger, participant.get()));
-        }
-        if (configFile["gpiochips"])
-        {
-            ioManagers.push_back(std::make_unique<GpioManager>(configFile, ioAdapters, logger, participant.get()));
-        }
-        
-        // Publish initial values
-        logger->Debug("Serializing and publishing initial values");
-        std::for_each(ioAdapters.begin(), ioAdapters.end(), [](const auto& adapter){ adapter->Publish(); });
+        InotifyHandler::SetLogger(logger);
+
+        AdapterFactory::ConstructAdAdapters(configFile, ioAdapters, participant.get(), ioc);
+        AdapterFactory::ConstructChardevAdapters(configFile, ioAdapters, participant.get(), ioc);
+
+#ifndef QNX_BUILD
+        std::vector<std::unique_ptr<GpioWrapper::Chip>> chips;
+        AdapterFactory::ConstructGpioAdapters(configFile, ioAdapters, chips, participant.get(), ioc);
+#endif
+
+        std::thread iocThread([&]() -> void {
+            ioc.run();
+        });
 
         auto finalStateFuture = lifecycleService->StartLifecycle();
 
         promptForExit();
 
-        // Stop all io_contexts and threads
-        std::for_each(ioManagers.begin(), ioManagers.end(), [](const auto& manager){ manager->Stop(); });
+        ioc.stop();
+
+        if (iocThread.joinable())
+        {
+            iocThread.join();
+        }
 
         auto runningStateFuture = runningStatePromise.get_future();
         auto futureStatus = runningStateFuture.wait_for(15s);

@@ -6,7 +6,7 @@ set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 set(SILKIT_ADAPTER_GENERIC_LINUX_IO_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 set(SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
@@ -77,11 +77,20 @@ set(compile_options
     -Werror -Wfatal-errors
 )
 
+if(DEFINED ENV{QNX_BUILD})
+    set(QNX_BUILD 1)
+    add_definitions(-DQNX_BUILD=${QNX_BUILD})
+endif()
+
 add_subdirectory(adapter)
 add_subdirectory(advalues/demos)
 add_subdirectory(chardev/demos)
-add_subdirectory(gpio/demos)
+add_subdirectory(util)
 add_subdirectory(third_party)
+
+if(NOT DEFINED QNX_BUILD)
+    add_subdirectory(gpio/demos)
+endif()
 
 ################################################################################
 # Distribution of the source code and binaries
@@ -91,11 +100,11 @@ add_subdirectory(third_party)
 # Leave out git repo related data
 
 install(
-    DIRECTORY            
+    DIRECTORY
         ${CMAKE_CURRENT_SOURCE_DIR}/adapter
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev
-        ${CMAKE_CURRENT_SOURCE_DIR}/gpio
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party
     DESTINATION .
     COMPONENT source
@@ -118,7 +127,7 @@ install(
 )
 
 install(
-    FILES            
+    FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run_all.sh
     DESTINATION adapter/demos/CANoe4SW_SE
@@ -131,7 +140,7 @@ install(
 )
 
 install(
-    FILES            
+    FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run_all.sh
     DESTINATION advalues/demos/CANoe4SW_SE
@@ -144,7 +153,7 @@ install(
 )
 
 install(
-    FILES            
+    FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/create_adchips.sh
     DESTINATION advalues/demos
     PERMISSIONS
@@ -156,7 +165,7 @@ install(
 )
 
 install(
-    FILES            
+    FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run_all.sh
     DESTINATION chardev/demos/CANoe4SW_SE
@@ -169,35 +178,9 @@ install(
 )
 
 install(
-    FILES            
+    FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/create_chardevs.sh
     DESTINATION chardev/demos
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
-)
-
-install(
-    FILES            
-        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_all.sh
-    DESTINATION gpio/demos/CANoe4SW_SE
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
-)
-
-install(
-    FILES            
-        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/create_gpio_sim.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/clean_gpio_sim.sh
-    DESTINATION gpio/demos
     PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
@@ -209,7 +192,7 @@ install(
 include(GNUInstallDirs)
 
 install(
-    FILES 
+    FILES
         ${SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY}/libSilKit.so                
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PERMISSIONS
@@ -224,7 +207,6 @@ install(
     TARGETS 
         sil-kit-demo-glio-advalues-forward-device
         sil-kit-demo-glio-chardev-forward-device
-        sil-kit-demo-glio-gpio-forward-device
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
     PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -232,6 +214,56 @@ install(
         WORLD_READ WORLD_EXECUTE    
     EXCLUDE_FROM_ALL
 )
+
+# Disable GPIO mode on QNX
+if(NOT DEFINED QNX_BUILD)
+    install(
+        DIRECTORY
+            ${CMAKE_CURRENT_SOURCE_DIR}/gpio
+        DESTINATION .
+        COMPONENT source
+        EXCLUDE_FROM_ALL
+        REGEX "\.git$" EXCLUDE
+        REGEX "\.github$" EXCLUDE
+    )
+
+    install(
+        FILES
+            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run.sh
+            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_all.sh
+        DESTINATION gpio/demos/CANoe4SW_SE
+        PERMISSIONS
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE
+        COMPONENT source
+        EXCLUDE_FROM_ALL
+    )
+
+    install(
+        FILES
+            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/create_gpio_sim.sh
+            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/clean_gpio_sim.sh
+        DESTINATION gpio/demos
+        PERMISSIONS
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE
+        COMPONENT source
+        EXCLUDE_FROM_ALL
+    )
+
+    install(
+        TARGETS
+            sil-kit-demo-glio-gpio-forward-device
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
+        PERMISSIONS
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE    
+        EXCLUDE_FROM_ALL
+    )
+endif()
 
 # only sil-kit-adapter-generic-linux-io should be installed to /usr/local/bin by calling --target install (therefore it is not excluded)
 install(

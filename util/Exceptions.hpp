@@ -27,8 +27,13 @@ enum ExitCode
 inline auto GetErrno() -> std::string
 {
     char buffer[256];
+#ifdef QNX_BUILD
+    int errorMsg = strerror_r(errno, buffer, 256);
+    return std::string(buffer);
+#else // Other Unix
     char * errorMsg = strerror_r(errno, buffer, 256);
     return std::string(errorMsg);
+#endif
 }
 
 // Throw handlers
@@ -84,13 +89,16 @@ class InvalidCli : public std::exception
 {
 };
 
-template<class exception>
+template<class InvalidCli>
 void throwIf(bool b)
 {
     if (b)
-        throw exception();
+        throw std::exception();
 }
 
-inline auto& throwInvalidCliIf = throwIf<InvalidCli>;
+inline void throwInvalidCliIf(bool b)
+{
+    return throwIf<InvalidCli>(b);
+}
 
 } // namespace adapters

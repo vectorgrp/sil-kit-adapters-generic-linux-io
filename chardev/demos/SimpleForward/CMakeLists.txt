@@ -1,14 +1,11 @@
-
 add_executable(sil-kit-demo-glio-chardev-forward-device
     "SilKitDemoGLIOChardevForwardDevice.cpp"
-
-    "${CMAKE_SOURCE_DIR}/util/Parsing.cpp"
-    "${CMAKE_SOURCE_DIR}/util/SignalHandler.cpp"
 )
 
 target_link_libraries(sil-kit-demo-glio-chardev-forward-device
     PRIVATE
         SilKit::SilKit
+        Utility
 )
 
 target_compile_options(sil-kit-demo-glio-chardev-forward-device

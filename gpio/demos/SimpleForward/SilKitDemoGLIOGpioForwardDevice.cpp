@@ -1,6 +1,5 @@
 // Copyright (c) Vector Informatik GmbH. All rights reserved.
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -11,6 +10,9 @@
 #include "silkit/config/all.hpp"
 #include "silkit/services/pubsub/all.hpp"
 #include "silkit/util/serdes/Serialization.hpp"
+
+#include <thread>
+#include <chrono>
 
 using namespace adapters;
 using namespace adapters::Parsing;
@@ -52,9 +54,10 @@ int main(int argc, char** argv)
 
         auto dataPublisher = participant->CreateDataPublisher(participantName + "_pub", pubDataSpec);
 
-        std::string line_buffer;
+        // sleep to be sure that the publisher is created before the subscriber
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
-        constexpr auto printData = [](std::string_view str, const uint8_t dir, const uint8_t val){
+        auto printData = [](const std::string& str, const uint8_t dir, const uint8_t val){
             std::cout << str << (dir == 0 ? "INPUT - " : "OUTPUT - ") 
                 << (val == 0 ? "LOW" : "HIGH") << std::endl;
         };

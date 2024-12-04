@@ -4,8 +4,6 @@
 
 #include <vector>
 #include <string>
-#include <memory>
-#include <sys/inotify.h>
 
 #include "../../adapter/IOAdapter.hpp"
 
@@ -14,13 +12,15 @@
 
 #include "asio/posix/stream_descriptor.hpp"
 
-// Each file has a specific ChardevAdapter
+// each file has a specific ChardevAdapter
 class ChardevAdapter : public IOAdapter
 {
 using PubSubSpec = SilKit::Services::PubSub::PubSubSpec;
 
 public:
-    friend class ChardevManager;
+    // access and manage the chardev
+    std::string _pathToFile;
+    std::array<uint8_t, 4096> _bufferToPublisher = {};
 
     ChardevAdapter() = delete;
     ChardevAdapter(SilKit::IParticipant* participant, 
@@ -29,32 +29,19 @@ public:
                    PubSubSpec* pubDataSpec, 
                    PubSubSpec* subDataSpec,
                    const std::string& pathToCharDev,
-                   int inotifyFd);
-    ~ChardevAdapter() = default;
+                   asio::io_context& ioc);
+    ~ChardevAdapter();
 
-protected:
-    static constexpr uint32_t BUF_LEN = 4096;
-    static constexpr uint32_t EVENT_SIZE = sizeof(inotify_event);
-
-    // Access and manage the chardev
-    std::vector<uint8_t> _bufferToChardev = {};
-    std::vector<uint8_t> _bufferFromChardev = {};
-    std::string _pathToCharDev;
-
-    // Avoid to read several times the same received value
-    bool _isRecvValue;
-
-    // Inotify watch descriptor
-    int _wd;
-
-    auto isBufferFromChardevEmpty() const -> bool;
-
+    // publish n bytes of the chardev buffer
+    void Publish(const std::size_t n);
 private:
-    // Publish chardev values
-    void Publish() override;
+    // handle error code introduced by _fd.cancel()
+    bool _isCancelled;
+    std::unique_ptr<asio::posix::stream_descriptor> _fd;
 
-    // Serialize chip values
-    auto Serialize() -> std::vector<uint8_t> override;
-    // Deserialize received values 
+    std::vector<uint8_t> _bufferFromSubscriber = {};
+
+    // deserialize received values
     void Deserialize(const std::vector<uint8_t>& bytes) override;
+    void ReceiveEvent();    
 };

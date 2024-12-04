@@ -2,13 +2,13 @@
 
 #include "ChardevAdapter.hpp"
 
+#include <sys/stat.h>
+
+#include "../../adapter/InotifyHandler.hpp"
 #include "../../util/FileHelper.hpp"
-#include "../../util/Exceptions.hpp"
 
 #include "silkit/util/serdes/Deserializer.hpp"
 #include "silkit/util/serdes/Serializer.hpp"
-
-#include "asio/read.hpp"
 
 using namespace SilKit::Services::PubSub;
 using namespace adapters;
@@ -19,24 +19,46 @@ ChardevAdapter::ChardevAdapter(SilKit::IParticipant* participant,
                                PubSubSpec* pubDataSpec, 
                                PubSubSpec* subDataSpec,
                                const std::string& pathToCharDev,
-                               int inotifyFd) :
-    _pathToCharDev(pathToCharDev),
-    _isRecvValue(false)
+                               asio::io_context& ioc) :
+    _pathToFile(pathToCharDev),
+    _isCancelled(false)    
 {
     _logger = participant->GetLogger();
-    
-    _wd = inotify_add_watch(inotifyFd, _pathToCharDev.c_str(), IN_CLOSE_WRITE);
-    if (_wd == -1) {
-        throw InotifyError("inotify add watch error (" + std::to_string(errno) +") on: " + _pathToCharDev);
-    }
 
     if (pubDataSpec)
     {
+        struct stat sb;
+        if (stat(_pathToFile.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
+        {
+            // file exists and it's a regular file
+            // use inotify to handle the events
+            InotifyHandler& eHandler = InotifyHandler::GetInstance(ioc);
+            eHandler.AddAdapterCallBack(this, _pathToFile);
+        }
+        else
+        {
+            int fd = open(_pathToFile.c_str(), O_RDONLY | O_NONBLOCK);
+            if (fd == -1) {
+                _logger->Error("Error while openning " + _pathToFile);
+                throw std::runtime_error("file " + _pathToFile + " can not be opened");
+            }
+
+            _fd = std::make_unique<asio::posix::stream_descriptor>(ioc, fd);
+        }
+
         _publishTopic = pubDataSpec->Topic();
         _publisher = participant->CreateDataPublisher(publisherName, *pubDataSpec, 1);
 
-        // Read initial data from character devices
-        _bufferFromChardev = Util::ReadFile(_pathToCharDev, _logger, BUF_LEN);
+        // read initial data from character devices
+        auto n = Util::ReadFile(_pathToFile, _logger, _bufferToPublisher);
+
+        // publish initial value
+        Publish(n);
+
+        if (_fd)
+        {
+            ReceiveEvent();
+        }
     }
 
     if (subDataSpec)
@@ -45,71 +67,83 @@ ChardevAdapter::ChardevAdapter(SilKit::IParticipant* participant,
         _subscriber = participant->CreateDataSubscriber(subscriberName, *subDataSpec,
             [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
                 Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
-
-                _logger->Debug("New value received on " + _subscribeTopic);
-                _logger->Trace("Value received: " + std::string(_bufferToChardev.begin(), _bufferToChardev.end()));
-                _isRecvValue = true;
-                
-                _logger->Debug("Updating " + _pathToCharDev);
-                Util::WriteFile(_pathToCharDev, _bufferToChardev, _logger);
-
-                // Copy the deserialized buffer into the one to publish for other participants
-                _bufferFromChardev = _bufferToChardev;
-                Publish();
+                _logger->Debug("New value received on " + _subscribeTopic + ". Updating " + _pathToFile);
+                _logger->Trace("Value received: " + std::string(_bufferFromSubscriber.begin(), _bufferFromSubscriber.end()));
+                Util::WriteFile(_pathToFile, _bufferFromSubscriber, _logger);
             });
     }
 }
 
-void ChardevAdapter::Publish()
+ChardevAdapter::~ChardevAdapter()
 {
-    if (!_publishTopic.empty())
+    _isCancelled = true;
+    
+    if (_fd && _fd->is_open())
     {
-        if (const auto& bytes = Serialize(); !bytes.empty())
-        {
-            _publisher->Publish(bytes);
-        }
+        _logger->Trace("Cancel operations on asio stream_descriptor.");
+        _fd->cancel();
+        _logger->Trace("Close asio stream_descriptor.");
+        _fd->close();
     }
 }
 
-auto ChardevAdapter::Serialize() -> std::vector<uint8_t>
-{    
-    // Check if the file read is empty
-    if(isBufferFromChardevEmpty())
+void ChardevAdapter::Publish(const std::size_t n)
+{
+    if (_publishTopic.empty())
+        return;
+
+    // check if the file read is empty
+    if(_bufferToPublisher.empty() || (n == 0))
     {
-        _logger->Info(_pathToCharDev + " file is empty or resource is temporarily unavailable");
-        return std::vector<uint8_t>{};
+        _logger->Info(_pathToFile + " file is empty or resource is temporarily unavailable");
+        return;
     }
 
     SilKit::Util::SerDes::Serializer serializer;
-
-    std::size_t size = _bufferFromChardev.size();
     
-    serializer.BeginArray(size);
+    serializer.BeginArray(n);
     auto publishBuffer = serializer.ReleaseBuffer();
-    publishBuffer.reserve(publishBuffer.size() + size);
-    publishBuffer.insert(publishBuffer.end(), _bufferFromChardev.begin(),
-                            _bufferFromChardev.begin() + size);
+    publishBuffer.reserve(publishBuffer.size() + n);
+    publishBuffer.insert(publishBuffer.end(), _bufferToPublisher.begin(),
+                        _bufferToPublisher.begin() + n);
 
     _logger->Debug("Serializing data and publishing on topic: " + _publishTopic);
-    
-    return publishBuffer;
+
+    _publisher->Publish(publishBuffer);
 }
 
 void ChardevAdapter::Deserialize(const std::vector<uint8_t>& bytes)
 {
     _logger->Debug("Deserializing data from topic: " + _subscribeTopic);
     SilKit::Util::SerDes::Deserializer deserializer(bytes);
-    _bufferToChardev = deserializer.Deserialize<std::vector<uint8_t>>();
+    _bufferFromSubscriber = deserializer.Deserialize<std::vector<uint8_t>>();
 }
 
-auto ChardevAdapter::isBufferFromChardevEmpty() const -> bool
+void ChardevAdapter::ReceiveEvent()
 {
-    const std::string str(_bufferFromChardev.begin(), _bufferFromChardev.end());
+    _fd->async_read_some(asio::buffer(_bufferToPublisher, _bufferToPublisher.size()),
+        [this](const std::error_code ec, const std::size_t bytes_transferred){
+            if (ec)
+            {
+                if (_isCancelled && (ec == asio::error::operation_aborted))
+                {
+                    // an error code comes right after calling fd.cancel() in order to close all asynchronous reads
+                    _isCancelled = false;
+                }
+                else
+                {
+                    // if the error does not happened after fd.cancel(), handle it
+                    _logger->Error("Unable to handle event. "
+                                "Error code: " + std::to_string(ec.value()) + " (" + ec.message()+ "). " +
+                                "Error category: " + ec.category().name());
+                }
+            }
+            else
+            {
+                _logger->Debug(_pathToFile + " has been updated");
+                Publish(bytes_transferred);
 
-    // Check if the file read is empty
-    if ((str == "") || (str[0] == '\n'))
-    {
-        return true;
-    }
-    return false;
+                ReceiveEvent();
+            }
+        });
 }

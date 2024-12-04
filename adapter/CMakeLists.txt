@@ -1,23 +1,24 @@
 # Copyright (c) Vector Informatik GmbH. All rights reserved.
+set(SOURCES_FILES
+    "SilKitAdapterGenericLinuxIO.cpp"
+    "InotifyHandler.cpp"
+    "AdapterFactory.cpp"
+
+    "../chardev/adapter/ChardevAdapter.cpp"
+    "../advalues/adapter/AdAdapter.cpp"
+)
+
+if(NOT DEFINED QNX_BUILD)
+    set(SOURCES_GPIO
+        "../gpio/adapter/GpioAdapter.cpp"
+        "../gpio/adapter/GpioWrapper.cpp"
+    )
+endif()
 
 add_executable(sil-kit-adapter-generic-linux-io
-    "SilKitAdapterGenericLinuxIO.cpp"
-
-    "../chardev/adapter/ChardevManager.cpp"
-    "../chardev/adapter/ChardevAdapter.cpp"
-
-    "../advalues/adapter/AdManager.cpp"
-    "../advalues/adapter/AdAdapter.cpp"
-
-    "../gpio/adapter/GpioManager.cpp"
-    "../gpio/adapter/GpioAdapter.cpp"
-    "../gpio/adapter/GpioWrapper.cpp"
-
-    "../util/FileHelper.cpp"
-    "../util/YamlHelper.cpp"
-    "../util/Parsing.cpp"
-    "../util/SignalHandler.cpp"
-)    
+    ${SOURCES_FILES}
+    ${SOURCES_GPIO}
+)
 
 target_include_directories(sil-kit-adapter-generic-linux-io 
     PUBLIC 
@@ -28,8 +29,8 @@ target_include_directories(sil-kit-adapter-generic-linux-io
 target_link_libraries(sil-kit-adapter-generic-linux-io
     PRIVATE
         SilKit::SilKit
-        yaml-cpp
         asio
+        Utility
 )
 
 set_target_properties(sil-kit-adapter-generic-linux-io 

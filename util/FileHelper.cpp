@@ -2,18 +2,14 @@
 
 #include "FileHelper.hpp"
 
-#include <filesystem>
 #include <fstream>
-#include <vector>
+#include <sstream>
 #include <fcntl.h>
-#include <unistd.h>
-#include <termios.h>
-#include <sys/ioctl.h>
 
 #include "Exceptions.hpp"
 
-namespace adapters::Util
-{
+namespace adapters {
+namespace Util {
 
 auto ReadFileStr(const std::string& path, SilKit::Services::Logging::ILogger* logger) -> std::string
 {
@@ -35,26 +31,23 @@ auto ReadFileStr(const std::string& path, SilKit::Services::Logging::ILogger* lo
     return buffer.str();
 }
 
-auto ReadFile(const std::string& path, SilKit::Services::Logging::ILogger* logger, const std::size_t valueSizeMax) -> std::vector<uint8_t>
+auto ReadFile(const std::string& path, SilKit::Services::Logging::ILogger* logger, std::array<uint8_t, BUF_LEN>& buffer) -> std::size_t
 {
     auto fd = open(path.c_str(), O_RDONLY | O_NONBLOCK);
     if (fd < 0)
     {
         logger->Error("File " + path + " cannot be opened (O_RDONLY mode): " + GetErrno());
-        return std::vector<uint8_t>();
+        return {};
     }
 
-    std::vector<uint8_t> read_buf(valueSizeMax);
-    std::vector<uint8_t> bytes;
-
-    const int n = read(fd, &read_buf[0], read_buf.size());
+    const auto n = read(fd, &buffer[0], buffer.size());
 
     if (n == -1)
     {
         if (errno == EAGAIN)
         {
             // File is empty or resource is temporarily unavailable
-            return std::vector<uint8_t>{};
+            return {};
         }
         else
         {
@@ -62,14 +55,9 @@ auto ReadFile(const std::string& path, SilKit::Services::Logging::ILogger* logge
         }
     }
 
-    for (int i = 0; i < n; ++i)
-    {
-        bytes.push_back(read_buf[i]);
-    }
-
     close(fd);
-
-    return bytes;
+    
+    return n;
 }
 
 void WriteFile(const std::string& path, const std::vector<uint8_t>& dataToWrite, SilKit::Services::Logging::ILogger* logger)
@@ -81,7 +69,6 @@ void WriteFile(const std::string& path, const std::vector<uint8_t>& dataToWrite,
         close(fd);
         return;
     }
-
     const int res = write(fd, reinterpret_cast<const char*>(dataToWrite.data()), dataToWrite.size());
 
     if (res == -1)
@@ -92,4 +79,5 @@ void WriteFile(const std::string& path, const std::vector<uint8_t>& dataToWrite,
     close(fd);
 }
 
-} // namespace adapters::Util
+} // namespace Util
+} // namespace adapters

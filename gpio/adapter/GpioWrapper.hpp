@@ -4,10 +4,8 @@
 
 #include <linux/gpio.h>
 #include <string>
-#include <string_view>
 
 #include "asio/posix/stream_descriptor.hpp"
-#include "asio/read.hpp"
 
 namespace GpioWrapper 
 {
@@ -31,9 +29,9 @@ class ChipInfo
     friend class Chip;
 
 public:
-	constexpr const char *GetName() const noexcept { return _info.name; }
-	constexpr const char *GetLabel() const noexcept { return _info.label; }
-	constexpr offset_t GetLines() const noexcept { return _info.lines; }
+	constexpr auto GetName() const noexcept -> const char * { return _info.name; }
+	constexpr auto GetLabel() const noexcept -> const char * { return _info.label; }
+	constexpr auto GetLines() const noexcept -> offset_t { return _info.lines; }
 
 private:
 	gpiochip_info _info;
@@ -45,8 +43,8 @@ class LineInfo
     friend class Chip;
 
 public:
-	constexpr bool GetOffset() const noexcept { return _info.line_offset; }
-	constexpr Dir GetDirection() const noexcept { return _info.flags & GPIOLINE_FLAG_IS_OUT ? Out : In; }
+	constexpr auto GetOffset() const noexcept -> bool { return _info.line_offset; }
+	constexpr auto GetDirection() const noexcept -> Dir { return _info.flags & GPIOLINE_FLAG_IS_OUT ? Out : In; }
 
 private:
     gpioline_info _info;
@@ -59,28 +57,30 @@ class Chip
 	friend class EventHandle;
 
 public:
-	Chip(Ioc &ioc, std::string_view devName);
+	Chip(Ioc &ioc, const std::string& devName);
+    ~Chip() {
+        if(IsFdOpen()) 
+            Close();
+     }
 	ChipInfo GetInfo();
 	LineInfo GetLineInfo(offset_t);
 
-    inline void Close() { fd.close(); }
-    inline bool IsFdOpen() { return fd.is_open(); }
+    inline void Close() { _fd.close(); }
+    inline auto IsFdOpen() -> bool { return _fd.is_open(); }
 
 private:
-    Fd fd;
+    Fd _fd;
 };
 
 class LineHandle 
 {
 public:
-	static constexpr offset_t MAX = GPIOHANDLES_MAX;
-
 	LineHandle(Ioc &ioc, Chip &chip, gpiohandle_request req);
     
 	template <typename Offsets = std::initializer_list<offset_t>>
 	LineHandle(Ioc &ioc, Chip &chip, const Offsets &offsets, Dir dir, uint8_t value = -1
-		,	std::string_view consumer = "ska-generic-linux-io")
-		:	LineHandle(ioc, chip, [&]() constexpr {
+		,	const std::string& consumer = "ska-generic-linux-io")
+		:	LineHandle(ioc, chip, [&]() {
 			gpiohandle_request req;
 			offset_t i = 0; 
             auto it = offsets.begin();
@@ -97,31 +97,30 @@ public:
 			return req;
 		}()) {}
 
-	uint64_t GetValue();
+	auto GetValue() -> uint64_t;
 	void SetValue(uint64_t values);
 
-    inline void Close() { fd.close(); }
-    inline bool IsFdOpen() { return fd.is_open(); }
+    inline void Close() { _fd.close(); }
+    inline auto IsFdOpen() -> bool { return _fd.is_open(); }
 
 private:
-    Fd fd;
-    offset_t numLines;
+    Fd _fd;
+    offset_t _numLines;
 };
 
 class EventHandle 
 {
 public:
 	EventHandle(Ioc &ioc, Chip &chip, offset_t offset, Edge events = BothEdges,
-		std::string_view consumer = "ska-generic-linux-io");
+		const std::string& consumer = "ska-generic-linux-io");
 
-	inline void Cancel() { fd.cancel(); }
-    inline void Close() { fd.close(); }
-    inline bool IsFdOpen() { return fd.is_open(); }
-
-    inline Fd* GetFd() noexcept { return &fd; }
+	inline void Cancel() { _fd.cancel(); }
+    inline void Close() { _fd.close(); }
+    inline auto IsFdOpen() -> bool { return _fd.is_open(); }
+    inline auto GetFd() noexcept -> Fd* { return &_fd; }
 
 private:
-    Fd fd;
+    Fd _fd;
 };
 
 } // namespace GpioWrapper

@@ -4,9 +4,10 @@
 
 #include <iostream>
 #include <cstring>
+#include <algorithm>
 
-namespace adapters::Parsing 
-{
+namespace adapters {
+namespace Parsing {
 
 void PrintHelp(bool userRequested)
 {
@@ -138,4 +139,5 @@ auto ThereAreUnknownArgumentsDemo(int argc, char** argv, const std::string& mode
     return false;
 }
 
-} // namespace adapters::Parsing
+} // namespace Parsing
+} // namespace adapters

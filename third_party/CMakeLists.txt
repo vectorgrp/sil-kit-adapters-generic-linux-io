@@ -1,7 +1,11 @@
-# Third party YAML parsing 
+# Third party YAML parsing
+set(THIRD_PARTY_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE STRING "" FORCE)
 
-add_subdirectory(yaml-cpp
+set(YAML_BUILD_SHARED_LIBS OFF CACHE BOOL "Disable building yaml-cpp as shared library" FORCE)
+
+add_subdirectory(
     yaml-cpp
+    "${THIRD_PARTY_BINARY_DIR}/_tp_yaml-cpp"
     EXCLUDE_FROM_ALL
 )
 
