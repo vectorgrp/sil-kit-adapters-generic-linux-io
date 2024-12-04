@@ -19,10 +19,13 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-# create the adchips - chardevs - GPIO chips
+# create the adchips - chardevs
 $scriptDir/../../../advalues/demos/create_adchips.sh
 source $scriptDir/../../../chardev/demos/create_chardevs.sh
-$scriptDir/../../../gpio/demos/create_gpio_sim.sh 2>&1 /dev/null
+# create the GPIO chips only if not in the pipeline
+if [[ $CI_RUN -ne "1" ]] ; then
+  $scriptDir/../../../gpio/demos/create_gpio_sim.sh 2>&1 /dev/null
+fi
 
 # update the adchips paths into the DevicesConfig.yaml file
 sed -i -E s#-\ path:\ \".*/adchips#"-\ path:\ \"$(pwd)"/adchips#g $scriptDir/../DevicesConfig.yaml
@@ -43,7 +46,10 @@ exit_status=$?
 # clean the environment
 rm -rf $(pwd)/adchips
 rm -rf $(pwd)/chardevs
-$scriptDir/../../../gpio/demos/clean_gpio_sim.sh
+# clean the GPIO chips only if not in the pipeline
+if [[ $CI_RUN -ne "1" ]] ; then
+  $scriptDir/../../../gpio/demos/clean_gpio_sim.sh
+fi
 
 #exit run_all.sh with same exit_status
 exit $exit_status

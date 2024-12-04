@@ -19,8 +19,10 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-# create the GPIOs
-$scriptDir/../create_gpio_sim.sh 2>&1 /dev/null
+# create the GPIOs only if not in the pipeline
+if [[ $CI_RUN -ne "1" ]] ; then
+  $scriptDir/../create_gpio_sim.sh 2>&1 /dev/null
+fi
 
 $silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &> $scriptDir/sil-kit-registry.out &
 sleep 1 # wait 1 second for the creation/existense of the .out file
@@ -33,8 +35,10 @@ $scriptDir/run.sh
 #capture returned value of run.sh script
 exit_status=$?
 
-# clean the created GPIOs
-$scriptDir/../clean_gpio_sim.sh
+# clean the created GPIOs only if not in the pipeline
+if [[ $CI_RUN -ne "1" ]] ; then
+  $scriptDir/../clean_gpio_sim.sh
+fi
 
 #exit run_all.sh with same exit_status
 exit $exit_status
