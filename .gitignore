@@ -1,20 +1,34 @@
-/silkit-qemu-demos-guest.qcow2
-/out/
-/.vscode/
-/.vs/
-/_build/
-/build/
-/*/build/
-/CMakeSettings.json
-/build_wsl
-/bin
-/lib
-/Downloads
-/**/Default.venvironment/
-/**/working-dir/
-/**/*.vtestunit/
-*.vector
-/**/.run/
+# ignore cmake-generated path directories
+build*/
+_build*/
+install*/
+_install*/
+out/
+bin/
+lib/
+**/Downloads/
+
+# ignore IDE directories
+.idea/
+.vs/
+.vscode/
+
+# ignore log files
 *.out
-/adchips/
-/chardevs/
+
+# ignore Vector files
+.vector/
+
+# ignore CANoe-generated files and directories
+*.xpa
+*.vtestreport
+*.stcfg
+*.ini
+**/.run/
+**/Default.venvironment/
+**/working-dir/
+**/*.vtestunit/
+
+# ignore GLIO-generated directories for demos
+adchips/
+chardevs/
