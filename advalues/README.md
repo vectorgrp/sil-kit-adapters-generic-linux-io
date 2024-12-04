@@ -93,12 +93,11 @@ You can start the forward device:
 
 You should see the following output:
 ```
-Creating participant 'ForwardDevice' at silkit://localhost:850
-[date time] [ForwardDevice] [info] Creating participant 'ForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
-[date time] [ForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:45286' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
+[date time] [AdvaluesForwardDevice] [info] Creating participant 'AdvaluesForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [AdvaluesForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:45286' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
 Press enter to stop the process...
-GLIO Adapter  >> ForwardDevice: 3
-ForwardDevice >> GLIO Adapter : 3
+[date time] [AdvaluesForwardDevice] [info] Adapter  >> ForwardDevice: 3
+[date time] [AdvaluesForwardDevice] [info] ForwardDevice >> Adapter : 3
 ```
 
 The GLIO Adapter published the initial values, it means ``3`` is the initial value from the file ``out_voltage32``. Then the forward demo is publishing the value in order to update ``in_voltage103``.

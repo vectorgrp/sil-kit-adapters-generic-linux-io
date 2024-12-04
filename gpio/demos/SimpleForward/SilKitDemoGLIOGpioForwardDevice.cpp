@@ -49,17 +49,15 @@ int main(int argc, char** argv)
         auto participantConfiguration =
             SilKit::Config::ParticipantConfigurationFromString(participantConfigurationString);
 
-        std::cout << "Creating participant '" << participantName << "' at " << registryURI << std::endl;
         auto participant = SilKit::CreateParticipant(participantConfiguration, participantName, registryURI);
-
+        auto logger = participant->GetLogger();
         auto dataPublisher = participant->CreateDataPublisher(participantName + "_pub", pubDataSpec);
 
         // sleep to be sure that the publisher is created before the subscriber
         std::this_thread::sleep_for(std::chrono::seconds(1));
 
-        auto printData = [](const std::string& str, const uint8_t dir, const uint8_t val){
-            std::cout << str << (dir == 0 ? "INPUT - " : "OUTPUT - ") 
-                << (val == 0 ? "LOW" : "HIGH") << std::endl;
+        auto printData = [logger](const std::string& str, const uint8_t dir, const uint8_t val){
+            logger->Info(str + (dir == 0 ? "INPUT - " : "OUTPUT - ") + (val == 0 ? "LOW" : "HIGH"));
         };
         
         auto dataSubscriber = participant->CreateDataSubscriber(
@@ -71,11 +69,11 @@ int main(int argc, char** argv)
                 auto receivedValue = deserializer.Deserialize<uint8_t>(8);
                 auto receivedDirection = deserializer.Deserialize<uint8_t>(8);
 
-                printData("GLIO Adapter  >> ForwardDevice: ", receivedDirection, receivedValue);
+                printData("Adapter >> ForwardDevice: ", receivedDirection, receivedValue);
 
                 // Set dir to OUT - forward received value
                 uint8_t dir = 1;
-                printData("ForwardDevice >> GLIO Adapter : ", dir, receivedValue);
+                printData("ForwardDevice >> Adapter: ", dir, receivedValue);
 
                 SilKit::Util::SerDes::Serializer serializer;
                 serializer.Serialize(receivedValue, 8);

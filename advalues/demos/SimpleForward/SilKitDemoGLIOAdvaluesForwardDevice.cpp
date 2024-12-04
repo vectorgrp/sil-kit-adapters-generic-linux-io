@@ -47,9 +47,8 @@ int main(int argc, char** argv)
         auto participantConfiguration =
             SilKit::Config::ParticipantConfigurationFromString(participantConfigurationString);
 
-        std::cout << "Creating participant '" << participantName << "' at " << registryURI << std::endl;
         auto participant = SilKit::CreateParticipant(participantConfiguration, participantName, registryURI);
-
+        auto logger = participant->GetLogger();
         auto dataPublisher = participant->CreateDataPublisher(participantName + "_pub", pubDataSpec);
 
         // sleep to be sure that the publisher is created before the subscriber
@@ -62,13 +61,13 @@ int main(int argc, char** argv)
                 SilKit::Util::SerDes::Deserializer deserializer(SilKit::Util::ToStdVector(dataMessageEvent.data));
                 // Deserialize the received value from out_voltage32
                 recvValue = deserializer.Deserialize<int16_t>(16);
-                std::cout << "GLIO Adapter  >> ForwardDevice: " << std::to_string(recvValue) << std::endl;
+                logger->Info("Adapter >> ForwardDevice: " + std::to_string(recvValue));
 
                 // Serialize the received value to in_voltage103
                 SilKit::Util::SerDes::Serializer serializer;
                 serializer.Serialize(recvValue, 16);
                 dataPublisher->Publish(serializer.ReleaseBuffer());
-                std::cout << "ForwardDevice >> GLIO Adapter : " << std::to_string(recvValue) << std::endl;
+                logger->Info("ForwardDevice >> Adapter: " + std::to_string(recvValue));
             });
 
         promptForExit();

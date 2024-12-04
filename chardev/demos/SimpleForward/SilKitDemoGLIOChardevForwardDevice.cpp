@@ -47,9 +47,8 @@ int main(int argc, char** argv)
         auto participantConfiguration =
             SilKit::Config::ParticipantConfigurationFromString(participantConfigurationString);
 
-        std::cout << "Creating participant '" << participantName << "' at " << registryURI << std::endl;
         auto participant = SilKit::CreateParticipant(participantConfiguration, participantName, registryURI);
-
+        auto logger = participant->GetLogger();
         auto dataPublisher = participant->CreateDataPublisher(participantName + "_pub", pubDataSpec);
 
         // sleep to be sure that the publisher is created before the subscriber
@@ -62,7 +61,7 @@ int main(int argc, char** argv)
             [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
                 if (dataMessageEvent.data.size() <= 4)
                 {
-                    std::cerr << "warning: message received probably wasn't following SAB format."<<std::endl;
+                    logger->Warn("Received message probably wasn't following SAB format.");
                     line_buffer += std::string(reinterpret_cast<const char*>(dataMessageEvent.data.data()),
                                                dataMessageEvent.data.size());
                 }
@@ -76,8 +75,8 @@ int main(int argc, char** argv)
                 while ( (newline_pos = line_buffer.find_first_of('\n')) != std::string::npos)
                 {
                     std::string tmpStr = line_buffer.substr(0,newline_pos);
-                    std::cout << "GLIO Adapter  >> ForwardDevice: " << tmpStr << std::endl;
-                    std::cout << "ForwardDevice >> GLIO Adapter : " << tmpStr << std::endl;
+                    logger->Info("Adapter >> ForwardDevice: " + tmpStr);
+                    logger->Info("ForwardDevice >> Adapter: " + tmpStr);
                     line_buffer.erase(0, newline_pos + 1);
                 }
                 dataPublisher->Publish(dataMessageEvent.data);

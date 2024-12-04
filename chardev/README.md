@@ -78,12 +78,11 @@ You can start the forward device:
 
 You should see the following output:
 ```
-Creating participant 'ForwardDevice' at silkit://localhost:850
-[date time] [ForwardDevice] [info] Creating participant 'ForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
-[date time] [ForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:45286' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
+[date time] [ChardevForwardDevice] [info] Creating participant 'ChardevForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [ChardevForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:45286' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
 Press enter to stop the process...
-GLIO Adapter  >> ForwardDevice: message1
-ForwardDevice >> GLIO Adapter : message1
+[date time] [ChardevForwardDevice] [info] Adapter  >> ForwardDevice: message1
+[date time] [ChardevForwardDevice] [info] ForwardDevice >> Adapter : message1
 ```
 
 The GLIO Adapter published the initial data, it means ``message1`` is the initial data from ``fifo1``. Then the forward demo is publishing the value in order to update ``fifo2``.

@@ -99,12 +99,11 @@ You can start the forward device:
 
 You should see the following output:
 ```
-Creating participant 'GpioForwardDevice' at silkit://localhost:8501
 [date time] [GpioForwardDevice] [info] Creating participant 'GpioForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
 [date time] [GpioForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:34144' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
 Press enter to stop the process...
-GLIO Adapter  >> ForwardDevice: INPUT - LOW
-ForwardDevice >> GLIO Adapter : OUTPUT - LOW
+[date time] [GpioForwardDevice] [info] Adapter  >> ForwardDevice: INPUT - LOW
+[date time] [GpioForwardDevice] [info] ForwardDevice >> Adapter : OUTPUT - LOW
 ```
 
 The GLIO Adapter published the initial value, it means ``LOW`` is the initial value from the ``gpiochip0 line 4``. Then the forward demo is publishing the value in order to update the ``gpiochip1 line 2``.
