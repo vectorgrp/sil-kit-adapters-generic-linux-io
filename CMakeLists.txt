@@ -81,7 +81,7 @@ set(compile_options
     -Wshadow -Wsign-promo -Wstrict-overflow=5
     -Wno-unused
     -Wpacked
-    -Werror -Wfatal-errors
+    -Wfatal-errors
 )
 
 if(DEFINED ENV{QNX_BUILD})

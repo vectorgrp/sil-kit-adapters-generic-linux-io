@@ -19,7 +19,7 @@ void LoadYAMLConfigFile(YAML::Node& doc, const std::string& configFile, SilKit::
     doc = YAML::Load(buffer);
 }
 
-void GetYAMLValue(const YAML::Node& node, const std::string& valueToGet, std::string& valueToUpdate, [[maybe_unused]] const bool isMandatory, SilKit::Services::Logging::ILogger* logger)
+void GetYAMLValue(const YAML::Node& node, const std::string& valueToGet, std::string& valueToUpdate, const bool isMandatory, SilKit::Services::Logging::ILogger* logger)
 {
     if (const auto value = node[valueToGet])
     {

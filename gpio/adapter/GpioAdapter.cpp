@@ -110,7 +110,7 @@ void GpioAdapter::Deserialize(const std::vector<uint8_t> &bytes)
     _logger->Debug("Deserializing data from topic: " + _subscribeTopic);
     SilKit::Util::SerDes::Deserializer deserializer(bytes);
     
-    [[maybe_unused]] auto receivedValue = deserializer.Deserialize<uint8_t>(8);
+    auto receivedValue = deserializer.Deserialize<uint8_t>(8);
     _direction = static_cast<Direction>(deserializer.Deserialize<uint8_t>(8));
     
     // if received direction is OUTPUT update the value

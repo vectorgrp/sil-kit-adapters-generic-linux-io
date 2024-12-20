@@ -62,7 +62,7 @@ auto FindArgOf(int argc, char** argv, const std::string& argument, char** args) 
     return NULL;
 }
 
-auto GetArgDefault(int argc, char** argv, const std::string& argument, [[maybe_unused]] const std::string& defaultValue) -> std::string
+auto GetArgDefault(int argc, char** argv, const std::string& argument, const std::string& defaultValue) -> std::string
 {
     auto found = FindArgOf(argc, argv, argument, argv);
     if (found != NULL)

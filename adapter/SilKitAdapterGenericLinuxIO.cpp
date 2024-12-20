@@ -165,7 +165,7 @@ int main(int argc, char** argv)
             logger->Debug("Lifecycle service stopping: timed out");
         }
 
-        logger->Debug("Simulation stopped. Final State: " + static_cast<std::int16_t>(finalState));
+        logger->Debug("Simulation stopped. Final State: " + std::to_string(static_cast<std::int16_t>(finalState)));
     }
     catch (const SilKit::ConfigurationError& error)
     {
