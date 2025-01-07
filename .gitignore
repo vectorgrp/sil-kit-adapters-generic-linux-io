@@ -13,6 +13,9 @@ lib/
 .vs/
 .vscode/
 
+# needed for devcontainer feature 
+!.vscode/tasks.json
+
 # ignore log files
 *.out
 

@@ -113,6 +113,8 @@ install(
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party
+        ${CMAKE_CURRENT_SOURCE_DIR}/.devcontainer
+        ${CMAKE_CURRENT_SOURCE_DIR}/.vscode
     DESTINATION .
     COMPONENT source
     EXCLUDE_FROM_ALL
@@ -137,7 +139,26 @@ install(
     FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run_all.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run_adapter.sh
     DESTINATION adapter/demos/CANoe4SW_SE
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
+install(
+    FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/build_adapter.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/clean_up.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/prepare_run_silkit_registry.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/run_demos.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/stop_processes.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/stop_clean_all.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/update_chips.sh
+    DESTINATION adapter/demos/tasks_scripts/tasks_scripts
     PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
@@ -150,6 +171,7 @@ install(
     FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run_all.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/create_adchips_run_adapter.sh
     DESTINATION advalues/demos/CANoe4SW_SE
     PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -173,8 +195,23 @@ install(
 
 install(
     FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/clean_up.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/start_demo.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/update_adchip.sh
+    DESTINATION advalues/demos/tasks_scripts
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
+
+install(
+    FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run_all.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/create_chardevs_run_adapter.sh
     DESTINATION chardev/demos/CANoe4SW_SE
     PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -196,6 +233,19 @@ install(
     EXCLUDE_FROM_ALL
 )
 
+install(
+    FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/clean_up.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/start_demo.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/update_chardev.sh
+    DESTINATION chardev/demos/tasks_scripts
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+)
 include(GNUInstallDirs)
 
 install(
@@ -238,6 +288,7 @@ if(NOT DEFINED QNX_BUILD)
         FILES
             ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run.sh
             ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_all.sh
+            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_adapter.sh
         DESTINATION gpio/demos/CANoe4SW_SE
         PERMISSIONS
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -258,6 +309,20 @@ if(NOT DEFINED QNX_BUILD)
             WORLD_READ WORLD_EXECUTE
         COMPONENT source
         EXCLUDE_FROM_ALL
+    )
+
+    install(
+    FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/tasks_scripts/clean_up.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/tasks_scripts/start_demo.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/tasks_scripts/update_gpio.sh
+    DESTINATION gpio/demos/tasks_scripts
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+    COMPONENT source
+    EXCLUDE_FROM_ALL
     )
 
     install(

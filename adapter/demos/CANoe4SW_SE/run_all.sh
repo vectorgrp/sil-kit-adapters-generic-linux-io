@@ -1,9 +1,13 @@
 #!/bin/bash
+set -e 
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 silKitDir=/home/vector/SilKit/SilKit-4.0.43-ubuntu-18.04-x86_64-gcc/
 # if "exported_full_path_to_silkit" environment variable is set (in pipeline script), use it. Otherwise, use default value
 silKitDir="${exported_full_path_to_silkit:-$silKitDir}"
+
+logDir=$scriptDir/logs # define a directory for .out files
+mkdir -p $logDir # if it does not exist, create it
 
 # cleanup trap for child processes 
 trap 'kill $(jobs -p); exit' EXIT SIGHUP;
@@ -19,24 +23,19 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-# create the adchips - chardevs
-$scriptDir/../../../advalues/demos/create_adchips.sh
-source $scriptDir/../../../chardev/demos/create_chardevs.sh
 # create the GPIO chips only if not in the pipeline
 if [[ $CI_RUN -ne "1" ]] ; then
   $scriptDir/../../../gpio/demos/create_gpio_sim.sh 2>&1 /dev/null
 fi
 
-# update the adchips paths into the DevicesConfig.yaml file
-sed -i -E s#-\ path:\ \".*/adchips#"-\ path:\ \"$(pwd)"/adchips#g $scriptDir/../DevicesConfig.yaml
-# update the chardevs paths into the DevicesConfig.yaml file
-sed -i -E s#-\ path:\ \".*/chardevs#"-\ path:\ \"$(pwd)"/chardevs#g $scriptDir/../DevicesConfig.yaml
-
 $silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &> $scriptDir/sil-kit-registry.out &
 sleep 1 # wait 1 second for the creation/existense of the .out file
 timeout 30s grep -q 'Registered signal handler' <(tail -f /$scriptDir/sil-kit-registry.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
 
-$scriptDir/../../../bin/sil-kit-adapter-generic-linux-io --adapter-configuration $scriptDir/../DevicesConfig.yaml --log Debug &> $scriptDir/sil-kit-adapter-generic-linux-io.out &
+$scriptDir/run_adapter.sh $scriptDir/../DevicesConfig.yaml --log Debug &> $scriptDir/run_adapter.out &
+sleep 1 # wait 1 second for the creation/existence of the .out file
+timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $scriptDir/run_adapter.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
+echo "[info] sil-kit-adapter-generic-linux-io has been started"
 
 $scriptDir/run.sh
 

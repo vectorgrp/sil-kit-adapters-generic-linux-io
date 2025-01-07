@@ -99,3 +99,37 @@ You can also run the same test set with ``CANoe4SW SE`` by executing the followi
 
 ### CANoe4SW Server Edition (Linux)
 You can also run the same test set with ``CANoe4SW SE (Linux)``. At first you have to execute the powershell script ``./adapter/demos/CANoe4SW_SE/createEnvForLinux.ps1`` on your windows system by using tools of ``CANoe4SW SE (Windows)`` to prepare your test environment for Linux. In ``./adapter/demos/CANoe4SW_SE/run.sh`` you should adapt ``canoe4sw_se_install_dir`` to the path of your ``CANoe4SW SE`` installation in your Linux system. Afterwards you can execute ``./adapter/demos/CANoe4SW_SE/run.sh`` in your Linux system. The test cases are executed automatically and you should see a short test report in your terminal after execution.
+
+## Running the demo applications inside a Docker container (Optional)
+*Note: This section provides an alternative method for running the demo applications - apart from CANoe Desktop Edition and CANoe4SW Server Edition - inside a Docker container and using the `devcontainers` Visual Studio Code extension. The steps outlined here are optional and not required if you prefer to run the applications directly and manually on your host machine.*
+
+The following tools are needed:
+* Visual Studio Code in Windows
+* An Ubuntu Virtual Machine with Linux kernel version v5.17-rc1 or higher and Docker running as a daemon (a standard WSL2 is not compatible because it does not support GPIO by default)
+    > You can use the *ms-vscode-remote.remote-ssh* Visual Studio Code extension to connect your Visual Studio Code to the Ubuntu Virtual Machine.
+* *ms-vscode-remote.remote-containers* Visual Studio Code extension
+
+>In WSL2, it is advisable to use the native filesystem (such as `/home/`) rather than the mounted `/mnt/` filesystem to prevent any performance issues.
+
+### Steps:
+
+
+1- Clone the repo on your Virtual Machine (if you have not done that yet).
+ 
+2- On your Ubuntu host, run the `gpio/demos/create_gpio_sim.sh` script as root to instantiate the GPIO chips.
+    
+    sudo ./gpio/demos/create_gpio_sim.sh 
+ 
+These GPIO chips (`gpiochip0` and `gpiochip1`) will be automatically mounted and accessible on the `/dev` directory of the Docker container. 
+
+3- Open the cloned folder remotely from an instance of Visual Studio Code via SSH (using the *ms-vscode-remote.remote-ssh* Visual Studio Code Extension).
+
+4- A pop-up will appear and propose to open the project in a container.
+
+![Dev Containers popup](../adapter/demos/images/dev-container-popup.png)
+
+Alternatively, you can click on the Dev Containers button at the bottom-left corner of Visual Studio Code, then click on `Reopen in Container`. 
+
+Wait for the Docker image to be built and for the container to start. After that, you can launch the available pre-defined tasks in the Advalues section to acheive the demo setup. 
+
+> The Docker container exposes the TCP/IP port 8501 to the host, which means that adding CANoe as a participant in the following steps shall work out-of-the box if you set SIL Kit's registry-uri to `silkit://localhost:8501`.  

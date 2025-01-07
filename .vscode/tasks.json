@@ -1,0 +1,149 @@
+{
+	"version": "2.0.0",
+    "command": "/bin/bash",
+    "args": [
+        "-c"
+    ],
+    "options": {
+        "cwd": "${workspaceFolder}"
+    },
+	"tasks": [
+        {
+            "label": "1- Build SIL Kit Adapter for Generic Linux IO",
+            "args": [
+                "adapter/demos/tasks_scripts/build_adapter.sh"
+            ]
+        },
+        {
+            "label": "2- Run sil-kit-registry",
+            "args": [
+                "adapter/demos/tasks_scripts/prepare_run_silkit_registry.sh"
+            ]
+        },
+        {
+            "label": "3- Advalues mode",
+            "type":"shell",
+            "command": "echo 'Advalues mode demo'"
+        },
+        {
+            "label": "---- Start advalues demo app",
+            "args": [
+                "advalues/demos/tasks_scripts/start_demo.sh"
+            ]
+        },
+        {
+            "label": "---- Create Adchips & start Adapter (in Advalues mode)",
+            "args": [
+                "advalues/demos/CANoe4SW_SE/create_adchips_run_adapter.sh"
+            ]
+        },
+        {
+            "label": "---- Update adchip pin",
+            "args": [
+                "advalues/demos/tasks_scripts/update_adchip.sh"
+            ]
+        },
+        {
+            "label": "---- Stop & Clean up",
+            "args": [
+                "advalues/demos/tasks_scripts/clean_up.sh"
+            ]
+        },
+        {
+            "label": "4- Chardev mode",
+            "type":"shell",
+            "command": "echo 'Chardev mode demo'"
+        },
+        {
+            "label": "---- Start Chardev demo app",
+            "args": [
+                "chardev/demos/tasks_scripts/start_demo.sh"
+            ]
+        },
+        {
+            "label": "---- Create Chardevs & Start Adapter (in Chardev mode)",
+            "args": [
+                "chardev/demos/CANoe4SW_SE/create_chardevs_run_adapter.sh"
+            ]
+        },
+        { 
+            "label": "---- Update fifo",
+            "args": [
+                "chardev/demos/tasks_scripts/update_chardev.sh"
+            ]
+        },
+        {
+            "label": "---- Stop & Clean up",
+            "args": [
+                "chardev/demos/tasks_scripts/clean_up.sh"
+            ]
+        },
+        {
+            "label": "5- GPIO mode",
+            "type":"shell",
+            "command": "echo 'GPIO mode demo'"
+        },
+        {
+            "label": "---- Start GPIO demo app",
+            "args": [
+                "gpio/demos/tasks_scripts/start_demo.sh"
+            ]
+        },
+        {
+            "label": "---- Start Adapter (in GPIO mode)",
+            "args": [
+                "gpio/demos/CANoe4SW_SE/run_adapter.sh"
+            ]
+        },
+        { 
+            "label": "---- Update GPIO",
+            "args": [
+                "gpio/demos/tasks_scripts/update_gpio.sh"
+            ]
+        },
+        {
+            "label": "---- Stop & Clean up",
+            "args": [
+                "gpio/demos/tasks_scripts/clean_up.sh"
+            ]
+        },
+        {
+            "label": "6- All modes",
+            "type":"shell",
+            "command": "echo 'All modes demo'"
+        },
+       
+        {
+            "label": "---- Start demo apps",
+            "args": [
+                "adapter/demos/tasks_scripts/run_demos.sh"
+            ]
+        },
+        {
+            "label": "---- Create Adchips and Chardevs & Start Adapter (in All modes)",
+
+            "args": [
+                "adapter/demos/CANoe4SW_SE/run_adapter.sh"
+            ]
+        },
+        { 
+            "label": "---- Update chips",
+
+            "args": [
+                "adapter/demos/tasks_scripts/update_chips.sh"
+            ]
+        },
+        {
+            "label": "---- Stop & Clean up",
+            "args": [
+                "adapter/demos/tasks_scripts/clean_up.sh"
+            ]
+        },
+        {
+            "label": "7- Stop all & clean up",
+            "args": [
+                "adapter/demos/tasks_scripts/stop_clean_all.sh"
+            ]
+        }
+    ]
+}

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e 
 
 ## This script creates the character devices for the chardev demo
 

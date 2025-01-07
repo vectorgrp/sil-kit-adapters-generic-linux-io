@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e 
 
 # check if user is root
 if [[ $EUID -ne 0 ]]; then
