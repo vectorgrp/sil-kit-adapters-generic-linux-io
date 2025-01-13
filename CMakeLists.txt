@@ -350,6 +350,16 @@ install(
         WORLD_READ WORLD_EXECUTE
 )
 
+if (DEFINED CMAKE_INSTALL_MANDIR)
+    install(
+        FILES
+            ${CMAKE_CURRENT_SOURCE_DIR}/docs/man/sil-kit-adapter-generic-linux-io.1
+        DESTINATION ${CMAKE_INSTALL_MANDIR}/man1/
+        COMPONENT docs
+    )
+endif()
+
+
 ###############################################################################
 # Packaging
 ###############################################################################
