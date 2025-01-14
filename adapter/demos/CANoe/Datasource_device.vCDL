@@ -44,12 +44,12 @@ namespace KeyA
   interface GLIOAdapter
   {
     // adchip0 //
-    consumed data int16 fromVoltage15;
-    consumed data int16 fromVoltage32;
+    consumed data int16 fromVoltage15 = 0;
+    consumed data int16 fromVoltage32 = 0;
     
     // adchip1 //
-    consumed data uint8 fromPIN12Value;
-    consumed data uint8 fromPIN12Dir;
+    consumed data uint8 fromPIN12Value = 0;
+    consumed data uint8 fromPIN12Dir = 0;
     
     // chardevs //
     consumed data string fromFifo1;
@@ -73,13 +73,13 @@ namespace KeyA
   interface ValueSender
   {
     // adchip0 //
-    provided data int16 toVoltage103;
-    provided data int16 toVoltage15;
+    provided data int16 toVoltage103 = 0;
+    provided data int16 toVoltage15 = 0;
     
     // adchip1 //
-    provided data uint8 toPIN12Value;
-    provided data uint8 toPIN12Dir;
-    provided data double toVoltage5;
+    provided data uint8 toPIN12Value = 0;
+    provided data uint8 toPIN12Dir = 0;
+    provided data double toVoltage5 = 0;
     
     // chardevs //
     provided data string toFifo2;
