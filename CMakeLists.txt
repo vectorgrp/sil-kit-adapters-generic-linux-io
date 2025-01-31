@@ -118,6 +118,7 @@ install(
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+	${CMAKE_CURRENT_SOURCE_DIR}/docs
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party
         ${CMAKE_CURRENT_SOURCE_DIR}/.devcontainer
         ${CMAKE_CURRENT_SOURCE_DIR}/.vscode
