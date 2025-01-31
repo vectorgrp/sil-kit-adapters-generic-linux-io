@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.5)
 project(VectorSilKitAdapterGenericLinuxIO)
 include(FetchContent)
 
+option(BUILD_LINUX_PACKAGE "Creates a SIL Kit Adapter Generic Linux IO build suitable for package managers in Linux Distributions (.deb)" OFF)
+
+if(BUILD_LINUX_PACKAGE)
+    add_subdirectory(docs/man)
+endif()
+
 set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -349,16 +355,6 @@ install(
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
 )
-
-if (DEFINED CMAKE_INSTALL_MANDIR)
-    install(
-        FILES
-            ${CMAKE_CURRENT_SOURCE_DIR}/docs/man/sil-kit-adapter-generic-linux-io.1
-        DESTINATION ${CMAKE_INSTALL_MANDIR}/man1/
-        COMPONENT docs
-    )
-endif()
-
 
 ###############################################################################
 # Packaging
