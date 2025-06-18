@@ -5,29 +5,25 @@ includes
 }
 
 variables
-{
-  distObjRef GLIOAdapter in_object = KeyA::Receiver;
-  distObjRef ValueSender out_object = KeyA::Sender;
-  int result;
-  dword timeout=2000;
+{  
+  int result = 0;
+  dword timeout = 2000;
 }
 
 export testfunction PepareTestscenarioAdvalues()
 {
-  out_object.Connect();
-  $out_object.toVoltage15 = 3;
-
-  $out_object.toPIN12Value = 0;
+  KeyA::Receiver.Connect();
+  KeyA::Sender.Connect();
+  resetDistObjValues(KeyA::Receiver);  
+  $KeyA::Sender.toVoltage15 = 3;
+  $KeyA::Sender.toPIN12Value = 1;
 }
 
 // Tests for int16 type
 export testcase DO_CheckAdvaluesMatchInt16()
-{
-  int expectedValue;
-  expectedValue = 3;
-
-  in_object.Connect();
-
+{  
+  int expectedValue = 3;
+  
   result = testWaitForPhysValueInRangeSInt(KeyA::Receiver.fromVoltage15, expectedValue, expectedValue, timeout);
 
   if (result != 1)
@@ -40,9 +36,8 @@ export testcase DO_CheckAdvaluesMatchInt16()
 // Tests for uint8 type
 export testCase DO_CheckAdvaluesMatchUint8()
 {
-  byte expectedValue;
-  expectedValue = 0;
-
+  byte expectedValue = 1;
+  
   result = testWaitForPhysValueInRangeSInt(KeyA::Receiver.fromPIN12Value, expectedValue, expectedValue, timeout);
 
   if (result != 1)

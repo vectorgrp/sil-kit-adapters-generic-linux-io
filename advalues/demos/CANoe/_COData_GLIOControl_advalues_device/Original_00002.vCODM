@@ -8,7 +8,30 @@
             <AttributeValue Definition="_SystemAttributes::Binding" InitialValue="SilKit" InitialValueType="String" />
           </AttributeValues>
           <MemberData>
-            <DOMemberDataHolder Name="MemberData" />
+            <DOMemberDataHolder Name="MemberData">
+              <Data>
+                <DOIFMemberData Name="fromVoltage15">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="Int32" />
+                  </InitialValues>
+                </DOIFMemberData>
+                <DOIFMemberData Name="fromVoltage32">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="Int32" />
+                  </InitialValues>
+                </DOIFMemberData>
+                <DOIFMemberData Name="fromPIN12Value">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="UInt32" />
+                  </InitialValues>
+                </DOIFMemberData>
+                <DOIFMemberData Name="fromPIN12Dir">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="UInt32" />
+                  </InitialValues>
+                </DOIFMemberData>
+              </Data>
+            </DOMemberDataHolder>
           </MemberData>
           <DataMembers>
             <DOIFDataMember LocalDirection="Consumed" Name="fromVoltage15">
@@ -30,7 +53,35 @@
             <AttributeValue Definition="_SystemAttributes::Binding" InitialValue="SilKit" InitialValueType="String" />
           </AttributeValues>
           <MemberData>
-            <DOMemberDataHolder Name="MemberData" />
+            <DOMemberDataHolder Name="MemberData">
+              <Data>
+                <DOIFMemberData Name="toVoltage103">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="Int32" />
+                  </InitialValues>
+                </DOIFMemberData>
+                <DOIFMemberData Name="toVoltage15">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="Int32" />
+                  </InitialValues>
+                </DOIFMemberData>
+                <DOIFMemberData Name="toPIN12Value">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="UInt32" />
+                  </InitialValues>
+                </DOIFMemberData>
+                <DOIFMemberData Name="toPIN12Dir">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="UInt32" />
+                  </InitialValues>
+                </DOIFMemberData>
+                <DOIFMemberData Name="toVoltage5">
+                  <InitialValues>
+                    <InitialValue Value="0" ValueType="Double" />
+                  </InitialValues>
+                </DOIFMemberData>
+              </Data>
+            </DOMemberDataHolder>
           </MemberData>
           <DataMembers>
             <DOIFDataMember Name="toVoltage103">

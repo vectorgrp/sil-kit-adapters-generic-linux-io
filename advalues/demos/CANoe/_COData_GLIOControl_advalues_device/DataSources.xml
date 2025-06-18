@@ -5,9 +5,9 @@
       <Files>
         <File>
           <FileType>evCDL</FileType>
-          <LastModifiedTime>2024-05-15T16:46:31.1278099+02:00</LastModifiedTime>
+          <LastModifiedTime>2025-01-07T16:23:43.2983879+01:00</LastModifiedTime>
           <Path>Datasource_device.vCDL</Path>
-          <ReferenceHashValue>A6NazKjSE8eJayP4Sr+cM/p/ryi0k6lNdZk2gDuXwIU=</ReferenceHashValue>
+          <ReferenceHashValue>E2o8UTHKCR4MIJtuYJKfI3Sdb/gPkIDc9cVPl1gjLhM=</ReferenceHashValue>
         </File>
       </Files>
       <ID>2</ID>
@@ -52,9 +52,9 @@
       <Name></Name>
       <ReferencedFiles>
         <File>
-          <LastModifiedTime>2024-05-15T16:46:31.1278099+02:00</LastModifiedTime>
+          <LastModifiedTime>2025-01-07T16:23:43.2983879+01:00</LastModifiedTime>
           <Path>Datasource_device.vCDL</Path>
-          <ReferenceHashValue>A6NazKjSE8eJayP4Sr+cM/p/ryi0k6lNdZk2gDuXwIU=</ReferenceHashValue>
+          <ReferenceHashValue>E2o8UTHKCR4MIJtuYJKfI3Sdb/gPkIDc9cVPl1gjLhM=</ReferenceHashValue>
         </File>
       </ReferencedFiles>
     </DataSource>
