@@ -1,4 +1,7 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
+# SPDX-License-Identifier: MIT
+
 set -e 
 
 ## This script creates the character devices for the chardev demo
