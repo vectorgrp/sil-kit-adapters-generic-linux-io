@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e 
 
-PSScriptRoot=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # Set a default path for canoe4sw-se installation directory
 default_canoe4sw_se_install_dir="/opt/vector/canoe4sw-se"
 
@@ -16,7 +16,7 @@ fi
 if [[ -n "$canoe4sw_se_install_dir" ]]; then
 	echo "canoe4sw-se found at location : $canoe4sw_se_install_dir"
 	#run tests
-	$canoe4sw_se_install_dir/canoe4sw-se "$PSScriptRoot/Default.venvironment" -d "$PSScriptRoot/working-dir" --verbosity-level "2" --test-unit "$PSScriptRoot/testForwardGpio.vtestunit"  --show-progress "tree-element"
+	$canoe4sw_se_install_dir/canoe4sw-se "$scriptDir/Default.venvironment" -d "$scriptDir/working-dir" --verbosity-level "2" --test-unit "$scriptDir/testForwardGpio.vtestunit"  --show-progress "tree-element"
     exit_status=$?
 else
     echo "canoe4sw-se executable not found"
