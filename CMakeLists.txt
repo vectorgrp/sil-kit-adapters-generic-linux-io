@@ -14,6 +14,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(SILKIT_ADAPTER_GENERIC_LINUX_IO_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 set(SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+include(SilKitAdapterVersion)
+configure_silkit_adapter_version(${PROJECT_NAME})
+
 set(SILKIT_VERSION "4.0.50" CACHE STRING "If no SIL Kit package is specified, this version will be downloaded")
 set(SILKIT_FLAVOR "ubuntu-18.04-x86_64-gcc" CACHE STRING "If no SIL Kit package is specified, this package flavor will be downloaded")
 
@@ -357,6 +361,10 @@ install(
 # Packaging
 ###############################################################################
 
+if(NOT DEFINED PACKAGE_FILENAME_SUFFIX)
+    set(PACKAGE_FILENAME_SUFFIX "-${PROJECT_VERSION}")
+endif()
+
 set(CPACK_GENERATOR "ZIP")
 
 set(CPACK_PACKAGE_DESCRIPTION "binary release of SIL Kit Adapter Generic Linux IO")
@@ -364,6 +372,9 @@ set(CPACK_PACKAGE_NAME "SilKit-Adapter-Generic-Linux-IO")
 set(CPACK_PACKAGE_VENDOR "Vector Informatik")
 set(CPACK_PACKAGE_CONTACT "support@vector.com")
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}${PACKAGE_FILENAME_SUFFIX}")
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 set(CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE ON)
