@@ -41,6 +41,12 @@ int main(int argc, char** argv)
         return NO_ERROR;
     }
 
+    if(Parsing::FindArg(argc, argv, Parsing::versionArg, argv) != NULL)
+    {
+        Parsing::PrintVersion();
+        return NO_ERROR;
+    }
+
     const std::string participantName = Parsing::GetArgDefault(argc, argv, Parsing::participantNameArg, "SilKitAdapterGenericLinuxIO");
 
     const std::string registryURI = Parsing::GetArgDefault(argc, argv, Parsing::regUriArg, "silkit://localhost:8501");

@@ -92,6 +92,7 @@ The application *optionnally* takes the following command line arguments (defaul
       [--name <participant name{SilKitAdapterGenericLinuxIO}>]
       [--registry-uri silkit://<host{localhost}>:<port{8501}>]
       [--log <Trace|Debug|Warn|{Info}|Error|Critical|Off>]
+      [--version]
       [--help]
 
 ### Configure the publish and subscribe topics

@@ -12,6 +12,7 @@ namespace Parsing {
 
 void PrintHelp(bool userRequested)
 {
+    PrintVersion();
     std::cout << "Usage (defaults in curly braces if you omit the switch):\n"
                 "sil-kit-adapter-generic-linux-io " << adapterConfigurationArg << " <path to .yaml devices configuration file>\n"
                 "  [" << configurationArg << " <path to .silkit.yaml or .json configuration file>]\n"
@@ -19,14 +20,23 @@ void PrintHelp(bool userRequested)
                 "  [" << regUriArg << " silkit://<host{localhost}>:<port{8501}>]\n"
                 "  [" << logLevelArg << " <Trace|Debug|Warn|{Info}|Error|Critical|Off>]\n"
                 "\n"
+                "SIL Kit-specific CLI arguments will be overwritten by the config file passed by " << configurationArg << ".\n";
+    std::cout << "\n"
                 "Example:\n"
                 "sil-kit-adapter-generic-linux-io " << adapterConfigurationArg << " ./adapter/demos/DevicesConfig.yaml " << participantNameArg << " GLIO_Participant" << '\n';
+                
+    std::cout << "Pass "<< versionArg <<" to get the version of the Adapter.\n";
 
     if (!userRequested)
     {
         std::cout << '\n';
         std::cout << "Pass " << helpArg << " to get this message" << '\n';
     }
+}
+
+void PrintVersion()
+{
+    std::cout << "Vector SIL Kit Adapter for Generic Linux IO - version: " << SILKIT_ADAPTER_VERSION << std::endl;
 }
 
 void PrintDemoHelp(const std::string& mode, bool userRequested)

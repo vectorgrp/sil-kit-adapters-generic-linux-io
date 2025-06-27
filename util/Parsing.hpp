@@ -18,6 +18,7 @@ const std::string logLevelArg = "--log";
 const std::string participantNameArg = "--name";
 const std::string helpArg = "--help";
 const std::string configurationArg = "--configuration";
+const std::string versionArg = "--version";
 
 // Arguments only available for demos
 const std::string pubTopicArg = "--pub-topic";
@@ -26,12 +27,15 @@ const std::string subTopicArg = "--sub-topic";
 const std::array<const std::string, 7> switchesWithArgument = 
     {regUriArg, adapterConfigurationArg, logLevelArg, participantNameArg, configurationArg, pubTopicArg, subTopicArg};
 
-const std::array<const std::string, 1> switchesWithoutArguments = {helpArg};
+const std::array<const std::string, 2> switchesWithoutArguments = {helpArg, versionArg};
 
 const std::array<const std::string, 3> demoSwitchesWithArguments = {participantNameArg, regUriArg, logLevelArg};
 
 // Prints the help message containing all switches and arguments.
 void PrintHelp(bool userRequested = false);
+
+// Prints the version of the adapter.
+void PrintVersion();
 
 // Prints the help message containing all switches and arguments for the demos.
 void PrintDemoHelp(const std::string& mode, bool userRequested = false);

@@ -23,6 +23,7 @@ set(SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY "${CMAKE_CURRENT_SOURCE_DI
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(SilKitAdapterVersion)
 configure_silkit_adapter_version(${PROJECT_NAME})
+add_definitions(-DSILKIT_ADAPTER_VERSION="${PROJECT_VERSION}")
 
 set(SILKIT_VERSION "4.0.50" CACHE STRING "If no SIL Kit package is specified, this version will be downloaded")
 set(SILKIT_FLAVOR "ubuntu-18.04-x86_64-gcc" CACHE STRING "If no SIL Kit package is specified, this package flavor will be downloaded")
