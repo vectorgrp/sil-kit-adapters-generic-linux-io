@@ -50,11 +50,27 @@ Download a preview or release of the adapter directly from [Vector SIL Kit Adapt
 If not already existent on your system you should also download a SIL Kit Release directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). You will need this for being able to start a sil-kit-registry.
 
 ## Install the sil-kit-adapter-generic-linux-io (optional)
-If you call the following command (can be done for self-built and pre-built package after cmake configure) ``sil-kit-adapter-generic-linux-io`` can be called from everywhere without defining a path:  
+
+### Installation with Debian package
+On Debian systems, the most straightforward way to install the sil-kit-adapter-generic-linux-io is to use the Debian package `sil-kit-adapter-generic-linux-io_*.deb` which is provided with each release (version v1.0.0 and above).
+After downloading it, you can install it using the following command:
+```
+sudo apt install ./sil-kit-adapter-generic-linux-io_*.deb
+```
+To get more information about this Debian package you can refer to the SIL Kit Adapter Packaging [README](https://github.com/vectorgrp/sil-kit-adapters-pkg).
+
+**Note 1:** To be able to run the installed adapter you will also have to install the SIL Kit library. This can be done installing the `libsilkit4_*.deb` and `libsilkit-dev_*.deb` provided in the SIL Kit releases.
+
+**Note 2:** After installing the adapter, you can run the ``sil-kit-adapter-generic-linux-io`` from any location without specifying a path. The default installation path is ``/usr/bin``.
+
+### Installation with CMake
+To install the sil-kit-adapter-generic-linux-io using CMake, run the following command (can be done for self-built and pre-built package after cmake configure):
 
     sudo cmake --build build --target install
 
-The default installation path will be ``/usr/local/bin``. Be aware that SIL Kit itself also needs to be installed to make this work.
+**Note 1:** Be aware that SIL Kit itself also needs to be installed to run the adapter.
+
+**Note 2:** After installing the adapter, you can run the ``sil-kit-adapter-generic-linux-io`` from any location without specifying a path. The default installation path is ``/usr/local/bin``.
 
 ## Run the sil-kit-adapter-generic-linux-io
 This application allows the user to attach character devices of any Linux system to the Vector SIL Kit.
