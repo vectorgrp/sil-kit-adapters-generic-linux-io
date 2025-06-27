@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
+// SPDX-License-Identifier: MIT
+
 #include "AdapterFactory.hpp"
 
 #include "util/YamlHelper.hpp"

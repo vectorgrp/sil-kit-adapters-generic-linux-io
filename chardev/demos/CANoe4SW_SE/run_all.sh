@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
+# SPDX-License-Identifier: MIT
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 silKitDir=/home/vector/SilKit/SilKit-4.0.43-ubuntu-18.04-x86_64-gcc/
@@ -7,6 +9,9 @@ silKitDir="${exported_full_path_to_silkit:-$silKitDir}"
 
 logDir=$scriptDir/logs # define a directory for .out files
 mkdir -p $logDir # if it does not exist, create it
+
+# create a timestamp for log files
+timestamp=$(date +"%Y%m%d_%H%M%S")
 
 # cleanup trap for child processes 
 trap 'kill $(jobs -p); exit' EXIT SIGHUP;
@@ -22,13 +27,13 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-$silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &> $logDir/sil-kit-registry.out &
+$silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &> $logDir/sil-kit-registry_${timestamp}_chardev.out &
 sleep 1 # wait 1 second for the creation/existense of the .out file
-timeout 30s grep -q 'Registered signal handler' <(tail -f $logDir/sil-kit-registry.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
+timeout 30s grep -q 'Registered signal handler' <(tail -f $logDir/sil-kit-registry_${timestamp}_chardev.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
 
-$scriptDir/create_chardevs_run_adapter.sh &> $logDir/create_chardevs_run_adapter.out &
+$scriptDir/create_chardevs_run_adapter.sh &> $logDir/create_chardevs_run_adapter_${timestamp}_chardev.out &
 sleep 1 # wait 1 second for the creation/existence of the .out file
-timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/create_chardevs_run_adapter.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
+timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/create_chardevs_run_adapter_${timestamp}_chardev.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
 echo "[info] sil-kit-adapter-generic-linux-io has been started"
 
 $scriptDir/run.sh
