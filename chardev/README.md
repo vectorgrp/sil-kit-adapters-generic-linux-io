@@ -26,6 +26,7 @@ source ./chardev/demos/create_chardevs.sh
 ```
 
 This script will create fifo1 and fifo2 into a main folder ``chardevs``.
+> Note that the spawned FIFOs will be automatically deleted when you close the terminal where you sourced the `create_chardevs.sh` script. 
 
 ## YAML devices configuration file
 ### Configure the chardev paths
