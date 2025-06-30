@@ -9,6 +9,10 @@ add_subdirectory(
     EXCLUDE_FROM_ALL
 )
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND TARGET yaml-cpp)
+    target_compile_options(yaml-cpp INTERFACE -Wno-shadow)
+endif()
+
 add_library(YamlInterface INTERFACE)
 target_include_directories(YamlInterface
     INTERFACE $<TARGET_PROPERTY:yaml-cpp,INTERFACE_INCLUDE_DIRECTORIES>)

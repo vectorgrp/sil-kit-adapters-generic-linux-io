@@ -62,7 +62,7 @@ AdAdapter::AdAdapter(SilKit::IParticipant* participant,
     {
         _subscribeTopic = subDataSpec->Topic();
         _subscriber = participant->CreateDataSubscriber(subscriberName, *subDataSpec,
-            [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
+            [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
                 Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
                 _logger->Debug("New value received on " + _subscribeTopic + ", updating " + _pathToFile);
                 _logger->Trace("Value received: " + std::string(_bufferFromSubscriber.begin(), _bufferFromSubscriber.end()));

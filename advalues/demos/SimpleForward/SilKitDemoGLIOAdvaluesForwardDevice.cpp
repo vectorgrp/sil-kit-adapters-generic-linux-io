@@ -58,7 +58,7 @@ int main(int argc, char** argv)
         
         auto dataSubscriber = participant->CreateDataSubscriber(
             participantName + "_sub", subDataSpec,
-            [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
+            [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
                 SilKit::Util::SerDes::Deserializer deserializer(SilKit::Util::ToStdVector(dataMessageEvent.data));
                 // Deserialize the received value from out_voltage32
                 recvValue = deserializer.Deserialize<int16_t>(16);

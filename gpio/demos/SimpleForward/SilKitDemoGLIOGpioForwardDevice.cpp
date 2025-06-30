@@ -63,7 +63,7 @@ int main(int argc, char** argv)
         
         auto dataSubscriber = participant->CreateDataSubscriber(
             participantName + "_sub", subDataSpec,
-            [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
+            [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
                 
                 SilKit::Util::SerDes::Deserializer deserializer(SilKit::Util::ToStdVector(dataMessageEvent.data));
                 

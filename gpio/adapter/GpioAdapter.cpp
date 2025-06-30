@@ -129,7 +129,7 @@ void GpioAdapter::Deserialize(const std::vector<uint8_t> &bytes)
         // the initialization of the subscriber is done after the whole chip initialization
         // to avoid data receiving during this step (the gpio mode needs all adapters to update data)
         _subscriber = _participant->CreateDataSubscriber(_subscriberName, *_subDataSpec,
-            [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
+            [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
                 // if new values are received for the io device
                 _logger->Debug("New values received on " + _subscribeTopic);
                 
@@ -168,7 +168,7 @@ void GpioAdapter::ReceiveEvent()
 {
     gpioevent_data data;
     asio::async_read(*(_eh->GetFd()), asio::buffer(&data, sizeof(data)),
-    [this, &data](const std::error_code ec, const long unsigned int size){
+    [this, &data](const std::error_code ec, const long unsigned int /*size*/){
         if (ec)
         {
             if(_isCancelled && (ec == asio::error::operation_aborted))

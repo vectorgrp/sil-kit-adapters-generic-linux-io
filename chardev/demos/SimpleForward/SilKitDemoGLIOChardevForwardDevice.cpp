@@ -59,7 +59,7 @@ int main(int argc, char** argv)
         
         auto dataSubscriber = participant->CreateDataSubscriber(
             participantName + "_sub", subDataSpec,
-            [&](SilKit::Services::PubSub::IDataSubscriber* subscriber, const DataMessageEvent& dataMessageEvent) {
+            [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
                 if (dataMessageEvent.data.size() <= 4)
                 {
                     logger->Warn("Received message probably wasn't following SAB format.");
