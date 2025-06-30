@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.12)
 project(VectorSilKitAdapterGenericLinuxIO)
 include(FetchContent)
 
