@@ -5,7 +5,7 @@
 set -e 
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-silKitDir=/home/vector/SilKit/SilKit-4.0.43-ubuntu-18.04-x86_64-gcc/
+silKitDir=/home/vector/SilKit/SilKit-4.0.56-ubuntu-18.04-x86_64-gcc/
 # if "exported_full_path_to_silkit" environment variable is set (in pipeline script), use it. Otherwise, use default value
 silKitDir="${exported_full_path_to_silkit:-$silKitDir}"
 
@@ -36,7 +36,7 @@ fi
 
 $silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &> $logDir/sil-kit-registry_${timestamp}_gpio.out &
 sleep 1 # wait 1 second for the creation/existense of the .out file
-timeout 30s grep -q 'Registered signal handler' <(tail -f $logDir/sil-kit-registry_${timestamp}_gpio.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
+timeout 30s grep -q 'Press Ctrl-C to terminate...' <(tail -f $logDir/sil-kit-registry_${timestamp}_gpio.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
 
 $scriptDir/run_adapter.sh &> $logDir/run_adapter_${timestamp}_gpio.out &
 timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/run_adapter_${timestamp}_gpio.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }

@@ -42,7 +42,7 @@ Now is a good point to start the ``sil-kit-registry`` and the ``sil-kit-adapter-
 
 You should see the following output:
 ```
-[date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant 'SilKitAdapterGenericLinuxIO' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant 'SilKitAdapterGenericLinuxIO' at 'silkit://localhost:8501', SIL Kit version: <version>
 [date time] [SilKitAdapterGenericLinuxIO] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:34612' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
 [date time] [SilKitAdapterGenericLinuxIO] [info] Creating participant SilKitAdapterGenericLinuxIO with registry silkit://localhost:8501
 ...
@@ -79,7 +79,7 @@ You can start the forward device:
 
 You should see the following output:
 ```
-[date time] [ChardevForwardDevice] [info] Creating participant 'ChardevForwardDevice' at 'silkit://localhost:8501', SIL Kit version: 4.0.44
+[date time] [ChardevForwardDevice] [info] Creating participant 'ChardevForwardDevice' at 'silkit://localhost:8501', SIL Kit version: <version>
 [date time] [ChardevForwardDevice] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:45286' (local:///tmp/SilKitRegic044495579071f55.silkit, silkit://localhost:8501)
 Press enter to stop the process...
 [date time] [ChardevForwardDevice] [info] Adapter  >> ForwardDevice: message1
