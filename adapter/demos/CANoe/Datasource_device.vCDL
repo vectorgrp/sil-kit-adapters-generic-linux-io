@@ -1,4 +1,4 @@
-version 1.4;
+version 2.0;
 
 import module "SilKit";
 
@@ -52,19 +52,19 @@ namespace KeyA
     consumed data uint8 fromPIN12Dir = 0;
     
     // chardevs //
-    consumed data string fromFifo1;
-    consumed data string fromFifo2;
+    consumed data string fromFifo1 = "";
+    consumed data string fromFifo2 = "";
     
     // gpiochip0 //
-    consumed data RecvLineValue fromGpiochip0Line0;
-    consumed data RecvLineValue fromGpiochip0Line1;
-    consumed data RecvLineValue fromGpiochip0Line4;
+    consumed data RecvLineValue fromGpiochip0Line0 = {value: KeyA::RecvValue.Low, direction: KeyA::Direction.Input};
+    consumed data RecvLineValue fromGpiochip0Line1 = {value: KeyA::RecvValue.Low, direction: KeyA::Direction.Input};
+    consumed data RecvLineValue fromGpiochip0Line4 = {value: KeyA::RecvValue.Low, direction: KeyA::Direction.Input};
     
     // gpiochip1 //
-    consumed data RecvLineValue fromGpiochip1Line1;
+    consumed data RecvLineValue fromGpiochip1Line1 = {value: KeyA::RecvValue.Low, direction: KeyA::Direction.Input};
   }
   
-  object Receiver : GLIOAdapter;
+  GLIOAdapter Receiver;
   
   /////////////////////////
   // Handle data to send //
@@ -82,17 +82,17 @@ namespace KeyA
     provided data double toVoltage5 = 0;
     
     // chardevs //
-    provided data string toFifo2;
+    provided data string toFifo2 = "";
     
     // gpiochip0 //
-    provided data SendLineValue toGpiochip0Line0;
-    provided data SendLineValue toGpiochip0Line1;
-    provided data SendLineValue toGpiochip0Line2;
+    provided data SendLineValue toGpiochip0Line0 = {value: KeyA::SendValue.Low, direction: KeyA::Direction.Input};
+    provided data SendLineValue toGpiochip0Line1 = {value: KeyA::SendValue.Low, direction: KeyA::Direction.Input};
+    provided data SendLineValue toGpiochip0Line2 = {value: KeyA::SendValue.Low, direction: KeyA::Direction.Input};
     
     // gpiochip1 //
-    provided data SendLineValue toGpiochip1Line1;
-    provided data SendLineValue toGpiochip1Line2;    
+    provided data SendLineValue toGpiochip1Line1 = {value: KeyA::SendValue.Low, direction: KeyA::Direction.Input};
+    provided data SendLineValue toGpiochip1Line2 = {value: KeyA::SendValue.Low, direction: KeyA::Direction.Input};
   }
   
-  object Sender : ValueSender;
+  ValueSender Sender;
 }

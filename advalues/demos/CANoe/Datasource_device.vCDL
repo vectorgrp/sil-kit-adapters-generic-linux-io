@@ -1,4 +1,4 @@
-version 1.4;
+version 2.0;
 import module "SilKit";
 
 namespace KeyA
@@ -18,8 +18,7 @@ namespace KeyA
     consumed data uint8 fromPIN12Dir = 0;
   }
   
-  object Receiver : GLIOAdapter;
-  
+  GLIOAdapter Receiver;
   
   /////////////////////////
   // Handle data to send //
@@ -37,6 +36,5 @@ namespace KeyA
     provided data double toVoltage5 = 0;
   }
   
-  object Sender : ValueSender;
-  
+  ValueSender Sender;
 }

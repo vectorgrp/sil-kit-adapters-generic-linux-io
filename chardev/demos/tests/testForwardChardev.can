@@ -6,23 +6,21 @@ includes
 
 variables
 {
-  distObjRef GLIOAdapter in_object = KeyA::Receiver;
-  distObjRef ValueSender out_object = KeyA::Sender;
-  int result;
-  dword timeout=2000;
+  int result = 0;
+  dword timeout = 2000;
 }
 
 export testfunction PepareTestscenarioChardev()
 {
-  out_object.Connect();
+  KeyA::Receiver.Connect();
+  KeyA::Sender.Connect();
+  resetDistObjValues(KeyA::Receiver);
 
-  $out_object.toFifo2 = "send_receive_test";
+  $KeyA::Sender.toFifo2 = "send_receive_test";
 }
 
 export testcase DO_CheckChardevMatch()
 {
-  in_object.Connect();
-
   result = testWaitForImplValueString(KeyA::Receiver.fromFifo2, "send_receive_test", timeout);
   if (result != 1)
   {

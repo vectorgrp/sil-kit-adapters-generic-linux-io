@@ -1,4 +1,4 @@
-version 1.4;
+version 2.0;
 
 import module "SilKit";
 
@@ -11,11 +11,11 @@ namespace KeyA
   interface GLIOAdapter
   {   
     // chardevs //
-    consumed data string fromFifo1;
-    consumed data string fromFifo2;
+    consumed data string fromFifo1 = "";
+    consumed data string fromFifo2 = "";
   }
   
-  object Receiver : GLIOAdapter;
+  GLIOAdapter Receiver;
   
   /////////////////////////
   // Handle data to send //
@@ -24,8 +24,8 @@ namespace KeyA
   interface ValueSender
   {    
     // chardevs //
-    provided data string toFifo2;  
+    provided data string toFifo2 = "";  
   }
   
-  object Sender : ValueSender;
+  ValueSender Sender;
 }
