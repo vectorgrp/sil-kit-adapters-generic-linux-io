@@ -126,9 +126,37 @@ install(
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party
+        ${CMAKE_CURRENT_SOURCE_DIR}/docs
+        ${CMAKE_CURRENT_SOURCE_DIR}/util
         ${CMAKE_CURRENT_SOURCE_DIR}/.devcontainer
         ${CMAKE_CURRENT_SOURCE_DIR}/.vscode
+    DESTINATION .
+    COMPONENT source
+    EXCLUDE_FROM_ALL
+
+    FILES_MATCHING
+        PATTERN *.cpp
+        PATTERN *.hpp
+        PATTERN *.cmake
+        PATTERN *.ps1
+        PATTERN *.sh
+        PATTERN *.json
+        PATTERN *.yaml
+        PATTERN *.can
+        PATTERN *.cfg
+        PATTERN *.md
+        PATTERN *.png
+        PATTERN *.1
+        PATTERN Dockerfile
+        PATTERN CMakeLists.txt
+
+    REGEX "\.git$" EXCLUDE
+    REGEX "\.github$" EXCLUDE
+)
+
+install(
+    DIRECTORY            
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party
     DESTINATION .
     COMPONENT source
     EXCLUDE_FROM_ALL
@@ -147,13 +175,6 @@ install(
     DESTINATION .
     COMPONENT source
     EXCLUDE_FROM_ALL
-)
-
-install(
-    DIRECTORY
-        ${CMAKE_CURRENT_SOURCE_DIR}/docs/
-    DESTINATION .
-    COMPONENT source
 )
 
 install(
