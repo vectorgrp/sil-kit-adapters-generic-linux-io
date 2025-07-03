@@ -5,6 +5,9 @@ cmake_minimum_required(VERSION 3.12)
 project(VectorSilKitAdapterGenericLinuxIO)
 include(FetchContent)
 
+option(ENABLE_ASAN "Enable -f sanitize=address for builds (requires gcc, clang,  VS2019)" OFF)
+option(ENABLE_UBSAN "Enable -f sanitize=undefined for builds (requires gcc, clang)" OFF)
+option(ENABLE_THREADSAN "Enable -f sanitize=thread for builds (requires gcc, clang)" OFF)
 option(BUILD_LINUX_PACKAGE "Creates a SIL Kit Adapter Generic Linux IO build suitable for package managers in Linux Distributions (.deb)" OFF)
 
 if(BUILD_LINUX_PACKAGE)
@@ -88,6 +91,12 @@ if(TARGET SilKit::SilKit)
 else()
 	message(FATAL_ERROR "Something went wrong : Could not find SIL Kit package.")
 endif()
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+include(BuildSettings)
+enable_address_sanitizer(${ENABLE_ASAN})
+enable_undefined_sanitizer(${ENABLE_UBSAN})
+enable_thread_sanitizer(${ENABLE_THREADSAN})
 
 set(compile_options
     -pedantic -Wall -Wextra
