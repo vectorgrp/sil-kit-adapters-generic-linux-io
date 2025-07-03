@@ -16,7 +16,7 @@ mkdir -p $logDir # if it does not exist, create it
 timestamp=$(date +"%Y%m%d_%H%M%S")
 
 # cleanup trap for child processes 
-trap 'kill $(jobs -p); exit' EXIT SIGHUP;
+trap 'kill $(jobs -p); mv $scriptDir/../DevicesConfig.yaml.bak $scriptDir/../DevicesConfig.yaml; exit' EXIT SIGHUP;
 
 if [ ! -d "$silKitDir" ]; then
     echo "The var 'silKitDir' needs to be set to actual location of your SilKit"
@@ -29,18 +29,30 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+gpio_demos_dir="$scriptDir/../../../gpio/demos"
+advalues_demos_dir="$scriptDir/../../../advalues/demos"
+chardev_demos_dir="$scriptDir/../../../chardev/demos"
+
 # create the GPIO chips only if not in the pipeline
 if [[ $CI_RUN -ne "1" ]] ; then
-  $scriptDir/../../../gpio/demos/create_gpio_sim.sh 2>&1 /dev/null
+  $gpio_demos_dir/create_gpio_sim.sh 2>&1 /dev/null
 fi
 
-$silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &> $logDir/sil-kit-registry_${timestamp}_adapter.out &
-sleep 1 # wait 1 second for the creation/existense of the .out file
-timeout 30s grep -q 'Press Ctrl-C to terminate...' <(tail -f /$logDir/sil-kit-registry_${timestamp}_adapter.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
+if [ ! -e /dev/gpiochip0 ] || [ ! -e /dev/gpiochip1 ]; then
+    echo "One or both GPIO chip devices are missing: /dev/gpiochip0, /dev/gpiochip1"
+    exit 1
+fi
 
-$scriptDir/run_adapter.sh $scriptDir/../DevicesConfig.yaml --log Debug &> $logDir/run_adapter_${timestamp}_adapter.out &
+# copy the DevicesConfig file to avoid overwritting it
+cp $scriptDir/../DevicesConfig.yaml $scriptDir/../DevicesConfig.yaml.bak
+
+$silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' &> $logDir/sil-kit-registry_${timestamp}.out &
+sleep 1 # wait 1 second for the creation/existense of the .out file
+timeout 30s grep -q 'Press Ctrl-C to terminate...' <(tail -f /$logDir/sil-kit-registry_${timestamp}.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
+
+$scriptDir/run_adapter.sh $scriptDir/../DevicesConfig.yaml --log Debug &> $logDir/run_adapter_adapter_${timestamp}.out &
 sleep 1 # wait 1 second for the creation/existence of the .out file
-timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/run_adapter_${timestamp}_adapter.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
+timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/run_adapter_adapter_${timestamp}.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
 echo "[info] sil-kit-adapter-generic-linux-io has been started"
 
 $scriptDir/run.sh
@@ -49,11 +61,11 @@ $scriptDir/run.sh
 exit_status=$?
 
 # clean the environment
-rm -rf $(pwd)/adchips
-rm -rf $(pwd)/chardevs
+rm -rf $advalues_demos_dir/adchips
+rm -rf $chardev_demos_dir/chardevs
 # clean the GPIO chips only if not in the pipeline
 if [[ $CI_RUN -ne "1" ]] ; then
-  $scriptDir/../../../gpio/demos/clean_gpio_sim.sh
+  $gpio_demos_dir/clean_gpio_sim.sh
 fi
 
 #exit run_all.sh with same exit_status

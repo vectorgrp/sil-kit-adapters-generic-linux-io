@@ -20,7 +20,7 @@ echo "[info] Creating adchips"
 $scriptDir/../create_adchips.sh
 
 # update the adchips paths into the DevicesConfig.yaml file
-sed -i -E s#-\ path:\ \".*/adchips#"-\ path:\ \"$(pwd)"/adchips#g $scriptDir/../DevicesConfig.yaml
+sed -i -E s#-\ path:\ \".*/advalues/demos/adchips#"-\ path:\ \"$(pwd)"/advalues/demos/adchips#g $scriptDir/../DevicesConfig.yaml
 
 echo "[info] Starting sil-kit-adapter-generic-linux-io in advalues mode"
 $scriptDir/../../../bin/sil-kit-adapter-generic-linux-io --adapter-configuration $scriptDir/../DevicesConfig.yaml --log Debug

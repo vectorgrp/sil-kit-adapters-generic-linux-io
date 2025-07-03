@@ -4,6 +4,10 @@
 
 set -e 
 
+localScriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+## Create the chardev folder
+chardevs_dir="$localScriptDir/chardevs"
 
 clean_chardevs() {
   ## This function closes file descriptors from current process if they are open
@@ -19,8 +23,8 @@ clean_chardevs() {
   close_file_descriptors 3 4
 
   # Remove the chardevs directory
-  if [ -d ./chardevs ]; then
-    rm -rf ./chardevs
+  if [ -d "$chardevs_dir" ]; then
+    rm -rf "$chardevs_dir"
   else
     echo "[info] Chardevs directory does not exist"
   fi
@@ -47,26 +51,26 @@ trap 'exit_handler' EXIT SIGHUP
 # Clean up any already-spawned demo fifos if any
 clean_chardevs
 
-# Create the chip folder
-mkdir -p ./chardevs
+# Create the chardevs folder
+mkdir -p "$chardevs_dir"
 
 # Create two fifos and redirect read/write
 # You can adapt file descriptors 3 and 4 if needed
-mkfifo chardevs/fifo1
+mkfifo "$chardevs_dir/fifo1"
 check_result "Failed to create fifo1"
 
-exec 3<>./chardevs/fifo1
+exec 3<>"$chardevs_dir/fifo1"
 check_result "Unable to open fifo1 for read/write operations"
 
-mkfifo chardevs/fifo2
+mkfifo "$chardevs_dir/fifo2"
 check_result "Failed to create fifo2"
 
-exec 4<>./chardevs/fifo2
+exec 4<>"$chardevs_dir/fifo2"
 check_result "Unable to open fifo2 for read/write operations"
 
-echo message1 > ./chardevs/fifo1
-echo message2 > ./chardevs/fifo2
+echo message1 > "$chardevs_dir/fifo1"
+echo message2 > "$chardevs_dir/fifo2"
 
 # Print out the created files and folders
 echo "[info] Created chardevs:"
-find ./chardevs
+find "$chardevs_dir"

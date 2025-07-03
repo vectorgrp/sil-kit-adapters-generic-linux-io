@@ -34,12 +34,17 @@ if [[ $CI_RUN -ne "1" ]] ; then
   $scriptDir/../create_gpio_sim.sh 2>&1 /dev/null
 fi
 
-$silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &> $logDir/sil-kit-registry_${timestamp}_gpio.out &
-sleep 1 # wait 1 second for the creation/existense of the .out file
-timeout 30s grep -q 'Press Ctrl-C to terminate...' <(tail -f $logDir/sil-kit-registry_${timestamp}_gpio.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
+if [ ! -e /dev/gpiochip0 ] || [ ! -e /dev/gpiochip1 ]; then
+    echo "One or both GPIO chip devices are missing: /dev/gpiochip0, /dev/gpiochip1"
+    exit 1
+fi
 
-$scriptDir/run_adapter.sh &> $logDir/run_adapter_${timestamp}_gpio.out &
-timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/run_adapter_${timestamp}_gpio.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
+$silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' &> $logDir/sil-kit-registry_gpio_${timestamp}.out &
+sleep 1 # wait 1 second for the creation/existense of the .out file
+timeout 30s grep -q 'Press Ctrl-C to terminate...' <(tail -f $logDir/sil-kit-registry_gpio_${timestamp}.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
+
+$scriptDir/run_adapter.sh &> $logDir/run_adapter_gpio_${timestamp}.out &
+timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/run_adapter_gpio_${timestamp}.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
 echo "[info] sil-kit-adapter-generic-linux-io has been started"
 
 $scriptDir/run.sh

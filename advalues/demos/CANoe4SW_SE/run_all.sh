@@ -16,7 +16,7 @@ mkdir -p $logDir # if it does not exist, create it
 timestamp=$(date +"%Y%m%d_%H%M%S")
 
 # cleanup trap for child processes 
-trap 'kill $(jobs -p); exit' EXIT SIGHUP;
+trap 'kill $(jobs -p); rm -rf $scriptDir/../adchips; mv $scriptDir/../DevicesConfig.yaml.bak $scriptDir/../DevicesConfig.yaml; exit' EXIT SIGHUP;
 
 if [ ! -d "$silKitDir" ]; then
     echo "The var 'silKitDir' needs to be set to actual location of your SilKit"
@@ -29,22 +29,18 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-$silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' -s &> $logDir/sil-kit-registry_${timestamp}_advalues.out &
-sleep 1 # wait 1 second for the creation/existense of the .out file
-timeout 30s grep -q 'Press Ctrl-C to terminate...' <(tail -f $logDir/sil-kit-registry_${timestamp}_advalues.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
+# copy the DevicesConfig file to avoid overwritting it
+cp $scriptDir/../DevicesConfig.yaml $scriptDir/../DevicesConfig.yaml.bak
 
-$scriptDir/create_adchips_run_adapter.sh &> $logDir/create_adchips_run_adapter_${timestamp}_advalues.out &
+$silKitDir/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' &> $logDir/sil-kit-registry_${timestamp}.out &
+sleep 1 # wait 1 second for the creation/existense of the .out file
+timeout 30s grep -q 'Press Ctrl-C to terminate...' <(tail -f $logDir/sil-kit-registry_${timestamp}.out) || (echo "[error] Timeout reached while waiting for sil-kit-registry to start"; exit 1;)
+
+$scriptDir/create_adchips_run_adapter.sh &> $logDir/create_adchips_run_adapter_${timestamp}.out &
 sleep 1 # wait 1 second for the creation/existence of the .out file
-timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/create_adchips_run_adapter_${timestamp}_advalues.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
+timeout 30s grep -q 'Press CTRL + C to stop the process...' <(tail -f $logDir/create_adchips_run_adapter_${timestamp}.out -n +1) || { echo "[error] Timeout reached while waiting for sil-kit-adapter-generic-linux-io to start"; exit 1; }
 echo "[info] sil-kit-adapter-generic-linux-io has been started"
 
 $scriptDir/run.sh
 
-#capture returned value of run.sh script
-exit_status=$?
-
-# clean the created adchips
-rm -rf $(pwd)/adchips
-
-#exit run_all.sh with same exit_status
-exit $exit_status
+exit $?

@@ -4,8 +4,8 @@
 # /path/to/chardevs/fifo2
 #
 chardevs:
-- path: "./chardevs/fifo1"
+- path: "./chardev/demos/chardevs/fifo1"
   topic_publish: fromFifo1
-- path: "./chardevs/fifo2"
+- path: "./chardev/demos/chardevs/fifo2"
   topic_publish: fromFifo2
   topic_subscribe: toFifo2

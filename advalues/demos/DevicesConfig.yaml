@@ -12,7 +12,7 @@
 # |   `-- direction
 # 
 advalues:
-- path: "./adchips/adchip0/"
+- path: "./advalues/demos/adchips/adchip0/"
   int16_t:
   - files:
     - name: in_voltage103
@@ -22,7 +22,7 @@ advalues:
       topic_publish: fromVoltage15
     - name: out_voltage32
       topic_publish: fromVoltage32
-- path: "./adchips/adchip1/"
+- path: "./advalues/demos/adchips/adchip1/"
   uint8_t:
   - files:
     - name: PIN12/value

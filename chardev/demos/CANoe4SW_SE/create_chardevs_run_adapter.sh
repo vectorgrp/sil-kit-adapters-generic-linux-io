@@ -14,11 +14,10 @@ fi
 trap 'kill $(jobs -p); exit' EXIT SIGHUP;
 
 echo "[info] Creating chardevs"
-# create the chardevs
 source $scriptDir/../create_chardevs.sh
 
 # update the chardevs paths into the DevicesConfig.yaml file
-sed -i -E s#-\ path:\ \".*/chardevs#"-\ path:\ \"$(pwd)"/chardevs#g $scriptDir/../DevicesConfig.yaml
+sed -i -E s#-\ path:\ \".*/chardev/demos/chardevs#"-\ path:\ \"$(pwd)"/chardev/demos/chardevs#g $scriptDir/../DevicesConfig.yaml
 
 echo "[info] Starting sil-kit-adapter-generic-linux-io in advalues mode"
 $scriptDir/../../../bin/sil-kit-adapter-generic-linux-io --adapter-configuration $scriptDir/../DevicesConfig.yaml --log Debug
