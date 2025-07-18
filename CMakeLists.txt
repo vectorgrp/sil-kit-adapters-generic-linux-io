@@ -153,6 +153,11 @@ install(
         PATTERN *.yaml
         PATTERN *.can
         PATTERN *.cfg
+        PATTERN *.vCDL
+        PATTERN *.vCODM
+        PATTERN *.xvp
+        PATTERN *.xml
+        PATTERN *.fbbin
         PATTERN *.md
         PATTERN *.png
         PATTERN *.1
@@ -209,7 +214,7 @@ install(
         ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/stop_processes.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/stop_clean_all.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/update_chips.sh
-    DESTINATION adapter/demos/tasks_scripts/tasks_scripts
+    DESTINATION adapter/demos/tasks_scripts
     PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
