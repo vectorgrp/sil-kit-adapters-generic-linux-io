@@ -3,8 +3,6 @@
 
 add_library(Utility STATIC
     FileHelper.cpp
-    Parsing.cpp
-    SignalHandler.cpp
     YamlHelper.cpp
     Exceptions.hpp
 )
@@ -17,6 +15,7 @@ target_link_libraries(Utility PUBLIC
     asio
     SilKit::SilKit
     yaml-cpp
+    sil-kit-adapters-common
 )
 
 if(MINGW)

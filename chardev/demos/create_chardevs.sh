@@ -2,8 +2,6 @@
 # SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
 # SPDX-License-Identifier: MIT
 
-set -e 
-
 localScriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 ## Create the chardev folder
@@ -46,7 +44,7 @@ check_result() {
 }
 
 # Set up the trap to call exit_handler on EXIT signal, which will clean up workspace in case of script exit 
-trap 'exit_handler' EXIT SIGHUP
+trap 'exit_handler' SIGHUP SIGTERM
 
 # Clean up any already-spawned demo fifos if any
 clean_chardevs

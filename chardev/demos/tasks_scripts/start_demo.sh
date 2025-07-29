@@ -4,4 +4,4 @@
 
 set -e 
 
-./bin/sil-kit-demo-glio-chardev-forward-device
+./bin/sil-kit-demo-glio-chardev-forward-device --log Debug

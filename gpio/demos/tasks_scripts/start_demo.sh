@@ -4,4 +4,4 @@
 
 set -e 
 
-./bin/sil-kit-demo-glio-gpio-forward-device
+./bin/sil-kit-demo-glio-gpio-forward-device --log Debug

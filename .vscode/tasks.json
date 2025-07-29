@@ -34,7 +34,7 @@
         {
             "label": "---- Create Adchips & start Adapter (in Advalues mode)",
             "args": [
-                "advalues/demos/CANoe4SW_SE/create_adchips_run_adapter.sh"
+                "advalues/demos/tasks_scripts/create_adchips_run_adapter.sh"
             ]
         },
         {
@@ -63,7 +63,7 @@
         {
             "label": "---- Create Chardevs & Start Adapter (in Chardev mode)",
             "args": [
-                "chardev/demos/CANoe4SW_SE/create_chardevs_run_adapter.sh"
+                "chardev/demos/tasks_scripts/create_chardevs_run_adapter.sh"
             ]
         },
         { 
@@ -92,7 +92,7 @@
         {
             "label": "---- Start Adapter (in GPIO mode)",
             "args": [
-                "gpio/demos/CANoe4SW_SE/run_adapter.sh"
+                "gpio/demos/tasks_scripts/run_adapter.sh"
             ]
         },
         { 
@@ -123,7 +123,7 @@
             "label": "---- Create Adchips and Chardevs & Start Adapter (in All modes)",
 
             "args": [
-                "adapter/demos/CANoe4SW_SE/run_adapter.sh"
+                "adapter/demos/tasks_scripts/run_adapter.sh"
             ]
         },
         { 

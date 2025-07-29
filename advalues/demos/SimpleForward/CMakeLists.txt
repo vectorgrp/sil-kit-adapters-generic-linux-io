@@ -8,6 +8,7 @@ target_link_libraries(sil-kit-demo-glio-advalues-forward-device
     PRIVATE
         SilKit::SilKit
         Utility
+        sil-kit-adapters-common
 )
 
 target_compile_options(sil-kit-demo-glio-advalues-forward-device

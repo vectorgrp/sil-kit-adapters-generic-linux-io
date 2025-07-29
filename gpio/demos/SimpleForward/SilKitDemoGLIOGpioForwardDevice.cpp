@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "../../../util/Parsing.hpp"
-#include "../../../util/SignalHandler.hpp"
+#include "../../../util/DemoParsing.hpp"
+#include "../../../util/Exceptions.hpp"
 
 #include "silkit/SilKit.hpp"
 #include "silkit/config/all.hpp"
@@ -15,32 +15,29 @@
 #include <thread>
 #include <chrono>
 
+using namespace util;
 using namespace adapters;
-using namespace adapters::Parsing;
 using namespace SilKit::Services::PubSub;
-
-const std::array<const std::string, 3> demoSwitchesWithArgument = {participantNameArg, regUriArg, logLevelArg};
-const std::array<const std::string, 1> demoSwitchesWithoutArgument = {helpArg};
 
 int main(int argc, char** argv)
 {
-    if (FindArg(argc, argv, "--help", argv) != nullptr)
+    if (findArg(argc, argv, "--help", argv) != nullptr)
     {
         PrintDemoHelp("Gpio", true);
         return NO_ERROR;
     }
 
-    const std::string loglevel = GetArgDefault(argc, argv, logLevelArg, "Info");
-    const std::string participantName = GetArgDefault(argc, argv, participantNameArg, "GpioForwardDevice");
-    const std::string registryURI = GetArgDefault(argc, argv, regUriArg, "silkit://localhost:8501");
-
     try
     {
-        throwInvalidCliIf(ThereAreUnknownArgumentsDemo(argc, argv, "Gpio"));
+        throwInvalidCliIf(ThereAreUnknownArgumentsDemo(argc, argv, {&participantNameArg, &regUriArg, &logLevelArg},
+            {&helpArg}, "Gpio"));
+
+        const std::string loglevel = getArgDefault(argc, argv, logLevelArg, "Info");
+        const std::string participantName = getArgDefault(argc, argv, participantNameArg, "GpioForwardDevice");
+        const std::string registryURI = getArgDefault(argc, argv, regUriArg, "silkit://localhost:8501");
 
         const std::string participantConfigurationString =
             R"({ "Logging": { "Sinks": [ { "Type": "Stdout", "Level": ")" + loglevel + R"("} ] } })";
-
 
         const std::string pubTopic = "toGpiochip1Line2";
         const std::string subTopic = "fromGpiochip0Line4";

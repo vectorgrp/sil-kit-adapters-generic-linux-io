@@ -9,6 +9,7 @@ target_link_libraries(sil-kit-demo-glio-gpio-forward-device
     PRIVATE
         SilKit::SilKit
         Utility
+        sil-kit-adapters-common
 )
 
 target_compile_options(sil-kit-demo-glio-gpio-forward-device

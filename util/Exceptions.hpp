@@ -77,29 +77,4 @@ public:
 
     InotifyError() : InotifyError("Adapter: Inotify has error.") { }
 };
-
-struct IncompleteReadError : std::runtime_error
-{
-    IncompleteReadError()
-        : std::runtime_error("incomplete read")
-    {
-    }
-};
-
-class InvalidCli : public std::exception
-{
-};
-
-template<class InvalidCli>
-void throwIf(bool b)
-{
-    if (b)
-        throw std::exception();
-}
-
-inline void throwInvalidCliIf(bool b)
-{
-    return throwIf<InvalidCli>(b);
-}
-
 } // namespace adapters

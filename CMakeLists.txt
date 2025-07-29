@@ -3,7 +3,6 @@
 
 cmake_minimum_required(VERSION 3.12)
 project(VectorSilKitAdapterGenericLinuxIO)
-include(FetchContent)
 
 option(ENABLE_ASAN "Enable -f sanitize=address for builds (requires gcc, clang,  VS2019)" OFF)
 option(ENABLE_UBSAN "Enable -f sanitize=undefined for builds (requires gcc, clang)" OFF)
@@ -28,69 +27,8 @@ include(SilKitAdapterVersion)
 configure_silkit_adapter_version(${PROJECT_NAME})
 add_definitions(-DSILKIT_ADAPTER_VERSION="${PROJECT_VERSION}")
 
-set(SILKIT_VERSION "4.0.56" CACHE STRING "If no SIL Kit package is specified, this version will be downloaded")
-set(SILKIT_FLAVOR "ubuntu-18.04-x86_64-gcc" CACHE STRING "If no SIL Kit package is specified, this package flavor will be downloaded")
-
-find_package(Threads REQUIRED)
-add_library(asio INTERFACE)
-target_include_directories(asio INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/third_party/asio/asio/include)
-target_compile_definitions(asio INTERFACE ASIO_STANDALONE=1)
-target_link_libraries(asio INTERFACE Threads::Threads)
-
-# Set SIL Kit lib name
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(SILKIT_SO_NAME "libSilKit.so")
-else() # Debug or RelWithDebInfo
-    set(SILKIT_SO_NAME "libSilKitd.so")
-endif()
-
-if(DEFINED SILKIT_PACKAGE_DIR)
-    # if the user forces using a specific SIL Kit package, use it
-	message(STATUS "SILKIT_PACKAGE_DIR has been set to: ${SILKIT_PACKAGE_DIR}, CMAKE will look for a SIL Kit package in that directory")
-	find_package(SilKit 4.0.40
-		REQUIRED 
-		CONFIG  
-		NO_CMAKE_PACKAGE_REGISTRY 
-		NO_DEFAULT_PATH 
-		PATHS "${SILKIT_PACKAGE_DIR}")
-else()
-    # otherwise, look for an installed version of SIL Kit
-    message(STATUS "SILKIT_PACKAGE_DIR has not been set by user. Attempting to find an installed version of SIL Kit")
-    find_package(SilKit 4.0.40
-        CONFIG)
-        
-    if(NOT SilKit_FOUND)
-    # if installed SIL Kit is not found, fetch it from github.com
-        message(STATUS "No version of SIL Kit present. Attempting to fetch [SilKit-${SILKIT_VERSION}-${SILKIT_FLAVOR}] from github.com")
-        FetchContent_Declare(
-                silkit
-                URL https://github.com/vectorgrp/sil-kit/releases/download/v${SILKIT_VERSION}/SilKit-${SILKIT_VERSION}-${SILKIT_FLAVOR}.zip
-		DOWNLOAD_DIR ${CMAKE_CURRENT_LIST_DIR}/Downloads
-            )
-
-        message(STATUS "SIL Kit: fetching [SilKit-${SILKIT_VERSION}-${SILKIT_FLAVOR}]")
-        FetchContent_MakeAvailable(silkit)
-
-        set(SILKIT_SOURCE_DIR ${silkit_SOURCE_DIR}/SilKit-Source)
-        message(STATUS "SIL Kit: using source code from: \"${SILKIT_SOURCE_DIR}\"")
-        message(STATUS "SIL Kit: using pre-built binaries from: ${silkit_SOURCE_DIR}")
-
-        message(STATUS "Searching SilKit package which has been fetched from github.com")
-        find_package(SilKit 4.0.40
-            REQUIRED
-            CONFIG
-            NO_CMAKE_PACKAGE_REGISTRY
-            NO_DEFAULT_PATH
-            PATHS "${silkit_SOURCE_DIR}"
-        )
-    endif()	
-endif()
-	
-if(TARGET SilKit::SilKit)
-    message(STATUS "SIL Kit package has been successfully imported as a CMake target. [version : ${SilKit_VERSION}]")
-else()
-	message(FATAL_ERROR "Something went wrong : Could not find SIL Kit package.")
-endif()
+include(common/cmake/RepoTargets.cmake)
+include(common/cmake/Building.cmake)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(BuildSettings)
@@ -135,6 +73,7 @@ install(
         ${CMAKE_CURRENT_SOURCE_DIR}/advalues
         ${CMAKE_CURRENT_SOURCE_DIR}/chardev
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+        ${CMAKE_CURRENT_SOURCE_DIR}/common
         ${CMAKE_CURRENT_SOURCE_DIR}/docs
         ${CMAKE_CURRENT_SOURCE_DIR}/util
         ${CMAKE_CURRENT_SOURCE_DIR}/.devcontainer
@@ -161,6 +100,7 @@ install(
         PATTERN *.md
         PATTERN *.png
         PATTERN *.1
+        PATTERN LICENSE
         PATTERN Dockerfile
         PATTERN CMakeLists.txt
 
@@ -178,255 +118,108 @@ install(
     REGEX "\.github$" EXCLUDE
 )
 
-install(
-    FILES
-        CMakeLists.txt
-        CMakePresets.json
-        LICENSE
-        README.md
-        SECURITY.md
-        CONTRIBUTING.md
-    DESTINATION .
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+include(common/cmake/InstallFunctions.cmake)
+
+install_root_source_files()
+
+install_scripts_to(adapter/demos/CANoe4SW_SE
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run_all.sh
 )
 
-install(
-    FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run_all.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run_adapter.sh
-    DESTINATION adapter/demos/CANoe4SW_SE
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+install_scripts_to(adapter/demos/tasks_scripts
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/build_adapter.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/clean_up.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/prepare_run_silkit_registry.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/run_demos.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/run_adapter.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/stop_processes.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/stop_clean_all.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/update_chips.sh
 )
 
-install(
-    FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/build_adapter.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/clean_up.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/prepare_run_silkit_registry.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/run_demos.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/stop_processes.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/stop_clean_all.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/tasks_scripts/update_chips.sh
-    DESTINATION adapter/demos/tasks_scripts
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+install_scripts_to(advalues/demos/CANoe4SW_SE
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run_all.sh
 )
 
-install(
-    FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run_all.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/create_adchips_run_adapter.sh
-    DESTINATION advalues/demos/CANoe4SW_SE
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+install_scripts_to(advalues/demos
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/create_adchips.sh
 )
 
-install(
-    FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/create_adchips.sh
-    DESTINATION advalues/demos
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+install_scripts_to(advalues/demos/tasks_scripts
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/clean_up.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/start_demo.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/update_adchip.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/create_adchips_run_adapter.sh
 )
 
-install(
-    FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/clean_up.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/start_demo.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/tasks_scripts/update_adchip.sh
-    DESTINATION advalues/demos/tasks_scripts
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+install_scripts_to(chardev/demos/CANoe4SW_SE
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run_all.sh
 )
 
-install(
-    FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run_all.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/create_chardevs_run_adapter.sh
-    DESTINATION chardev/demos/CANoe4SW_SE
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+install_scripts_to(chardev/demos
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/create_chardevs.sh
 )
 
-install(
-    FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/create_chardevs.sh
-    DESTINATION chardev/demos
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+install_scripts_to(chardev/demos/tasks_scripts
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/clean_up.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/start_demo.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/update_chardev.sh
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/create_chardevs_run_adapter.sh
 )
 
-install(
-    FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/clean_up.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/start_demo.sh
-        ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/tasks_scripts/update_chardev.sh
-    DESTINATION chardev/demos/tasks_scripts
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
-)
 include(GNUInstallDirs)
 
-install(
-    FILES 
-        ${SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY}/${SILKIT_SO_NAME}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE
-        GROUP_READ
-        WORLD_READ
-    COMPONENT lib
-    EXCLUDE_FROM_ALL
+install_silkit_lib(
+    ${SILKIT_ADAPTER_GENERIC_LINUX_IO_OUTPUT_DIRECTORY}
+    ${SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY}
 )
 
-install(
-    TARGETS 
-        sil-kit-demo-glio-advalues-forward-device
-        sil-kit-demo-glio-chardev-forward-device
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE    
-    EXCLUDE_FROM_ALL
-)
+install_demo(sil-kit-demo-glio-advalues-forward-device)
+install_demo(sil-kit-demo-glio-chardev-forward-device)
 
 # Disable GPIO mode on QNX
 if(NOT DEFINED QNX_BUILD)
-    install(
-        DIRECTORY
-            ${CMAKE_CURRENT_SOURCE_DIR}/gpio
-        DESTINATION .
-        COMPONENT source
-        EXCLUDE_FROM_ALL
-        REGEX "\.git$" EXCLUDE
-        REGEX "\.github$" EXCLUDE
+    install_git_source(${CMAKE_CURRENT_SOURCE_DIR}/gpio)
+
+    install_scripts_to(gpio/demos/CANoe4SW_SE
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_all.sh
     )
 
-    install(
-        FILES
-            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run.sh
-            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_all.sh
-            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_adapter.sh
-        DESTINATION gpio/demos/CANoe4SW_SE
-        PERMISSIONS
-            OWNER_READ OWNER_WRITE OWNER_EXECUTE
-            GROUP_READ GROUP_EXECUTE
-            WORLD_READ WORLD_EXECUTE
-        COMPONENT source
-        EXCLUDE_FROM_ALL
+    install_scripts_to(gpio/demos
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/create_gpio_sim.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/clean_gpio_sim.sh
     )
 
-    install(
-        FILES
-            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/create_gpio_sim.sh
-            ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/clean_gpio_sim.sh
-        DESTINATION gpio/demos
-        PERMISSIONS
-            OWNER_READ OWNER_WRITE OWNER_EXECUTE
-            GROUP_READ GROUP_EXECUTE
-            WORLD_READ WORLD_EXECUTE
-        COMPONENT source
-        EXCLUDE_FROM_ALL
-    )
-
-    install(
-    FILES
+    install_scripts_to(gpio/demos/tasks_scripts
         ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/tasks_scripts/clean_up.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/tasks_scripts/start_demo.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/tasks_scripts/update_gpio.sh
-    DESTINATION gpio/demos/tasks_scripts
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/tasks_scripts/run_adapter.sh
     )
 
-    install(
-        TARGETS
-            sil-kit-demo-glio-gpio-forward-device
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
-        PERMISSIONS
-            OWNER_READ OWNER_WRITE OWNER_EXECUTE
-            GROUP_READ GROUP_EXECUTE
-            WORLD_READ WORLD_EXECUTE    
-        EXCLUDE_FROM_ALL
-    )
+    install_demo(sil-kit-demo-glio-gpio-forward-device)
 endif()
 
-# only sil-kit-adapter-generic-linux-io should be installed to /usr/local/bin by calling --target install (therefore it is not excluded)
-install(
-    TARGETS 
-        sil-kit-adapter-generic-linux-io
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Runtime
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/sil-kit-adapter-generic-linux-io COMPONENT Development   
-    PERMISSIONS
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE
-)
+install_adapter(sil-kit-adapter-generic-linux-io)
 
 ###############################################################################
 # Packaging
 ###############################################################################
+include(common/cmake/Packaging.cmake)
 
 if(NOT DEFINED PACKAGE_FILENAME_SUFFIX)
     set(PACKAGE_FILENAME_SUFFIX "-${PROJECT_VERSION}")
 endif()
 
-set(CPACK_GENERATOR "ZIP")
+declare_package(
+    "SilKit-Adapter-Generic-Linux-IO"
+    "binary release of SIL Kit Adapter Generic Linux IO"
+)
 
-set(CPACK_PACKAGE_DESCRIPTION "binary release of SIL Kit Adapter Generic Linux IO")
-set(CPACK_PACKAGE_NAME "SilKit-Adapter-Generic-Linux-IO")
-set(CPACK_PACKAGE_VENDOR "Vector Informatik")
-set(CPACK_PACKAGE_CONTACT "support@vector.com")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}${PACKAGE_FILENAME_SUFFIX}")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
-
-set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-set(CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE ON)
-set(CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY ON)
-
-include(CPack)

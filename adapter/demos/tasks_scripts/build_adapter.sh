@@ -11,5 +11,3 @@ echo "[Info] Building adapter..."
 cmake -S. -Bbuild 
 cmake --build build --parallel
 echo "[Info] Done building adapter."
-
-

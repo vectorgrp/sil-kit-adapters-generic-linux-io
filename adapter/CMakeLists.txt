@@ -33,6 +33,7 @@ target_link_libraries(sil-kit-adapter-generic-linux-io
         SilKit::SilKit
         asio
         Utility
+        sil-kit-adapters-common
 )
 
 set_target_properties(sil-kit-adapter-generic-linux-io 
@@ -47,9 +48,7 @@ target_compile_options(sil-kit-adapter-generic-linux-io
     PRIVATE ${compile_options}
 )
 
-add_custom_command(
-    TARGET sil-kit-adapter-generic-linux-io
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND}
-    ARGS -E copy $<TARGET_FILE:SilKit::SilKit> ${SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY}/${SILKIT_SO_NAME}
+copy_sil_kit_to_bin(sil-kit-adapter-generic-linux-io
+    ${SILKIT_ADAPTER_GENERIC_LINUX_IO_OUTPUT_DIRECTORY}
+    ${SILKIT_ADAPTER_GENERIC_LINUX_IO_LIBRARY_DIRECTORY}
 )
