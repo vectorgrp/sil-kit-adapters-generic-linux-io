@@ -92,7 +92,7 @@ install(
         PATTERN *.yaml
         PATTERN *.can
         PATTERN *.cfg
-        PATTERN *.vCDL
+        PATTERN *.vcdl
         PATTERN *.vCODM
         PATTERN *.xvp
         PATTERN *.xml

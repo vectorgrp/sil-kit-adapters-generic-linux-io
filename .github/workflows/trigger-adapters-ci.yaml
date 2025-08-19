@@ -16,5 +16,3 @@ jobs:
         gpio/demos/CANoe4SW_SE/run_all.sh
         adapter/demos/CANoe4SW_SE/run_all.sh
     secrets: inherit
-
-    
