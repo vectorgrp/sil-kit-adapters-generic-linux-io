@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.13)
 project(VectorSilKitAdapterGenericLinuxIO)
 
 option(ENABLE_ASAN "Enable -f sanitize=address for builds (requires gcc, clang,  VS2019)" OFF)
