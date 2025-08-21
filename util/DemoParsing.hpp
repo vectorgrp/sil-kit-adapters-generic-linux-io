@@ -16,9 +16,15 @@ const std::array<const std::string, 1> demoSwitchesWithoutArgument = {helpArg};
 inline void PrintDemoHelp(const std::string& mode, bool userRequested = false)
 {
     std::cout << "Usage (defaults in curly braces if you omit the switch):\n"
-                 "sil-kit-demo-glio-" << std::tolower(mode[0], std::locale()) << mode.substr(1, mode.size()) << "-forward-device [" << adapters::participantNameArg << " <participant's name{" << mode << "ForwardDevice}>]\n"
-                 "  [" << adapters::regUriArg << " silkit://<host{localhost}>:<port{8501}>]\n"
-                 "  [" << adapters::logLevelArg << " <Trace|Debug|Warn|{Info}|Error|Critical|Off>]\n";
+                 "sil-kit-demo-glio-"
+              << std::tolower(mode[0], std::locale()) << mode.substr(1, mode.size()) << "-forward-device ["
+              << adapters::participantNameArg << " <participant's name{" << mode
+              << "ForwardDevice}>]\n"
+                 "  ["
+              << adapters::regUriArg
+              << " silkit://<host{localhost}>:<port{8501}>]\n"
+                 "  ["
+              << adapters::logLevelArg << " <Trace|Debug|Warn|{Info}|Error|Critical|Off>]\n";
 
     if (!userRequested)
     {
@@ -27,13 +33,12 @@ inline void PrintDemoHelp(const std::string& mode, bool userRequested = false)
     }
 }
 
-template<class elementType >
-bool ThereAreUnknownArgumentsDemo(int argc, char** argv,
-    std::initializer_list<elementType>&& switchesWithArgument,
-    std::initializer_list<elementType>&& switchesWithoutArguments,
-    const std::string &mode)
+template <class elementType>
+bool ThereAreUnknownArgumentsDemo(int argc, char** argv, std::initializer_list<elementType>&& switchesWithArgument,
+                                  std::initializer_list<elementType>&& switchesWithoutArguments,
+                                  const std::string& mode)
 {
-    if(util::thereAreUnknownArguments(argc, argv, switchesWithArgument, switchesWithoutArguments))
+    if (util::thereAreUnknownArguments(argc, argv, switchesWithArgument, switchesWithoutArguments))
     {
         PrintDemoHelp(mode);
         return true;

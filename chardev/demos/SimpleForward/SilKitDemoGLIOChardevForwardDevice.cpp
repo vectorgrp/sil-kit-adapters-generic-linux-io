@@ -29,14 +29,14 @@ int main(int argc, char** argv)
     try
     {
         throwInvalidCliIf(ThereAreUnknownArgumentsDemo(argc, argv, {&participantNameArg, &regUriArg, &logLevelArg},
-            {&helpArg}, "Chardev"));
+                                                       {&helpArg}, "Chardev"));
 
         const std::string loglevel = getArgDefault(argc, argv, logLevelArg, "Info");
         const std::string participantName = getArgDefault(argc, argv, participantNameArg, "ChardevForwardDevice");
         const std::string registryURI = getArgDefault(argc, argv, regUriArg, "silkit://localhost:8501");
 
         const std::string participantConfigurationString =
-        R"({ "Logging": { "Sinks": [ { "Type": "Stdout", "Level": ")" + loglevel + R"("} ] } })";
+            R"({ "Logging": { "Sinks": [ { "Type": "Stdout", "Level": ")" + loglevel + R"("} ] } })";
 
         const std::string pubTopic = "toFifo2";
         const std::string subTopic = "fromFifo1";
@@ -54,32 +54,31 @@ int main(int argc, char** argv)
         std::this_thread::sleep_for(std::chrono::seconds(1));
 
         std::string line_buffer;
-        
+
         auto dataSubscriber = participant->CreateDataSubscriber(
             participantName + "_sub", subDataSpec,
             [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
-                if (dataMessageEvent.data.size() <= 4)
-                {
-                    logger->Warn("Received message probably wasn't following SAB format.");
-                    line_buffer += std::string(reinterpret_cast<const char*>(dataMessageEvent.data.data()),
-                                               dataMessageEvent.data.size());
-                }
-                else
-                {
-                    
-                    line_buffer += std::string(reinterpret_cast<const char*>(dataMessageEvent.data.data() + 4),
-                                               dataMessageEvent.data.size() - 4);
-                }
-                std::string::size_type newline_pos;
-                while ( (newline_pos = line_buffer.find_first_of('\n')) != std::string::npos)
-                {
-                    std::string tmpStr = line_buffer.substr(0,newline_pos);
-                    logger->Info("Adapter >> ForwardDevice: " + tmpStr);
-                    logger->Info("ForwardDevice >> Adapter: " + tmpStr);
-                    line_buffer.erase(0, newline_pos + 1);
-                }
-                dataPublisher->Publish(dataMessageEvent.data);
-            });
+            if (dataMessageEvent.data.size() <= 4)
+            {
+                logger->Warn("Received message probably wasn't following SAB format.");
+                line_buffer += std::string(reinterpret_cast<const char*>(dataMessageEvent.data.data()),
+                                           dataMessageEvent.data.size());
+            }
+            else
+            {
+                line_buffer += std::string(reinterpret_cast<const char*>(dataMessageEvent.data.data() + 4),
+                                           dataMessageEvent.data.size() - 4);
+            }
+            std::string::size_type newline_pos;
+            while ((newline_pos = line_buffer.find_first_of('\n')) != std::string::npos)
+            {
+                std::string tmpStr = line_buffer.substr(0, newline_pos);
+                logger->Info("Adapter >> ForwardDevice: " + tmpStr);
+                logger->Info("ForwardDevice >> Adapter: " + tmpStr);
+                line_buffer.erase(0, newline_pos + 1);
+            }
+            dataPublisher->Publish(dataMessageEvent.data);
+        });
 
         promptForExit();
     }

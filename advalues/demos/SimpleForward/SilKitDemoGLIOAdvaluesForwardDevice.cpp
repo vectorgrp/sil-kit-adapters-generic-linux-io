@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     try
     {
         throwInvalidCliIf(ThereAreUnknownArgumentsDemo(argc, argv, {&participantNameArg, &regUriArg, &logLevelArg},
-            {&helpArg}, "Advalues"));
+                                                       {&helpArg}, "Advalues"));
 
         const std::string loglevel = getArgDefault(argc, argv, logLevelArg, "Info");
         const std::string participantName = getArgDefault(argc, argv, participantNameArg, "AdvaluesForwardDevice");
@@ -56,21 +56,21 @@ int main(int argc, char** argv)
         // sleep to be sure that the publisher is created before the subscriber
         std::this_thread::sleep_for(std::chrono::seconds(1));
         int16_t recvValue;
-        
+
         auto dataSubscriber = participant->CreateDataSubscriber(
             participantName + "_sub", subDataSpec,
             [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
-                SilKit::Util::SerDes::Deserializer deserializer(SilKit::Util::ToStdVector(dataMessageEvent.data));
-                // Deserialize the received value from out_voltage32
-                recvValue = deserializer.Deserialize<int16_t>(16);
-                logger->Info("Adapter >> ForwardDevice: " + std::to_string(recvValue));
+            SilKit::Util::SerDes::Deserializer deserializer(SilKit::Util::ToStdVector(dataMessageEvent.data));
+            // Deserialize the received value from out_voltage32
+            recvValue = deserializer.Deserialize<int16_t>(16);
+            logger->Info("Adapter >> ForwardDevice: " + std::to_string(recvValue));
 
-                // Serialize the received value to in_voltage103
-                SilKit::Util::SerDes::Serializer serializer;
-                serializer.Serialize(recvValue, 16);
-                dataPublisher->Publish(serializer.ReleaseBuffer());
-                logger->Info("ForwardDevice >> Adapter: " + std::to_string(recvValue));
-            });
+            // Serialize the received value to in_voltage103
+            SilKit::Util::SerDes::Serializer serializer;
+            serializer.Serialize(recvValue, 16);
+            dataPublisher->Publish(serializer.ReleaseBuffer());
+            logger->Info("ForwardDevice >> Adapter: " + std::to_string(recvValue));
+        });
 
         promptForExit();
     }

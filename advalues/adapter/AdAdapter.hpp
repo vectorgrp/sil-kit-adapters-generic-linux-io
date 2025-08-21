@@ -18,10 +18,21 @@
 // each file has a specific AdAdapter
 class AdAdapter : public IOAdapter
 {
-using PubSubSpec = SilKit::Services::PubSub::PubSubSpec;
+    using PubSubSpec = SilKit::Services::PubSub::PubSubSpec;
 
-enum EnumTypes {enum_int8_t, enum_uint8_t, enum_int16_t, enum_uint16_t, 
-    enum_int32_t, enum_uint32_t, enum_int64_t, enum_uint64_t, enum_float, enum_double};
+    enum EnumTypes
+    {
+        enum_int8_t,
+        enum_uint8_t,
+        enum_int16_t,
+        enum_uint16_t,
+        enum_int32_t,
+        enum_uint32_t,
+        enum_int64_t,
+        enum_uint64_t,
+        enum_float,
+        enum_double
+    };
 
 public:
     // access and manage the file
@@ -29,14 +40,9 @@ public:
     std::array<uint8_t, 4096> _bufferToPublisher = {};
 
     AdAdapter() = delete;
-    AdAdapter(SilKit::IParticipant* participant,
-              const std::string& publisherName,
-              const std::string& subscriberName,
-              PubSubSpec* pubDataSpec,
-              PubSubSpec* subDataSpec,
-              const std::string& pathToFile,
-              const std::string& dataType,
-              asio::io_context& ioc);
+    AdAdapter(SilKit::IParticipant* participant, const std::string& publisherName, const std::string& subscriberName,
+              PubSubSpec* pubDataSpec, PubSubSpec* subDataSpec, const std::string& pathToFile,
+              const std::string& dataType, asio::io_context& ioc);
 
     // serialize chip values
     void Publish(const std::size_t n);
@@ -47,21 +53,22 @@ private:
 
     // access and manage the file
     std::vector<uint8_t> _bufferFromSubscriber = {};
-    
-    // deserialize received values 
+
+    // deserialize received values
     void Deserialize(const std::vector<uint8_t>& bytes) override;
 
     // converting and checking values
-    template<typename T>
+    template <typename T>
     inline auto BufferFromFileTo() -> T;
 
-    template<typename T, typename U>
+    template <typename T, typename U>
     inline void ThrowIfInvalid(const T max, const T lowest, const U value);
-    
-    template<typename T, typename U>
+
+    template <typename T, typename U>
     inline auto IsValidData(const std::string& str) -> T;
 
-    void StrContainsOnly(const std::string& str, const std::string& allowedChars, bool isFloatingNumber = false, bool isSigned = false);
+    void StrContainsOnly(const std::string& str, const std::string& allowedChars, bool isFloatingNumber = false,
+                         bool isSigned = false);
     auto StrWithoutNewLine(const std::string& str) -> std::string;
 };
 
@@ -69,7 +76,7 @@ private:
 // Inline implementations //
 ////////////////////////////
 
-template<typename T>
+template <typename T>
 auto AdAdapter::BufferFromFileTo() -> T
 {
     std::string str(_bufferToPublisher.begin(), _bufferToPublisher.end());
@@ -79,7 +86,7 @@ auto AdAdapter::BufferFromFileTo() -> T
     return out;
 }
 
-template<typename T, typename U>
+template <typename T, typename U>
 void AdAdapter::ThrowIfInvalid(const T max, const T lowest, const U value)
 {
     if (value < static_cast<U>(lowest) || value > static_cast<U>(max))
@@ -88,14 +95,14 @@ void AdAdapter::ThrowIfInvalid(const T max, const T lowest, const U value)
     }
 }
 
-template<typename T, typename U>
+template <typename T, typename U>
 auto AdAdapter::IsValidData(const std::string& str) -> T
 {
     static const std::string strNum{"0123456789"};
 
     // Check hexadecimal value
     bool isHexa = false;
-    if (str.substr(0,2) == "0x")
+    if (str.substr(0, 2) == "0x")
     {
         isHexa = true;
         std::string hex = str.substr(2, str.size());
@@ -110,13 +117,15 @@ auto AdAdapter::IsValidData(const std::string& str) -> T
 
     if (_dataType == enum_float)
     {
-        if (!isHexa) StrContainsOnly(str, strNum + ".-", true, true);
+        if (!isHexa)
+            StrContainsOnly(str, strNum + ".-", true, true);
         value = std::stof(str);
         return value;
     }
     else if (_dataType == enum_double)
     {
-        if (!isHexa) StrContainsOnly(str, strNum + ".-", true, true);
+        if (!isHexa)
+            StrContainsOnly(str, strNum + ".-", true, true);
         value = std::stod(str);
         return value;
     }

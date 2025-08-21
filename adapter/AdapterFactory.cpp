@@ -17,19 +17,16 @@ using namespace adapters;
 using namespace adapters::Util;
 using namespace SilKit::Services::PubSub;
 
-void HandleTopics(const DataYAMLConfig& chardevYaml,
-                  std::unique_ptr<PubSubSpec> &subDataSpec, 
-                  std::unique_ptr<PubSubSpec> &pubDataSpec,
-                  std::string &subscriberName, 
-                  std::string &publisherName)
+void HandleTopics(const DataYAMLConfig& chardevYaml, std::unique_ptr<PubSubSpec>& subDataSpec,
+                  std::unique_ptr<PubSubSpec>& pubDataSpec, std::string& subscriberName, std::string& publisherName)
 {
     if (!FileExists(chardevYaml.path))
     {
         throw std::runtime_error("file " + chardevYaml.path + " does not exist");
     }
-    
+
     std::string pathToFile_ = chardevYaml.path;
-    for(std::size_t i = 0; i < pathToFile_.size(); ++i)
+    for (std::size_t i = 0; i < pathToFile_.size(); ++i)
     {
         if (pathToFile_[i] == '/')
         {
@@ -54,15 +51,13 @@ void HandleTopics(const DataYAMLConfig& chardevYaml,
     }
 }
 
-void GetYamlConfig(const YAML::Node& node, 
-                   std::vector<DataYAMLConfig>& dataYAMLConfigs, 
-                   SilKit::Services::Logging::ILogger* logger,
-                   const std::string& chipPath = "", 
+void GetYamlConfig(const YAML::Node& node, std::vector<DataYAMLConfig>& dataYAMLConfigs,
+                   SilKit::Services::Logging::ILogger* logger, const std::string& chipPath = "",
                    const std::string& type = "")
 {
-    static constexpr std::array<const char*, 5> attributes
-        {"path", "name", "offset", "topic_subscribe", "topic_publish"};
-    
+    static constexpr std::array<const char*, 5> attributes{"path", "name", "offset", "topic_subscribe",
+                                                           "topic_publish"};
+
     for (const auto& subNode : node)
     {
         // check if there is any unknown attribute
@@ -109,14 +104,13 @@ void GetYamlConfig(const YAML::Node& node,
     }
 }
 
-void GetAdValuesYamlConfig(const YAML::Node& node, 
-                           std::vector<DataYAMLConfig>& dataYAMLConfigs, 
+void GetAdValuesYamlConfig(const YAML::Node& node, std::vector<DataYAMLConfig>& dataYAMLConfigs,
                            SilKit::Services::Logging::ILogger* logger)
 {
-    static constexpr std::array<const char*, 11> attributes
-        {"path", "int8_t", "uint8_t", "int16_t", "uint16_t", "int32_t", "uint32_t", "int64_t", 
-         "uint64_t", "float", "double"};
-    
+    static constexpr std::array<const char*, 11> attributes{"path",     "int8_t",  "uint8_t",  "int16_t",
+                                                            "uint16_t", "int32_t", "uint32_t", "int64_t",
+                                                            "uint64_t", "float",   "double"};
+
     // iterate trough each chip
     for (const auto& nodeChip : node)
     {
@@ -151,9 +145,7 @@ void GetAdValuesYamlConfig(const YAML::Node& node,
 }
 
 #ifndef QNX_BUILD
-void GetGpioYamlConfig(const YAML::Node& chipNode, 
-                       std::vector<DataYAMLConfig>& dataYAMLConfigs, 
-                       std::string& chipPath, 
+void GetGpioYamlConfig(const YAML::Node& chipNode, std::vector<DataYAMLConfig>& dataYAMLConfigs, std::string& chipPath,
                        SilKit::Services::Logging::ILogger* logger)
 {
     static constexpr std::array<const char*, 2> attributes{"path", "lines"};
@@ -186,8 +178,7 @@ void GetGpioYamlConfig(const YAML::Node& chipNode,
 
 void AdapterFactory::ConstructAdAdapters(const YAML::Node& configFile,
                                          std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
-                                         SilKit::IParticipant* participant,
-                                         asio::io_context& ioc)
+                                         SilKit::IParticipant* participant, asio::io_context& ioc)
 {
     auto logger = participant->GetLogger();
 
@@ -199,9 +190,9 @@ void AdapterFactory::ConstructAdAdapters(const YAML::Node& configFile,
     }
 
     logger->Debug("Advalues chips found in the YAML configuration file.");
-    
+
     std::vector<DataYAMLConfig> advaluesYAMLConfigs;
-    
+
     GetAdValuesYamlConfig(nodeAdvalues, advaluesYAMLConfigs, logger);
 
     for (const auto& advaluesYaml : advaluesYAMLConfigs)
@@ -209,18 +200,10 @@ void AdapterFactory::ConstructAdAdapters(const YAML::Node& configFile,
         std::unique_ptr<PubSubSpec> subDataSpec, pubDataSpec;
         std::string publisherName, subscriberName;
 
-        HandleTopics(advaluesYaml,
-                     subDataSpec, pubDataSpec,
-                     subscriberName, publisherName);
+        HandleTopics(advaluesYaml, subDataSpec, pubDataSpec, subscriberName, publisherName);
 
-        auto newAdapter = std::make_unique<AdAdapter>(participant,
-                                                      publisherName,
-                                                      subscriberName,
-                                                      pubDataSpec.get(),
-                                                      subDataSpec.get(),
-                                                      advaluesYaml.path,
-                                                      advaluesYaml.dataType,
-                                                      ioc);
+        auto newAdapter = std::make_unique<AdAdapter>(participant, publisherName, subscriberName, pubDataSpec.get(),
+                                                      subDataSpec.get(), advaluesYaml.path, advaluesYaml.dataType, ioc);
 
         ioAdapters.push_back(std::move(newAdapter));
     }
@@ -228,8 +211,7 @@ void AdapterFactory::ConstructAdAdapters(const YAML::Node& configFile,
 
 void AdapterFactory::ConstructChardevAdapters(const YAML::Node& configFile,
                                               std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
-                                              SilKit::IParticipant* participant,
-                                              asio::io_context& ioc)
+                                              SilKit::IParticipant* participant, asio::io_context& ioc)
 {
     auto logger = participant->GetLogger();
 
@@ -244,23 +226,16 @@ void AdapterFactory::ConstructChardevAdapters(const YAML::Node& configFile,
 
     std::vector<DataYAMLConfig> chardevYAMLConfigs;
     GetYamlConfig(nodeChardev, chardevYAMLConfigs, logger);
-    
+
     for (auto chardevYaml : chardevYAMLConfigs)
     {
         std::unique_ptr<PubSubSpec> subDataSpec, pubDataSpec;
         std::string subscriberName, publisherName;
-        
-        HandleTopics(chardevYaml,
-                     subDataSpec, pubDataSpec,
-                     subscriberName, publisherName);
 
-        auto newAdapter = std::make_unique<ChardevAdapter>(participant, 
-                                                           publisherName, 
-                                                           subscriberName, 
-                                                           pubDataSpec.get(), 
-                                                           subDataSpec.get(), 
-                                                           chardevYaml.path,
-                                                           ioc);
+        HandleTopics(chardevYaml, subDataSpec, pubDataSpec, subscriberName, publisherName);
+
+        auto newAdapter = std::make_unique<ChardevAdapter>(participant, publisherName, subscriberName,
+                                                           pubDataSpec.get(), subDataSpec.get(), chardevYaml.path, ioc);
 
         ioAdapters.push_back(std::move(newAdapter));
     }
@@ -270,8 +245,7 @@ void AdapterFactory::ConstructChardevAdapters(const YAML::Node& configFile,
 void AdapterFactory::ConstructGpioAdapters(const YAML::Node& configFile,
                                            std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                                            std::vector<std::unique_ptr<GpioWrapper::Chip>>& chips,
-                                           SilKit::IParticipant* participant,
-                                           asio::io_context& ioc)
+                                           SilKit::IParticipant* participant, asio::io_context& ioc)
 {
     auto logger = participant->GetLogger();
 
@@ -292,36 +266,29 @@ void AdapterFactory::ConstructGpioAdapters(const YAML::Node& configFile,
         GetGpioYamlConfig(chipNode, gpioYAMLConfigs, chipPath, logger);
 
         auto chip = std::make_unique<GpioWrapper::Chip>(ioc, chipPath);
-        
+
         // manage each line specified in the YAML config file
         for (const auto& gpioYaml : gpioYAMLConfigs)
         {
             std::unique_ptr<PubSubSpec> pubDataSpec, subDataSpec;
             std::string publisherName, subscriberName;
 
-            HandleTopics(gpioYaml,
-                         subDataSpec, pubDataSpec,
-                         subscriberName, publisherName);
+            HandleTopics(gpioYaml, subDataSpec, pubDataSpec, subscriberName, publisherName);
 
             const std::string offset = gpioYaml.offset;
             subscriberName += offset;
             publisherName += offset;
 
-            auto newAdapter = std::make_unique<GpioAdapter>(participant, 
-                                                            publisherName, 
-                                                            subscriberName, 
-                                                            pubDataSpec.get(), 
-                                                            std::move(subDataSpec), 
-                                                            chip.get(), 
-                                                            ioc, 
-                                                            atoi(offset.c_str()));
+            auto newAdapter =
+                std::make_unique<GpioAdapter>(participant, publisherName, subscriberName, pubDataSpec.get(),
+                                              std::move(subDataSpec), chip.get(), ioc, atoi(offset.c_str()));
 
             ioAdapters.push_back(std::move(newAdapter));
         }
 
         chips.push_back(std::move(chip));
     }
-    
+
     // after initialization the data subscribers can be created
     for (const auto& adapter : ioAdapters)
     {

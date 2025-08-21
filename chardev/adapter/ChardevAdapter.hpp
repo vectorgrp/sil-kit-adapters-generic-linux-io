@@ -16,7 +16,7 @@
 // each file has a specific ChardevAdapter
 class ChardevAdapter : public IOAdapter
 {
-using PubSubSpec = SilKit::Services::PubSub::PubSubSpec;
+    using PubSubSpec = SilKit::Services::PubSub::PubSubSpec;
 
 public:
     // access and manage the chardev
@@ -24,17 +24,14 @@ public:
     std::array<uint8_t, 4096> _bufferToPublisher = {};
 
     ChardevAdapter() = delete;
-    ChardevAdapter(SilKit::IParticipant* participant, 
-                   const std::string& publisherName, 
-                   const std::string& subscriberName, 
-                   PubSubSpec* pubDataSpec, 
-                   PubSubSpec* subDataSpec,
-                   const std::string& pathToCharDev,
-                   asio::io_context& ioc);
+    ChardevAdapter(SilKit::IParticipant* participant, const std::string& publisherName,
+                   const std::string& subscriberName, PubSubSpec* pubDataSpec, PubSubSpec* subDataSpec,
+                   const std::string& pathToCharDev, asio::io_context& ioc);
     ~ChardevAdapter();
 
     // publish n bytes of the chardev buffer
     void Publish(const std::size_t n);
+
 private:
     // handle error code introduced by _fd.cancel()
     bool _isCancelled;
@@ -44,5 +41,5 @@ private:
 
     // deserialize received values
     void Deserialize(const std::vector<uint8_t>& bytes) override;
-    void ReceiveEvent();    
+    void ReceiveEvent();
 };

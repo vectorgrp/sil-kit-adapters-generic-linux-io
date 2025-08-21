@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     try
     {
         throwInvalidCliIf(ThereAreUnknownArgumentsDemo(argc, argv, {&participantNameArg, &regUriArg, &logLevelArg},
-            {&helpArg}, "Gpio"));
+                                                       {&helpArg}, "Gpio"));
 
         const std::string loglevel = getArgDefault(argc, argv, logLevelArg, "Info");
         const std::string participantName = getArgDefault(argc, argv, participantNameArg, "GpioForwardDevice");
@@ -54,30 +54,29 @@ int main(int argc, char** argv)
         // sleep to be sure that the publisher is created before the subscriber
         std::this_thread::sleep_for(std::chrono::seconds(1));
 
-        auto printData = [logger](const std::string& str, const uint8_t dir, const uint8_t val){
+        auto printData = [logger](const std::string& str, const uint8_t dir, const uint8_t val) {
             logger->Info(str + (dir == 0 ? "INPUT - " : "OUTPUT - ") + (val == 0 ? "LOW" : "HIGH"));
         };
-        
+
         auto dataSubscriber = participant->CreateDataSubscriber(
             participantName + "_sub", subDataSpec,
             [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
-                
-                SilKit::Util::SerDes::Deserializer deserializer(SilKit::Util::ToStdVector(dataMessageEvent.data));
-                
-                auto receivedValue = deserializer.Deserialize<uint8_t>(8);
-                auto receivedDirection = deserializer.Deserialize<uint8_t>(8);
+            SilKit::Util::SerDes::Deserializer deserializer(SilKit::Util::ToStdVector(dataMessageEvent.data));
 
-                printData("Adapter >> ForwardDevice: ", receivedDirection, receivedValue);
+            auto receivedValue = deserializer.Deserialize<uint8_t>(8);
+            auto receivedDirection = deserializer.Deserialize<uint8_t>(8);
 
-                // Set dir to OUT - forward received value
-                uint8_t dir = 1;
-                printData("ForwardDevice >> Adapter: ", dir, receivedValue);
+            printData("Adapter >> ForwardDevice: ", receivedDirection, receivedValue);
 
-                SilKit::Util::SerDes::Serializer serializer;
-                serializer.Serialize(receivedValue, 8);
-                serializer.Serialize(dir, 8);
-                dataPublisher->Publish(serializer.ReleaseBuffer());
-            });
+            // Set dir to OUT - forward received value
+            uint8_t dir = 1;
+            printData("ForwardDevice >> Adapter: ", dir, receivedValue);
+
+            SilKit::Util::SerDes::Serializer serializer;
+            serializer.Serialize(receivedValue, 8);
+            serializer.Serialize(dir, 8);
+            dataPublisher->Publish(serializer.ReleaseBuffer());
+        });
 
         promptForExit();
     }

@@ -32,7 +32,8 @@ auto ReadFileStr(const std::string& path, SilKit::Services::Logging::ILogger* lo
     return buffer.str();
 }
 
-auto ReadFile(const std::string& path, SilKit::Services::Logging::ILogger* logger, std::array<uint8_t, BUF_LEN>& buffer) -> std::size_t
+auto ReadFile(const std::string& path, SilKit::Services::Logging::ILogger* logger,
+              std::array<uint8_t, BUF_LEN>& buffer) -> std::size_t
 {
     auto fd = open(path.c_str(), O_RDONLY | O_NONBLOCK);
     if (fd < 0)
@@ -57,11 +58,12 @@ auto ReadFile(const std::string& path, SilKit::Services::Logging::ILogger* logge
     }
 
     close(fd);
-    
+
     return n;
 }
 
-void WriteFile(const std::string& path, const std::vector<uint8_t>& dataToWrite, SilKit::Services::Logging::ILogger* logger)
+void WriteFile(const std::string& path, const std::vector<uint8_t>& dataToWrite,
+               SilKit::Services::Logging::ILogger* logger)
 {
     auto fd = open(path.c_str(), O_WRONLY | O_TRUNC);
     if (fd < 0)

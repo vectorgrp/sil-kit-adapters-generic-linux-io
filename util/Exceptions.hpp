@@ -32,7 +32,7 @@ inline auto GetErrno() -> std::string
     int errorMsg = strerror_r(errno, buffer, 256);
     return std::string(buffer);
 #else // Other Unix
-    char * errorMsg = strerror_r(errno, buffer, 256);
+    char* errorMsg = strerror_r(errno, buffer, 256);
     return std::string(errorMsg);
 #endif
 }
@@ -40,19 +40,19 @@ inline auto GetErrno() -> std::string
 // Throw handlers
 
 // Base class of all adapter exceptions
-class AdapterError: public std::exception
+class AdapterError : public std::exception
 {
 protected:
     std::string _what;
-public:
 
+public:
     AdapterError(std::string message)
-        :_what{std::move(message)}
+        : _what{std::move(message)}
     {
     }
 
     AdapterError(const char* message)
-        :_what{message}
+        : _what{message}
     {
     }
 
@@ -67,7 +67,10 @@ class YamlError : public AdapterError
 public:
     using AdapterError::AdapterError;
 
-    YamlError() : YamlError("Adapter: YAML configuration has syntactical error or missing mandatory field.") { }
+    YamlError()
+        : YamlError("Adapter: YAML configuration has syntactical error or missing mandatory field.")
+    {
+    }
 };
 
 class InotifyError : public AdapterError
@@ -75,6 +78,9 @@ class InotifyError : public AdapterError
 public:
     using AdapterError::AdapterError;
 
-    InotifyError() : InotifyError("Adapter: Inotify has error.") { }
+    InotifyError()
+        : InotifyError("Adapter: Inotify has error.")
+    {
+    }
 };
 } // namespace adapters

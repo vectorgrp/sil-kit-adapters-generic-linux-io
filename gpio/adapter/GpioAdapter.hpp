@@ -15,8 +15,7 @@
 #include "silkit/services/logging/all.hpp"
 #include "silkit/services/pubsub/all.hpp"
 
-namespace adapters
-{
+namespace adapters {
 enum Direction : uint8_t
 {
     INPUT = 0,
@@ -33,19 +32,13 @@ enum Value : uint8_t
 // each gpiochip line has a specific GpioAdapter
 class GpioAdapter : public IOAdapter
 {
-using PubSubSpec = SilKit::Services::PubSub::PubSubSpec;
-using offset_t = uint8_t;
+    using PubSubSpec = SilKit::Services::PubSub::PubSubSpec;
+    using offset_t = uint8_t;
 
 public:
-
-    GpioAdapter(SilKit::IParticipant* participant,
-                const std::string& publisherName, 
-                const std::string& subscriberName, 
-                PubSubSpec* pubDataSpec, 
-                std::unique_ptr<PubSubSpec> subDataSpec,
-                GpioWrapper::Chip* gpiochip,
-                GpioWrapper::Ioc& ioc,
-                const offset_t offset);
+    GpioAdapter(SilKit::IParticipant* participant, const std::string& publisherName, const std::string& subscriberName,
+                PubSubSpec* pubDataSpec, std::unique_ptr<PubSubSpec> subDataSpec, GpioWrapper::Chip* gpiochip,
+                GpioWrapper::Ioc& ioc, const offset_t offset);
     ~GpioAdapter();
 
 private:
@@ -73,7 +66,7 @@ private:
 
     void Initialize();
 
-    // deserialize received value and direction 
+    // deserialize received value and direction
     void Deserialize(const std::vector<uint8_t>& bytes) override;
 
     // create data subscriber after the end of the initialization

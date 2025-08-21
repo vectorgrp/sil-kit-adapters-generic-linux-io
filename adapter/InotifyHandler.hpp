@@ -22,28 +22,34 @@ public:
     InotifyHandler(const InotifyHandler&) = delete;
     InotifyHandler& operator=(const InotifyHandler&) = delete;
 
-    template<typename T>
+    template <typename T>
     inline void AddAdapterCallBack(T* adapter, const std::string& path)
     {
         const auto wd = inotify_add_watch(_inotifyFd, path.c_str(), IN_CLOSE_WRITE);
-        if (wd == -1) {
-            throw adapters::InotifyError("inotify add watch error (" + std::to_string(errno) +") on: " + path);
+        if (wd == -1)
+        {
+            throw adapters::InotifyError("inotify add watch error (" + std::to_string(errno) + ") on: " + path);
         }
         _logger->Trace("New watcher (wd: " + std::to_string(wd) + ") added on " + path);
 
-        _callbacks.push_back([this, adapter](){
+        _callbacks.push_back([this, adapter]() {
             _logger->Debug(adapter->_pathToFile + " has been updated");
             auto n = adapters::Util::ReadFile(adapter->_pathToFile, _logger, adapter->_bufferToPublisher);
             adapter->Publish(n);
         });
     }
 
-    // stop and close the stream_descriptor 
+    // stop and close the stream_descriptor
     static void Stop();
-    static void SetLogger(SilKit::Services::Logging::ILogger* logger) { _logger = logger; }
+    static void SetLogger(SilKit::Services::Logging::ILogger* logger)
+    {
+        _logger = logger;
+    }
 
-    static auto GetInstance(asio::io_context& ioc) -> InotifyHandler& {
-        if ( _instance == nullptr ) {
+    static auto GetInstance(asio::io_context& ioc) -> InotifyHandler&
+    {
+        if (_instance == nullptr)
+        {
             _instance = new InotifyHandler();
             _instance->InitInotify(ioc);
             ReceiveEvent();

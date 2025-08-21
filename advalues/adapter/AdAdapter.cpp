@@ -14,31 +14,21 @@
 using namespace adapters;
 using namespace SilKit::Services::PubSub;
 
-AdAdapter::AdAdapter(SilKit::IParticipant* participant,
-                     const std::string& publisherName,
-                     const std::string& subscriberName,
-                     PubSubSpec* pubDataSpec,
-                     PubSubSpec* subDataSpec,
-                     const std::string& pathToFile,
-                     const std::string& dataType,
-                     asio::io_context& ioc) :
-    _pathToFile(pathToFile),
-    _strDataType(dataType)
+AdAdapter::AdAdapter(SilKit::IParticipant* participant, const std::string& publisherName,
+                     const std::string& subscriberName, PubSubSpec* pubDataSpec, PubSubSpec* subDataSpec,
+                     const std::string& pathToFile, const std::string& dataType, asio::io_context& ioc)
+    : _pathToFile(pathToFile)
+    , _strDataType(dataType)
 {
     _logger = participant->GetLogger();
 
-    static std::unordered_map<std::string, EnumTypes> map {
-#define CREATE(typename) {#typename, enum_##typename}
-        CREATE(int8_t),
-        CREATE(uint8_t),
-        CREATE(int16_t),
-        CREATE(uint16_t),
-        CREATE(int32_t),
-        CREATE(uint32_t),
-        CREATE(int64_t),
-        CREATE(uint64_t),
-        CREATE(float),
-        CREATE(double)
+    static std::unordered_map<std::string, EnumTypes> map{
+#define CREATE(typename) \
+    { \
+        #typename, enum_##typename \
+    }
+        CREATE(int8_t),  CREATE(uint8_t),  CREATE(int16_t), CREATE(uint16_t), CREATE(int32_t), CREATE(uint32_t),
+        CREATE(int64_t), CREATE(uint64_t), CREATE(float),   CREATE(double)
 #undef CREATE
     };
 
@@ -61,13 +51,15 @@ AdAdapter::AdAdapter(SilKit::IParticipant* participant,
     if (subDataSpec)
     {
         _subscribeTopic = subDataSpec->Topic();
-        _subscriber = participant->CreateDataSubscriber(subscriberName, *subDataSpec,
+        _subscriber = participant->CreateDataSubscriber(
+            subscriberName, *subDataSpec,
             [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
-                Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
-                _logger->Debug("New value received on " + _subscribeTopic + ", updating " + _pathToFile);
-                _logger->Trace("Value received: " + std::string(_bufferFromSubscriber.begin(), _bufferFromSubscriber.end()));
-                Util::WriteFile(_pathToFile, _bufferFromSubscriber, _logger);
-            });
+            Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
+            _logger->Debug("New value received on " + _subscribeTopic + ", updating " + _pathToFile);
+            _logger->Trace("Value received: "
+                           + std::string(_bufferFromSubscriber.begin(), _bufferFromSubscriber.end()));
+            Util::WriteFile(_pathToFile, _bufferFromSubscriber, _logger);
+        });
     }
 }
 
@@ -77,7 +69,7 @@ void AdAdapter::Publish(const std::size_t n)
         return;
 
     // check if the file read is empty
-    if(_bufferToPublisher.empty() || (n == 0))
+    if (_bufferToPublisher.empty() || (n == 0))
     {
         _logger->Info(_pathToFile + " file is empty or resource is temporarily unavailable");
         return;
@@ -114,24 +106,27 @@ void AdAdapter::Publish(const std::size_t n)
             serializer.Serialize(value);
             break;
         }
-#define CASE(typename,width) \
-        case enum_##typename:\
-        {\
-            if (std::is_signed<typename>::value ) {\
-                typename value = IsValidData<typename, int64_t>(str);\
-                serializer.Serialize(value, width);\
-            } else {\
-                typename value = IsValidData<typename, uint64_t>(str);\
-                serializer.Serialize(value, width);\
-            }\
-            break;\
-        }
-        CASE(int16_t, 16);
-        CASE(uint16_t, 16);
-        CASE(int32_t, 32);
-        CASE(uint32_t, 32);
-        CASE(int64_t, 64);
-        CASE(uint64_t, 64);
+#define CASE(typename, width) \
+    case enum_##typename: \
+    { \
+        if (std::is_signed<typename>::value) \
+        { \
+            typename value = IsValidData<typename, int64_t>(str); \
+            serializer.Serialize(value, width); \
+        } \
+        else \
+        { \
+            typename value = IsValidData<typename, uint64_t>(str); \
+            serializer.Serialize(value, width); \
+        } \
+        break; \
+    }
+            CASE(int16_t, 16);
+            CASE(uint16_t, 16);
+            CASE(int32_t, 32);
+            CASE(uint32_t, 32);
+            CASE(int64_t, 64);
+            CASE(uint64_t, 64);
 #undef CASE
         default:
             break;
@@ -143,11 +138,13 @@ void AdAdapter::Publish(const std::size_t n)
     }
     catch (const std::out_of_range& e)
     {
-        _logger->Error("Invalid value for topic " + _publishTopic + ": " + StrWithoutNewLine(str) + " value is out of min or max boundaries for data type " + _strDataType);
+        _logger->Error("Invalid value for topic " + _publishTopic + ": " + StrWithoutNewLine(str)
+                       + " value is out of min or max boundaries for data type " + _strDataType);
     }
     catch (const std::invalid_argument& e)
     {
-        _logger->Error("Invalid value for topic " + _publishTopic + ": '" + StrWithoutNewLine(str) + "' value contains characters which are not allowed for data type " + _strDataType);
+        _logger->Error("Invalid value for topic " + _publishTopic + ": '" + StrWithoutNewLine(str)
+                       + "' value contains characters which are not allowed for data type " + _strDataType);
     }
     catch (const std::exception& e)
     {
@@ -190,15 +187,15 @@ void AdAdapter::Deserialize(const std::vector<uint8_t>& bytes)
     case enum_double:
         str = std::to_string(deserializer.Deserialize<double>());
         break;
-#define CASE(typename, width)\
-    case enum_##typename:\
-        str = std::to_string(deserializer.Deserialize<typename>(width));\
+#define CASE(typename, width) \
+    case enum_##typename: \
+        str = std::to_string(deserializer.Deserialize<typename>(width)); \
         break;
-    CASE(int16_t, 16);
-    CASE(int32_t, 32);
-    CASE(uint32_t, 32);
-    CASE(int64_t, 64);
-    CASE(uint64_t, 64);
+        CASE(int16_t, 16);
+        CASE(int32_t, 32);
+        CASE(uint32_t, 32);
+        CASE(int64_t, 64);
+        CASE(uint64_t, 64);
 #undef CASE
     default:
         break;
@@ -207,7 +204,8 @@ void AdAdapter::Deserialize(const std::vector<uint8_t>& bytes)
     _bufferFromSubscriber = std::vector<uint8_t>(str.begin(), str.end());
 }
 
-void AdAdapter::StrContainsOnly(const std::string& str, const std::string& allowedChars, bool isFloatingNumber, bool isSigned)
+void AdAdapter::StrContainsOnly(const std::string& str, const std::string& allowedChars, bool isFloatingNumber,
+                                bool isSigned)
 {
     // if isFloatingNumber, allowedChars contains '.', verify if there is one at maximum
     if (isFloatingNumber)

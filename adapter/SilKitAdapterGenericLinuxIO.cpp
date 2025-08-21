@@ -43,7 +43,7 @@ int main(int argc, char** argv)
         return NO_ERROR;
     }
 
-    if(findArg(argc, argv, versionArg, argv) != NULL)
+    if (findArg(argc, argv, versionArg, argv) != NULL)
     {
         PrintVersion();
         return NO_ERROR;
@@ -51,8 +51,8 @@ int main(int argc, char** argv)
 
     try
     {
-        throwInvalidCliIf(thereAreUnknownArguments(argc, argv,
-            {&adapterConfigurationArg, &regUriArg, &logLevelArg, &participantNameArg, &configurationArg},
+        throwInvalidCliIf(thereAreUnknownArguments(
+            argc, argv, {&adapterConfigurationArg, &regUriArg, &logLevelArg, &participantNameArg, &configurationArg},
             {&helpArg, &versionArg}));
 
         const std::string adapterConfiguration = getArgDefault(argc, argv, adapterConfigurationArg, "");
@@ -72,8 +72,8 @@ int main(int argc, char** argv)
         std::string participantName = defaultParticipantName;
         const auto participant =
             CreateParticipant(argc, argv, logger, &participantName, &lifecycleService, &runningStatePromise);
-        
-        // handle the YAML config file 
+
+        // handle the YAML config file
         YAML::Node configFile;
         Util::LoadYAMLConfigFile(configFile, adapterConfiguration, logger);
 
@@ -97,9 +97,7 @@ int main(int argc, char** argv)
         AdapterFactory::ConstructGpioAdapters(configFile, ioAdapters, chips, participant.get(), ioContext);
 #endif
 
-        std::thread ioContextThread([&]() -> void {
-            ioContext.run();
-        });
+        std::thread ioContextThread([&]() -> void { ioContext.run(); });
 
         auto finalStateFuture = lifecycleService->StartLifecycle();
 

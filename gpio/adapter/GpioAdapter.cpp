@@ -14,21 +14,15 @@
 using namespace SilKit::Services::PubSub;
 using namespace GpioWrapper;
 
-namespace adapters
-{
-GpioAdapter::GpioAdapter(SilKit::IParticipant* participant,
-                         const std::string& publisherName, 
-                         const std::string& subscriberName, 
-                         PubSubSpec* pubDataSpec, 
-                         std::unique_ptr<PubSubSpec> subDataSpec,
-                         Chip* gpiochip,
-                         Ioc& ioc,
-                         const offset_t offset) :
-    _offset(offset),
-    _isCancelled(false),
-    _chip(gpiochip),
-    _ioc(&ioc),
-    _participant(participant)
+namespace adapters {
+GpioAdapter::GpioAdapter(SilKit::IParticipant* participant, const std::string& publisherName,
+                         const std::string& subscriberName, PubSubSpec* pubDataSpec,
+                         std::unique_ptr<PubSubSpec> subDataSpec, Chip* gpiochip, Ioc& ioc, const offset_t offset)
+    : _offset(offset)
+    , _isCancelled(false)
+    , _chip(gpiochip)
+    , _ioc(&ioc)
+    , _participant(participant)
 {
     _logger = participant->GetLogger();
 
@@ -68,7 +62,7 @@ GpioAdapter::~GpioAdapter()
 
 void GpioAdapter::Initialize()
 {
-    // handle chip values for each line 
+    // handle chip values for each line
     // get the line direction
     if (_chip->GetLineInfo(_offset).GetDirection() == GpioWrapper::In)
     {
@@ -88,7 +82,7 @@ void GpioAdapter::Initialize()
         _direction = OUTPUT;
 
         // don't handle output direction at initialization (to keep chip config as is)
-        // set value as unknown 
+        // set value as unknown
         _value = VALUE_UNKNOWN;
     }
 }
@@ -106,14 +100,14 @@ void GpioAdapter::Publish()
     _publisher->Publish(serializer.ReleaseBuffer());
 }
 
-void GpioAdapter::Deserialize(const std::vector<uint8_t> &bytes)
+void GpioAdapter::Deserialize(const std::vector<uint8_t>& bytes)
 {
     _logger->Debug("Deserializing data from topic: " + _subscribeTopic);
     SilKit::Util::SerDes::Deserializer deserializer(bytes);
-    
+
     auto receivedValue = deserializer.Deserialize<uint8_t>(8);
     _direction = static_cast<Direction>(deserializer.Deserialize<uint8_t>(8));
-    
+
     // if received direction is OUTPUT update the value
     if (_direction == OUTPUT)
     {
@@ -121,57 +115,58 @@ void GpioAdapter::Deserialize(const std::vector<uint8_t> &bytes)
     }
 }
 
- void GpioAdapter::CreateDataSubscriber()
- {
+void GpioAdapter::CreateDataSubscriber()
+{
     // init data subscriber only if sub topic has been defined
     if (_subDataSpec)
     {
         // the initialization of the subscriber is done after the whole chip initialization
         // to avoid data receiving during this step (the gpio mode needs all adapters to update data)
-        _subscriber = _participant->CreateDataSubscriber(_subscriberName, *_subDataSpec,
+        _subscriber = _participant->CreateDataSubscriber(
+            _subscriberName, *_subDataSpec,
             [&](SilKit::Services::PubSub::IDataSubscriber* /*subscriber*/, const DataMessageEvent& dataMessageEvent) {
-                // if new values are received for the io device
-                _logger->Debug("New values received on " + _subscribeTopic);
-                
-                // updating internal chip values
-                Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
+            // if new values are received for the io device
+            _logger->Debug("New values received on " + _subscribeTopic);
 
-                // updating io device
-                // close the previous request on the line
+            // updating internal chip values
+            Deserialize(SilKit::Util::ToStdVector(dataMessageEvent.data));
+
+            // updating io device
+            // close the previous request on the line
+            CloseRequests();
+
+            _logger->Debug("Updating " + std::string(_chip->GetInfo().GetName()) + " line " + to_string(_offset));
+
+            if (_direction == INPUT)
+            {
+                // when switching to INPUT, value goes back to its initial state
+                // internal value has to be updated
+                _lh.reset(new LineHandle(*_ioc, *_chip, {_offset}, GpioWrapper::In));
+                _value = static_cast<Value>(_lh->GetValue());
                 CloseRequests();
 
-                _logger->Debug("Updating " + std::string(_chip->GetInfo().GetName()) + " line " + to_string(_offset));
+                // set the request to catch events
+                _eh.reset(new EventHandle(*_ioc, *_chip, _offset, GpioWrapper::BothEdges));
+                ReceiveEvent();
+            }
+            else
+            {
+                _lh.reset(new LineHandle(*_ioc, *_chip, {_offset}, Out, _value));
+            }
 
-                if (_direction == INPUT)
-                {
-                    // when switching to INPUT, value goes back to its initial state
-                    // internal value has to be updated
-                    _lh.reset(new LineHandle(*_ioc, *_chip, {_offset}, GpioWrapper::In));
-                    _value = static_cast<Value>(_lh->GetValue());
-                    CloseRequests();
-                    
-                    // set the request to catch events
-                    _eh.reset(new EventHandle(*_ioc, *_chip, _offset, GpioWrapper::BothEdges));
-                    ReceiveEvent();
-                }
-                else
-                {
-                    _lh.reset(new LineHandle(*_ioc, *_chip, {_offset}, Out, _value));
-                }
-
-                Publish();
-            });
+            Publish();
+        });
     }
- }
- 
+}
+
 void GpioAdapter::ReceiveEvent()
 {
     gpioevent_data data;
     asio::async_read(*(_eh->GetFd()), asio::buffer(&data, sizeof(data)),
-    [this, &data](const std::error_code ec, const long unsigned int /*size*/){
+                     [this, &data](const std::error_code ec, const long unsigned int /*size*/) {
         if (ec)
         {
-            if(_isCancelled && (ec == asio::error::operation_aborted))
+            if (_isCancelled && (ec == asio::error::operation_aborted))
             {
                 // an error code comes right after calling fd.cancel() in order to close all asynchronous reads
                 _isCancelled = false;
@@ -179,21 +174,23 @@ void GpioAdapter::ReceiveEvent()
             else
             {
                 // if the error does not happened after fd.cancel(), handle it
-                _logger->Error("Unable to handle event on " + std::string(_chip->GetInfo().GetName()) + " line " + to_string(_offset) + ". " +
-                                "Error code: " + std::to_string(ec.value()) + " (" + ec.message()+ "). " +
-                                "Error category: " + ec.category().name());
+                _logger->Error("Unable to handle event on " + std::string(_chip->GetInfo().GetName()) + " line "
+                               + to_string(_offset) + ". " + "Error code: " + std::to_string(ec.value()) + " ("
+                               + ec.message() + "). " + "Error category: " + ec.category().name());
             }
         }
         else
         {
             if (data.id == GPIOEVENT_EVENT_RISING_EDGE)
             {
-                _logger->Debug("Event rising edge on " + std::string(_chip->GetInfo().GetName()) + " line " + to_string(_offset));
+                _logger->Debug("Event rising edge on " + std::string(_chip->GetInfo().GetName()) + " line "
+                               + to_string(_offset));
                 _value = VALUE_HIGH;
             }
             else
             {
-                _logger->Debug("Event falling edge on " + std::string(_chip->GetInfo().GetName()) + " line " + to_string(_offset));
+                _logger->Debug("Event falling edge on " + std::string(_chip->GetInfo().GetName()) + " line "
+                               + to_string(_offset));
                 _value = VALUE_LOW;
             }
 
@@ -215,7 +212,7 @@ void GpioAdapter::CloseRequests()
         _logger->Trace("Close _eh for " + std::string(_chip->GetInfo().GetName()) + " line " + to_string(_offset));
         _eh->Close();
     }
-    
+
     if (_lh != nullptr && _lh->IsFdOpen())
     {
         _isCancelled = true;
