@@ -67,45 +67,18 @@ endif()
 # Copy all files from the source and bin directory to the proper destination
 # Leave out git repo related data
 
-install(
-    DIRECTORY
-        ${CMAKE_CURRENT_SOURCE_DIR}/adapter
-        ${CMAKE_CURRENT_SOURCE_DIR}/advalues
-        ${CMAKE_CURRENT_SOURCE_DIR}/chardev
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmake
-        ${CMAKE_CURRENT_SOURCE_DIR}/common
-        ${CMAKE_CURRENT_SOURCE_DIR}/docs
-        ${CMAKE_CURRENT_SOURCE_DIR}/util
-        ${CMAKE_CURRENT_SOURCE_DIR}/.devcontainer
-        ${CMAKE_CURRENT_SOURCE_DIR}/.vscode
-    DESTINATION .
-    COMPONENT source
-    EXCLUDE_FROM_ALL
+include(common/cmake/InstallFunctions.cmake)
 
-    FILES_MATCHING
-        PATTERN *.cpp
-        PATTERN *.hpp
-        PATTERN *.cmake
-        PATTERN *.ps1
-        PATTERN *.sh
-        PATTERN *.json
-        PATTERN *.yaml
-        PATTERN *.can
-        PATTERN *.cfg
-        PATTERN *.vcdl
-        PATTERN *.vCODM
-        PATTERN *.xvp
-        PATTERN *.xml
-        PATTERN *.fbbin
-        PATTERN *.md
-        PATTERN *.png
-        PATTERN *.1
-        PATTERN LICENSE
-        PATTERN Dockerfile
-        PATTERN CMakeLists.txt
-
-    REGEX "\.git$" EXCLUDE
-    REGEX "\.github$" EXCLUDE
+install_adapter_source(
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/docs
+    ${CMAKE_CURRENT_SOURCE_DIR}/util
+    ${CMAKE_CURRENT_SOURCE_DIR}/.devcontainer
+    ${CMAKE_CURRENT_SOURCE_DIR}/.vscode
 )
 
 install(
@@ -117,8 +90,6 @@ install(
     REGEX "\.git$" EXCLUDE
     REGEX "\.github$" EXCLUDE
 )
-
-include(common/cmake/InstallFunctions.cmake)
 
 install_root_source_files()
 
