@@ -114,6 +114,7 @@ int main(int argc, char** argv)
     }
     catch (const InvalidCli&)
     {
+        PrintHelp(false);
         std::cerr << "Invalid command line arguments." << std::endl;
         return CLI_ERROR;
     }
