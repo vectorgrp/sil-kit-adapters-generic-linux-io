@@ -1,6 +1,7 @@
 # Vector SIL Kit Adapter for Generic Linux IO
 [![Vector Informatik](https://img.shields.io/badge/Vector%20Informatik-rgb(180,0,50))](https://www.vector.com/int/en/)
 [![SocialNetwork](https://img.shields.io/badge/vectorgrp%20LinkedIn®-rgb(0,113,176))](https://www.linkedin.com/company/vectorgrp/)\
+[![ReleaseBadge](https://img.shields.io/github/v/release/vectorgrp/sil-kit-adapters-generic-linux-io.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/blob/main/LICENSE)
 [![Linux Builds](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/actions/workflows/build-linux-release.yaml/badge.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/actions/workflows/build-linux-release.yaml)
 [![SIL Kit](https://img.shields.io/badge/SIL%20Kit-353b42?logo=github&logoColor=969da4)](https://github.com/vectorgrp/sil-kit)
