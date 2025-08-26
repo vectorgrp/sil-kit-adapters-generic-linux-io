@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
+concurrency:
+  group: serialization_group
+  cancel-in-progress: false
+
 jobs:
   trigger-adapters-ci:
     uses: pnd/sil-kit-adapters-ci-testing/.github/workflows/sil-kit-adapters-ci.yaml@main
