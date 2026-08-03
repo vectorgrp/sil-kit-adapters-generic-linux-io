@@ -110,7 +110,7 @@ new message
 
 The log output should be the same with the new value in ForwardDevice and GLIO Adapter windows.
 
-## Adding CANoe (17 SP3 or newer) as a participant
+## Adding CANoe (19 SP3 or newer) as a participant
 Before you can connect CANoe to the SIL Kit network you should adapt the ``RegistryUri`` in ``./chardev/demos/SilKitConfig_CANoe.silkit.yaml`` to the IP address of your system where your sil-kit-registry is running.
 
 ### CANoe Desktop Edition
@@ -120,7 +120,7 @@ Load the ``GLIOControl_chardevs_device.cfg`` from the ``./chardev/demos/CANoe`` 
 You can also run the same test set with ``CANoe4SW SE`` by executing the following powershell script ``./chardev/demos/CANoe4SW_SE/run.ps1``. The test cases are executed automatically and you should see a short test report in powershell after execution.
 
 ### CANoe4SW Server Edition (Linux)
-You can also run the same test set with ``CANoe4SW SE (Linux)``. At first you have to execute the powershell script ``./chardev/demos/CANoe4SW_SE/createEnvForLinux.ps1`` on your windows system by using tools of ``CANoe4SW SE (Windows)`` to prepare your test environment for Linux. In ``./chardev/demos/CANoe4SW_SE/run.sh`` you should adapt ``canoe4sw_se_install_dir`` to the path of your ``CANoe4SW SE`` installation in your Linux system. Afterwards you can execute ``./chardev/demos/CANoe4SW_SE/run.sh`` in your Linux system. The test cases are executed automatically and you should see a short test report in your terminal after execution.
+You can also run the same test set with ``CANoe4SW SE (Linux)``. In ``./chardev/demos/CANoe4SW_SE/run.sh`` you should adapt ``canoe4sw_se_install_dir`` to the path of your ``CANoe4SW SE`` installation in your Linux system. Afterwards you can execute ``./chardev/demos/CANoe4SW_SE/run.sh`` in your Linux system. The test cases are executed automatically and you should see a short test report in your terminal after execution.
 
 ## Running the demo applications inside a Docker container (Optional)
 *Note: This section provides an alternative method for running the demo applications - apart from CANoe Desktop Edition and CANoe4SW Server Edition - inside a Docker container and using the `devcontainers` Visual Studio Code extension. The steps outlined here are optional and not required if you prefer to run the applications directly and manually on your host machine.*

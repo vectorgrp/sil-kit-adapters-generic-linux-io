@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 cmake_minimum_required(VERSION 3.13)
-project(VectorSilKitAdapterGenericLinuxIO)
+project(SilKitAdapterGenericLinuxIO)
 
 option(ENABLE_ASAN "Enable -f sanitize=address for builds (requires gcc, clang,  VS2019)" OFF)
 option(ENABLE_UBSAN "Enable -f sanitize=undefined for builds (requires gcc, clang)" OFF)
@@ -94,6 +94,7 @@ install(
 install_root_source_files()
 
 install_scripts_to(adapter/demos/CANoe4SW_SE
+    ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/createEnvironment.sh
     ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run.sh
     ${CMAKE_CURRENT_SOURCE_DIR}/adapter/demos/CANoe4SW_SE/run_all.sh
 )
@@ -110,6 +111,7 @@ install_scripts_to(adapter/demos/tasks_scripts
 )
 
 install_scripts_to(advalues/demos/CANoe4SW_SE
+    ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/createEnvironment.sh
     ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run.sh
     ${CMAKE_CURRENT_SOURCE_DIR}/advalues/demos/CANoe4SW_SE/run_all.sh
 )
@@ -126,6 +128,7 @@ install_scripts_to(advalues/demos/tasks_scripts
 )
 
 install_scripts_to(chardev/demos/CANoe4SW_SE
+    ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/createEnvironment.sh
     ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run.sh
     ${CMAKE_CURRENT_SOURCE_DIR}/chardev/demos/CANoe4SW_SE/run_all.sh
 )
@@ -156,6 +159,7 @@ if(NOT DEFINED QNX_BUILD)
     install_git_source(${CMAKE_CURRENT_SOURCE_DIR}/gpio)
 
     install_scripts_to(gpio/demos/CANoe4SW_SE
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/createEnvironment.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run.sh
         ${CMAKE_CURRENT_SOURCE_DIR}/gpio/demos/CANoe4SW_SE/run_all.sh
     )

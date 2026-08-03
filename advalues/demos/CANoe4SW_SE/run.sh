@@ -2,24 +2,37 @@
 # SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
 # SPDX-License-Identifier: MIT
 
-set -e
+# check if user is root
+if [[ $EUID -ne 0 ]]; then
+    echo "[error] This script must be run as root / via sudo!"
+    exit 1
+fi
 
-PSScriptRoot=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+script_root=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # Set a default path for canoe4sw-se installation directory
-default_canoe4sw_se_install_dir="/opt/vector/canoe4sw-se"
+default_canoe4sw_se_install_dir="/opt/vector/canoe-server-edition"
 
 # Check if the executable exists at the default path
 if [[ -x "$default_canoe4sw_se_install_dir/canoe4sw-se" ]]; then
     canoe4sw_se_install_dir="$default_canoe4sw_se_install_dir"
 else
     # If not found at the default path, search for the executable
-	canoe4sw_se_install_dir=$(dirname $(find / -name canoe4sw-se -type f -executable -print -quit 2>/dev/null))
+    canoe4sw_se_install_dir=$(dirname $(find / -name canoe4sw-se -type f -executable -print -quit 2>/dev/null))
 fi
 
 if [[ -n "$canoe4sw_se_install_dir" ]]; then
-	echo "canoe4sw-se found at location : $canoe4sw_se_install_dir"
-	#run tests
-	$canoe4sw_se_install_dir/canoe4sw-se "$PSScriptRoot/Default.venvironment" -d "$PSScriptRoot/working-dir" --verbosity-level "2" --test-unit "$PSScriptRoot/testForwardAdvalues.vtestunit"  --show-progress "tree-element"
+    echo "canoe4sw-se found at location : $canoe4sw_se_install_dir"
+
+    # create the environment and compile the test unit
+    export canoe4sw_se_install_dir
+    $script_root/createEnvironment.sh
+    exit_status=$?
+    if [ $exit_status -ne 0 ]; then
+        exit $exit_status
+    fi
+
+    #run tests
+    $canoe4sw_se_install_dir/canoe4sw-se "$script_root/Default.venvironment" -d "$script_root/working-dir" --verbosity-level "2" --test-unit "$script_root/testForwardAdvalues.vtestunit"  --show-progress "tree-element"
     exit_status=$?
 else
     echo "canoe4sw-se executable not found"

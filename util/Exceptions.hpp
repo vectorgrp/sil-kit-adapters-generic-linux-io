@@ -8,11 +8,12 @@
 #include <string>
 #include <string.h>
 
+#include "common/Cli.hpp"
+
 namespace adapters {
 
 enum ExitCode
 {
-    NO_ERROR = 0,
     INIT_ERROR = -1,
     EVENT_IGNORED = -2,
     READ_ERROR = -3,

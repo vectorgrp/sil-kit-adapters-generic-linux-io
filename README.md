@@ -1,4 +1,4 @@
-# Vector SIL Kit Adapter for Generic Linux IO
+# SIL Kit Adapter for Generic Linux IO
 [![Vector Informatik](https://img.shields.io/badge/Vector%20Informatik-rgb(180,0,50))](https://www.vector.com/int/en/)
 [![SocialNetwork](https://img.shields.io/badge/vectorgrp%20LinkedIn®-rgb(0,113,176))](https://www.linkedin.com/company/vectorgrp/)\
 [![ReleaseBadge](https://img.shields.io/github/v/release/vectorgrp/sil-kit-adapters-generic-linux-io.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/releases)
@@ -6,7 +6,7 @@
 [![Linux Builds](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/actions/workflows/build-linux-release.yaml/badge.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/actions/workflows/build-linux-release.yaml)
 [![SIL Kit](https://img.shields.io/badge/SIL%20Kit-353b42?logo=github&logoColor=969da4)](https://github.com/vectorgrp/sil-kit)
 
-This collection of software is provided to illustrate how the [Vector SIL Kit](https://github.com/vectorgrp/sil-kit/)
+This collection of software is provided to illustrate how the [SIL Kit](https://github.com/vectorgrp/sil-kit/)
 can be attached to a generic Linux IO device such as character devices or GPIO chips.
 
 This repository contains instructions to build the adapter and set up a minimal working development environment.
@@ -35,7 +35,7 @@ The first thing that you should do is initializing the submodules to fetch the r
     git submodule update --init --recursive
 
 ### Build the Adapter and Demos
-To build the demos, you'll need SIL Kit packages ``SilKit-x.y.z-$platform`` for your platform. You can download them directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases).
+To build the demos, you'll need SIL Kit packages ``SilKit-x.y.z-$platform`` for your platform. You can download them directly from [SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases).
 
 The adapter and demos are built using ``cmake``. If you want to build the adapter against a specific downloaded release of SIL Kit, you can follow these steps:
 
@@ -69,9 +69,9 @@ Unzip the package that was generated and use the same toolchain file to cross-bu
 Lastly, update the LD_LIBRARY_PATH in your Android environment to point to the location of the SIL Kit shared library, which can be found in the generated lib folder.
 
 ## b) Getting Started with pre-built Adapter and Demos
-Download a preview or release of the adapter directly from [Vector SIL Kit Adapter for Generic Linux IO Releases](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/releases).
+Download a preview or release of the adapter directly from [SIL Kit Adapter for Generic Linux IO Releases](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/releases).
 
-If not already existent on your system you should also download a SIL Kit Release directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). You will need this for being able to start a sil-kit-registry.
+If not already existent on your system you should also download a SIL Kit Release directly from [SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). You will need this for being able to start a sil-kit-registry.
 
 ## Install the sil-kit-adapter-generic-linux-io (optional)
 
@@ -97,7 +97,7 @@ To install the sil-kit-adapter-generic-linux-io using CMake, run the following c
 **Note 2:** After installing the adapter, you can run the ``sil-kit-adapter-generic-linux-io`` from any location without specifying a path. The default installation path is ``/usr/local/bin``.
 
 ## Run the sil-kit-adapter-generic-linux-io
-This application allows the user to attach character devices of any Linux system to the Vector SIL Kit.
+This application allows the user to attach character devices of any Linux system to the SIL Kit.
 
 Before you start the adapter there always needs to be a sil-kit-registry running already. Start it e.g. like this:
 

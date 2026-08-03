@@ -10,14 +10,12 @@
 
 namespace adapters {
 
-// Arguments handled by the adapter
 const std::string adapterConfigurationArg = "--adapter-configuration";
-const std::string versionArg = "--version";
 const std::string defaultParticipantName = "SilKitAdapterGenericLinuxIO";
 
 inline void PrintVersion()
 {
-    std::cout << "Vector SIL Kit Adapter for Generic Linux IO - version: " << SILKIT_ADAPTER_VERSION << std::endl;
+    std::cout << "SIL Kit Adapter for Generic Linux IO - version: " << SILKIT_ADAPTER_VERSION << std::endl;
 }
 
 inline void PrintHelp(bool userRequested)
