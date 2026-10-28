@@ -51,7 +51,7 @@ void HandleTopics(const DataYAMLConfig& chardevYaml, std::unique_ptr<PubSubSpec>
     }
 }
 
-void GetYamlConfig(const YAML::Node& node, std::vector<DataYAMLConfig>& dataYAMLConfigs,
+void GetYamlConfig(const YamlNode& node, std::vector<DataYAMLConfig>& dataYAMLConfigs,
                    SilKit::Services::Logging::ILogger* logger, const std::string& chipPath = "",
                    const std::string& type = "")
 {
@@ -63,7 +63,7 @@ void GetYamlConfig(const YAML::Node& node, std::vector<DataYAMLConfig>& dataYAML
         // check if there is any unknown attribute
         if (FindUnknownAttribute(attributes, subNode, logger))
         {
-            throw adapters::YamlError("Unknown attribute found.");
+            throw subNode.MakeError("Unknown attribute found.");
         }
 
         DataYAMLConfig chardevYaml;
@@ -104,7 +104,7 @@ void GetYamlConfig(const YAML::Node& node, std::vector<DataYAMLConfig>& dataYAML
     }
 }
 
-void GetAdValuesYamlConfig(const YAML::Node& node, std::vector<DataYAMLConfig>& dataYAMLConfigs,
+void GetAdValuesYamlConfig(const YamlNode& node, std::vector<DataYAMLConfig>& dataYAMLConfigs,
                            SilKit::Services::Logging::ILogger* logger)
 {
     static constexpr std::array<const char*, 11> attributes{"path",     "int8_t",  "uint8_t",  "int16_t",
@@ -117,26 +117,26 @@ void GetAdValuesYamlConfig(const YAML::Node& node, std::vector<DataYAMLConfig>& 
         // check if there is any unknown attribute
         if (FindUnknownAttribute(attributes, nodeChip, logger))
         {
-            throw adapters::YamlError("Unknown attribute found.");
+            throw nodeChip.MakeError("Unknown attribute found.");
         }
 
         std::string chipPath;
         for (const auto& keyVal : nodeChip)
         {
-            if (keyVal.first.as<std::string>() == "path")
+            if (keyVal.Key() == "path")
             {
-                chipPath = keyVal.second.as<std::string>();
+                chipPath = keyVal.Value();
             }
             else
             {
                 // if it is not the path, it is the data type
-                const auto dataType = keyVal.first.as<std::string>();
-                // keyVal.second[0] because of "- files" which creates an array
-                const auto nodeFiles = keyVal.second[0]["files"];
+                const auto dataType = keyVal.Key();
+                // Child(0) because of "- files" which creates an array
+                const auto nodeFiles = keyVal.Child(0)["files"];
                 if (!nodeFiles)
                 {
                     logger->Error("Error in YAML config file. Missing mandatory attribute \"files\" for " + chipPath);
-                    throw adapters::YamlError("Unknown attribute found.");
+                    throw keyVal.MakeError("Unknown attribute found.");
                 }
                 GetYamlConfig(nodeFiles, dataYAMLConfigs, logger, chipPath, dataType);
             }
@@ -145,7 +145,7 @@ void GetAdValuesYamlConfig(const YAML::Node& node, std::vector<DataYAMLConfig>& 
 }
 
 #ifndef QNX_BUILD
-void GetGpioYamlConfig(const YAML::Node& chipNode, std::vector<DataYAMLConfig>& dataYAMLConfigs, std::string& chipPath,
+void GetGpioYamlConfig(const YamlNode& chipNode, std::vector<DataYAMLConfig>& dataYAMLConfigs, std::string& chipPath,
                        SilKit::Services::Logging::ILogger* logger)
 {
     static constexpr std::array<const char*, 2> attributes{"path", "lines"};
@@ -153,14 +153,14 @@ void GetGpioYamlConfig(const YAML::Node& chipNode, std::vector<DataYAMLConfig>& 
     // check if there is any unknown attribute
     if (FindUnknownAttribute(attributes, chipNode, logger))
     {
-        throw adapters::YamlError("Unknown attribute found.");
+        throw chipNode.MakeError("Unknown attribute found.");
     }
 
     for (const auto& keyVal : chipNode)
     {
-        if (keyVal.first.as<std::string>() == "path")
+        if (keyVal.Key() == "path")
         {
-            chipPath = keyVal.second.as<std::string>();
+            chipPath = keyVal.Value();
 
             if (!FileExists(chipPath))
             {
@@ -170,13 +170,13 @@ void GetGpioYamlConfig(const YAML::Node& chipNode, std::vector<DataYAMLConfig>& 
         else
         {
             // if it is not the path, it is the "lines" key, so pass its value
-            GetYamlConfig(keyVal.second, dataYAMLConfigs, logger, chipPath);
+            GetYamlConfig(keyVal, dataYAMLConfigs, logger, chipPath);
         }
     }
 }
 #endif
 
-void AdapterFactory::ConstructAdAdapters(const YAML::Node& configFile,
+void AdapterFactory::ConstructAdAdapters(const YamlNode& configFile,
                                          std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                                          SilKit::IParticipant* participant, asio::io_context& ioc)
 {
@@ -209,7 +209,7 @@ void AdapterFactory::ConstructAdAdapters(const YAML::Node& configFile,
     }
 }
 
-void AdapterFactory::ConstructChardevAdapters(const YAML::Node& configFile,
+void AdapterFactory::ConstructChardevAdapters(const YamlNode& configFile,
                                               std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                                               SilKit::IParticipant* participant, asio::io_context& ioc)
 {
@@ -242,7 +242,7 @@ void AdapterFactory::ConstructChardevAdapters(const YAML::Node& configFile,
 }
 
 #ifndef QNX_BUILD
-void AdapterFactory::ConstructGpioAdapters(const YAML::Node& configFile,
+void AdapterFactory::ConstructGpioAdapters(const YamlNode& configFile,
                                            std::vector<std::unique_ptr<IOAdapter>>& ioAdapters,
                                            std::vector<std::unique_ptr<GpioWrapper::Chip>>& chips,
                                            SilKit::IParticipant* participant, asio::io_context& ioc)

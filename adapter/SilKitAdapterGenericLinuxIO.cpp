@@ -74,13 +74,15 @@ int main(int argc, char** argv)
             CreateParticipant(argc, argv, logger, &participantName, &lifecycleService, &runningStatePromise);
 
         // handle the YAML config file
-        YAML::Node configFile;
-        Util::LoadYAMLConfigFile(configFile, adapterConfiguration, logger);
+        Util::YamlDocument configDocument;
+        Util::LoadYAMLConfigFile(configDocument, adapterConfiguration, logger);
 
-        if (configFile.IsNull())
+        if (configDocument.IsNull())
         {
             throw YamlError("Loading YAML configuration file failed.");
         }
+
+        const auto configFile = configDocument.Root();
 
         asio::io_context ioContext;
 

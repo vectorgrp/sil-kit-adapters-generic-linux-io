@@ -4,6 +4,7 @@
 add_library(Utility STATIC
     FileHelper.cpp
     YamlHelper.cpp
+    YamlParserUtils.cpp
     Exceptions.hpp
 )
 
@@ -14,7 +15,7 @@ endif()
 target_link_libraries(Utility PUBLIC
     asio
     SilKit::SilKit
-    yaml-cpp
+    rapidyaml-static
     sil-kit-adapters-common
 )
 
