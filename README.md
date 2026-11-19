@@ -3,7 +3,7 @@
 [![SocialNetwork](https://img.shields.io/badge/vectorgrp%20LinkedIn®-rgb(0,113,176))](https://www.linkedin.com/company/vectorgrp/)\
 [![ReleaseBadge](https://img.shields.io/github/v/release/vectorgrp/sil-kit-adapters-generic-linux-io.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/blob/main/LICENSE)
-[![Linux Builds](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/actions/workflows/build-linux-release.yaml/badge.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/actions/workflows/build-linux-release.yaml)
+[![Release](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/actions/workflows/release.yaml/badge.svg)](https://github.com/vectorgrp/sil-kit-adapters-generic-linux-io/actions/workflows/release.yaml)
 [![SIL Kit](https://img.shields.io/badge/SIL%20Kit-353b42?logo=github&logoColor=969da4)](https://github.com/vectorgrp/sil-kit)
 
 This collection of software is provided to illustrate how the [SIL Kit](https://github.com/vectorgrp/sil-kit/)
